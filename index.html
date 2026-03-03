@@ -1319,6 +1319,61 @@ const OBJ=[
  notes:'Il più grande globulare della Via Lattea (~10 milioni di stelle). Solo da Sud Europa.'},
 ];
 
+
+// ═══════════════════════════════════════════════════════
+// LOCAL IMAGES (img/ folder on same server)
+// Falls back to canvas if image not found
+// ═══════════════════════════════════════════════════════
+const LOCAL_IMGS = {
+  'm42':'img/m42.jpg','ic434':'img/ic434.jpg','ngc1977':'img/ngc1977.jpg',
+  'm78':'img/m78.jpg','m1':'img/m1.jpg','ngc2174':'img/ngc2174.jpg',
+  'ngc2244':'img/ngc2244.jpg','ngc1499':'img/ngc1499.jpg','ic1805':'img/ic1805.jpg',
+  'ic1848':'img/ic1848.jpg','ngc2261':'img/ngc2261.jpg','ngc2392':'img/ngc2392.jpg',
+  'ngc7000':'img/ngc7000.jpg','ic5070':'img/ic5070.jpg','ngc6992':'img/ngc6992.jpg',
+  'ngc6960':'img/ngc6960.jpg','ic5146':'img/ic5146.jpg','ngc6888':'img/ngc6888.jpg',
+  'm57':'img/m57.jpg','m27':'img/m27.jpg','ngc6543':'img/ngc6543.jpg',
+  'ngc7293':'img/ngc7293.jpg','ngc6302':'img/ngc6302.jpg','m8':'img/m8.jpg',
+  'm20':'img/m20.jpg','m16':'img/m16.jpg','m17':'img/m17.jpg',
+  'sh2101':'img/sh2101.jpg','ngc1333':'img/ngc1333.jpg','ngc2264':'img/ngc2264.jpg',
+  'ngc2359':'img/ngc2359.jpg','sh2240':'img/sh2240.jpg','ngc7635':'img/ngc7635.jpg',
+  'ngc896':'img/ngc896.jpg','ngc281':'img/ngc281.jpg','ngc6334':'img/ngc6334.jpg',
+  'ngc6357':'img/ngc6357.jpg','vdb1':'img/vdb1.jpg','ic1396':'img/ic1396.jpg',
+  'sh2157':'img/sh2157.jpg','ngc7822':'img/ngc7822.jpg','ngc2068b':'img/ngc2068b.jpg',
+  'ngc2023':'img/ngc2023.jpg','ngc2070':'img/ngc2070.jpg','ic2177':'img/ic2177.jpg',
+  'ngc1893':'img/ngc1893.jpg','ngc6820':'img/ngc6820.jpg','sh2132':'img/sh2132.jpg',
+  'sh2155':'img/sh2155.jpg','ngc40':'img/ngc40.jpg',
+  'm31':'img/m31.jpg','m33':'img/m33.jpg','ngc891':'img/ngc891.jpg',
+  'm74':'img/m74.jpg','m81':'img/m81.jpg','m82':'img/m82.jpg',
+  'm51':'img/m51.jpg','m101':'img/m101.jpg','m63':'img/m63.jpg',
+  'm64':'img/m64.jpg','ngc4565':'img/ngc4565.jpg','ngc4631':'img/ngc4631.jpg',
+  'ngc4038':'img/ngc4038.jpg','m65m66':'img/m65m66.jpg','ngc3628':'img/ngc3628.jpg',
+  'ngc4244':'img/ngc4244.jpg','m84virgo':'img/m84virgo.jpg','m87':'img/m87.jpg',
+  'm102':'img/m102.jpg','m106':'img/m106.jpg','ngc5128':'img/ngc5128.jpg',
+  'ngc6946':'img/ngc6946.jpg','ngc7331':'img/ngc7331.jpg','ic342':'img/ic342.jpg',
+  'ngc2903':'img/ngc2903.jpg','ngc772':'img/ngc772.jpg','ngc4594':'img/ngc4594.jpg',
+  'ngc253':'img/ngc253.jpg','ngc1316':'img/ngc1316.jpg','ngc2403':'img/ngc2403.jpg',
+  'ngc247':'img/ngc247.jpg','ngc4725':'img/ngc4725.jpg','ngc2841':'img/ngc2841.jpg',
+  'ngc7479':'img/ngc7479.jpg','ngc7814':'img/ngc7814.jpg','ngc3521':'img/ngc3521.jpg',
+  'ngc5055':'img/ngc5055.jpg','ngc4490':'img/ngc4490.jpg','ngc5139':'img/ngc5139.jpg',
+  'ngc1232':'img/ngc1232.jpg','ngc300':'img/ngc300.jpg','ngc55':'img/ngc55.jpg',
+  'ngc6744':'img/ngc6744.jpg',
+  'm13':'img/m13.jpg','m92':'img/m92.jpg','m3':'img/m3.jpg','m5':'img/m5.jpg',
+  'm15':'img/m15.jpg','m2':'img/m2.jpg','m22':'img/m22.jpg','m10':'img/m10.jpg',
+  'm12':'img/m12.jpg','m4':'img/m4.jpg','m80':'img/m80.jpg','ngc104':'img/ngc104.jpg',
+  'ngc6397':'img/ngc6397.jpg','m56':'img/m56.jpg','m107':'img/m107.jpg',
+  'm62':'img/m62.jpg','m79':'img/m79.jpg','ngc5024':'img/ngc5024.jpg',
+  'ngc6752':'img/ngc6752.jpg',
+  'm45':'img/m45.jpg','ngc869':'img/ngc869.jpg','ngc884b':'img/ngc884b.jpg',
+  'ngc7789':'img/ngc7789.jpg','ngc457':'img/ngc457.jpg','m35':'img/m35.jpg',
+  'm36':'img/m36.jpg','m37':'img/m37.jpg','m38':'img/m38.jpg','m34':'img/m34.jpg',
+  'm11':'img/m11.jpg','m41':'img/m41.jpg','m50':'img/m50.jpg','m52':'img/m52.jpg',
+  'm67':'img/m67.jpg','m44':'img/m44.jpg','m47':'img/m47.jpg','m46':'img/m46.jpg',
+  'm48':'img/m48.jpg','m39':'img/m39.jpg','m29':'img/m29.jpg','m26':'img/m26.jpg',
+  'luna':'img/luna.jpg','giove':'img/giove.jpg','saturno':'img/saturno.jpg',
+  'marte':'img/marte.jpg','venere':'img/venere.jpg','urano':'img/urano.jpg',
+  'nettuno':'img/nettuno.jpg','albireo':'img/albireo.jpg','mizar':'img/mizar.jpg',
+  'epsilonlyrae':'img/epsilonlyrae.jpg','etacas':'img/etacas.jpg','algedi':'img/algedi.jpg',
+};
 // ═══════════════════════════════════════════════════════
 // MONTHS
 // ═══════════════════════════════════════════════════════
@@ -1538,9 +1593,21 @@ function buildCard(obj,month){
     <div class="card-notes">${obj.notes}</div>
   </div>`;
 
-  // Draw canvas
+  // Try real image first, fall back to canvas
   const canvas=d.querySelector('canvas');
-  requestAnimationFrame(()=>renderCanvas(canvas,obj,false));
+  const localSrc=LOCAL_IMGS[obj.id];
+  if(localSrc){
+    const img=new Image();
+    img.onload=()=>{
+      const ctx=canvas.getContext('2d');
+      canvas.width=canvas.offsetWidth||280; canvas.height=canvas.offsetHeight||175;
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    };
+    img.onerror=()=>requestAnimationFrame(()=>renderCanvas(canvas,obj,false));
+    img.src=localSrc;
+  } else {
+    requestAnimationFrame(()=>renderCanvas(canvas,obj,false));
+  }
 
   // Click → modal
   d.addEventListener('click',()=>openModal(obj,month));
@@ -1556,9 +1623,15 @@ function openModal(obj,month){
   const camBest=bestFocalsForCamera(obj);
   const extra=OBJ_INFO[obj.id]||{};
 
-  // Canvas
+  // Canvas / real image
   const mc=document.getElementById('modalCanvas');
-  renderCanvas(mc,obj,true);
+  const mSrc=LOCAL_IMGS[obj.id];
+  if(mSrc){
+    const mi=new Image();
+    mi.onload=()=>{const ctx=mc.getContext('2d');mc.width=880;mc.height=320;ctx.drawImage(mi,0,0,880,320);};
+    mi.onerror=()=>renderCanvas(mc,obj,true);
+    mi.src=mSrc;
+  } else { renderCanvas(mc,obj,true); }
 
   // Badges
   document.getElementById('modalBadges').innerHTML=`
