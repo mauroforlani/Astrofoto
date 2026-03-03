@@ -7,20 +7,30 @@ jobs:
   download:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Create images folder
         run: mkdir -p assets/images
 
       - name: Download M42
-        run: curl -L "https://source.unsplash.com/1600x1200/?orion-nebula" -o assets/images/m42.jpg
+        run: |
+          curl -L -o assets/images/m42.jpg \
+          https://upload.wikimedia.org/wikipedia/commons/d/d2/Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg
 
-      - name: Download Andromeda
-        run: curl -L "https://source.unsplash.com/1600x1200/?andromeda-galaxy" -o assets/images/m31.jpg
+      - name: Download M31
+        run: |
+          curl -L -o assets/images/m31.jpg \
+          https://upload.wikimedia.org/wikipedia/commons/a/a4/Andromeda_Galaxy_(with_h-alpha).jpg
 
-      - name: Download Pleiades
-        run: curl -L "https://source.unsplash.com/1600x1200/?pleiades-cluster" -o assets/images/m45.jpg
+      - name: Download M45
+        run: |
+          curl -L -o assets/images/m45.jpg \
+          https://upload.wikimedia.org/wikipedia/commons/4/4e/Pleiades_large.jpg
 
       - name: Commit images
         run: |
