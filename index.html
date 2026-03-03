@@ -5,26 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tool Astrofoto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#faf9f6;
-  --bg2:#f4f2ee;
-  --bg3:#ede9e2;
-  --ink:#1a1612;
-  --ink2:#3d3830;
-  --ink3:#7a7168;
-  --ink4:#b0a899;
-  --blue:#1a3fa0;
-  --blue2:#2d5be3;
-  --blue3:#dce6fb;
-  --blue4:#eef2fd;
-  --red:#c0392b;
-  --amber:#c47a1a;
-  --green:#1a7a4a;
-  --border:#d8d2c8;
-  --border2:#c4bdb2;
+  --bg:#faf9f6;--bg2:#f4f2ee;--bg3:#ede9e2;
+  --ink:#1a1612;--ink2:#3d3830;--ink3:#7a7168;--ink4:#b0a899;
+  --blue:#1a3fa0;--blue2:#2d5be3;--blue3:#dce6fb;--blue4:#eef2fd;
+  --red:#c0392b;--amber:#c47a1a;--green:#1a7a4a;
+  --border:#d8d2c8;--border2:#c4bdb2;
+  --lx:#7c3aed;--lx2:#a78bfa;--lx3:#f5f3ff;--lx4:#ede9fe;
   --shadow:0 1px 3px rgba(26,22,18,.08),0 4px 16px rgba(26,22,18,.06);
   --shadow2:0 2px 8px rgba(26,22,18,.12),0 12px 40px rgba(26,22,18,.1);
 }
@@ -32,161 +22,213 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:'Jost',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden}
 
 /* ── HEADER ── */
-header{background:var(--ink);color:var(--bg);padding:52px 64px 44px;position:relative;overflow:hidden}
-header::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.03) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.03) 40px);pointer-events:none}
-.header-inner{max-width:1440px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;position:relative;z-index:1}
-.brand-eye{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px}
-.brand-title{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,5.5vw,80px);font-weight:700;line-height:.9;letter-spacing:-1px;color:#fff}
-.brand-title em{font-style:italic;color:rgba(255,255,255,.55)}
-.brand-sub{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:2px;margin-top:8px;font-family:'DM Mono',monospace}
-.header-chips{display:flex;gap:8px;flex-wrap:wrap;padding-bottom:2px}
-.chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:9px 14px}
-.chip-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace;display:block;margin-bottom:2px}
-.chip-val{font-size:12px;color:rgba(255,255,255,.8);font-weight:400}
+header{background:var(--ink);color:var(--bg);padding:36px 64px 32px;position:relative;overflow:hidden}
+header::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.025) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.025) 40px);pointer-events:none}
+.header-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;position:relative;z-index:1}
+.brand-eye{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px}
+.brand-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,56px);font-weight:700;line-height:.9;letter-spacing:-1px;color:#fff}
+.brand-title em{font-style:italic;color:rgba(255,255,255,.5)}
+
+/* Header chips (right side) */
+.header-chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:8px 14px;cursor:default}
+.chip.interactive{cursor:pointer;transition:background .15s,border-color .15s}
+.chip.interactive:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25)}
+.chip-lbl{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);font-family:'DM Mono',monospace;display:block;margin-bottom:2px}
+.chip-val{font-size:11px;color:rgba(255,255,255,.75);font-weight:400;display:flex;align-items:center;gap:5px}
+.chip-val select{background:transparent;border:none;color:rgba(255,255,255,.75);font-family:'Jost',sans-serif;font-size:11px;font-weight:400;cursor:pointer;outline:none;-webkit-appearance:none;padding-right:14px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,.4)'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 2px center}
+.chip-val select option{background:#1a1612;color:#faf9f6}
 
 /* ── CONTROL PANEL ── */
 .ctrl{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 64px}
 .ctrl-inner{max-width:1440px;margin:0 auto;display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
-.ctrl-block{padding:18px 32px 18px 0;border-right:1px solid var(--border);margin-right:32px;display:flex;flex-direction:column;justify-content:center}
+.ctrl-block{padding:16px 32px 16px 0;border-right:1px solid var(--border);margin-right:32px;display:flex;flex-direction:column;justify-content:center;flex-shrink:0}
 .ctrl-block:last-child{border-right:none;margin-right:0}
-.ctrl-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:9px}
-.country-pills{display:flex;gap:5px;flex-wrap:wrap}
-.cpill{background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--ink3);font-family:'Jost',sans-serif;font-size:11px;padding:5px 11px;cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px}
-.cpill:hover{border-color:var(--blue2);color:var(--blue)}
-.cpill.on{background:var(--blue);border-color:var(--blue);color:#fff}
-.lat-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);margin-top:5px}
+.ctrl-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:8px}
+
+/* Country/Lat/Lon controls */
+.loc-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+select.ctrl-sel{background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--ink2);font-family:'Jost',sans-serif;font-size:12px;padding:6px 28px 6px 10px;cursor:pointer;outline:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23b0a899'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;transition:border-color .15s}
+select.ctrl-sel:hover,select.ctrl-sel:focus{border-color:var(--blue2)}
+.lat-lon-inputs{display:flex;align-items:center;gap:6px}
+.latlon-field{display:flex;align-items:center;gap:4px;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4)}
+.latlon-field span{color:var(--ink3)}
+input.latlon-inp{width:62px;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:5px 7px;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink2);outline:none;transition:border-color .15s;text-align:center}
+input.latlon-inp:focus{border-color:var(--blue2)}
+
 /* time slider */
-.time-block{flex:1;min-width:260px;padding:18px 0}
-.time-row{display:flex;align-items:center;gap:14px;margin-bottom:10px}
-.time-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--ink);min-width:58px}
-.time-sep{color:var(--ink4);font-size:18px;font-family:'DM Mono',monospace}
-.win-info{font-size:11px;color:var(--ink3);font-family:'DM Mono',monospace}
-.slider-wrap{position:relative;height:28px;display:flex;align-items:center}
+.time-block{flex:1;min-width:260px;padding:16px 0}
+.time-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.time-val{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--ink);min-width:52px}
+.time-sep{color:var(--ink4);font-size:16px;font-family:'DM Mono',monospace}
+.win-info{font-size:10px;color:var(--ink3);font-family:'DM Mono',monospace}
+.slider-wrap{position:relative;height:26px;display:flex;align-items:center}
 .slider-track{position:absolute;left:0;right:0;height:2px;background:var(--border);border-radius:2px}
 .slider-fill{position:absolute;height:2px;background:var(--blue2);border-radius:2px;pointer-events:none}
 .range-input{position:absolute;width:100%;height:2px;background:transparent;-webkit-appearance:none;appearance:none;pointer-events:none;outline:none}
-.range-input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--ink);border:2px solid var(--bg);cursor:pointer;pointer-events:all;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:transform .12s}
+.range-input::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--ink);border:2px solid var(--bg);cursor:pointer;pointer-events:all;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:transform .12s}
 .range-input::-webkit-slider-thumb:active{transform:scale(1.25)}
-.slider-ticks{display:flex;justify-content:space-between;margin-top:5px;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4)}
+.slider-ticks{display:flex;justify-content:space-between;margin-top:4px;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4)}
 
 /* ── MONTH NAV ── */
-.mnav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);box-shadow:0 1px 0 var(--border)}
+.mnav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border)}
 .mnav-track{max-width:1440px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;padding:0 64px}
 .mnav-track::-webkit-scrollbar{display:none}
-.mnav-btn{background:none;border:none;font-family:'Jost',sans-serif;font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink4);padding:15px 16px 11px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s}
+.mnav-btn{background:none;border:none;font-family:'Jost',sans-serif;font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink4);padding:14px 14px 10px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s}
 .mnav-btn:hover{color:var(--ink2)}
 .mnav-btn.active{color:var(--ink);border-bottom-color:var(--ink)}
-.mnav-btn .cnt{display:block;font-size:9px;font-family:'DM Mono',monospace;font-weight:300;margin-top:1px;color:var(--ink4)}
+.mnav-btn .cnt{display:block;font-size:8px;font-family:'DM Mono',monospace;font-weight:300;margin-top:1px;color:var(--ink4)}
 .mnav-btn.active .cnt{color:var(--blue2)}
 
 /* ── MAIN ── */
-main{max-width:1440px;margin:0 auto;padding:48px 64px 100px}
+main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 .month-sec{display:none}
-.month-sec.active{display:block;animation:rise .4s cubic-bezier(.22,1,.36,1) both}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.month-sec.active{display:block;animation:rise .35s cubic-bezier(.22,1,.36,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-.sec-hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:32px;margin-bottom:32px;padding-bottom:24px;border-bottom:2px solid var(--ink)}
-.sec-month{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,7vw,100px);font-weight:700;line-height:.88;letter-spacing:-3px;color:var(--ink)}
+.sec-hero{display:grid;grid-template-columns:1fr auto;align-items:end;gap:32px;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--ink)}
+.sec-month{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,6vw,90px);font-weight:700;line-height:.88;letter-spacing:-3px}
 .sec-right{text-align:right}
-.sec-desc{font-size:12px;color:var(--ink3);line-height:1.8;max-width:300px;margin-bottom:6px}
-.sec-count{font-family:'DM Mono',monospace;font-size:10px;color:var(--blue2);letter-spacing:2px}
+.sec-desc{font-size:11px;color:var(--ink3);line-height:1.8;max-width:280px;margin-bottom:4px}
+.sec-count{font-family:'DM Mono',monospace;font-size:9px;color:var(--blue2);letter-spacing:2px}
 
 /* ── TOOLBAR ── */
-.toolbar{display:flex;align-items:center;gap:6px;margin-bottom:24px;flex-wrap:wrap}
+.toolbar{display:flex;align-items:center;gap:5px;margin-bottom:20px;flex-wrap:wrap}
 .tb-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);font-family:'DM Mono',monospace;flex-shrink:0}
-.pill{background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--ink3);font-family:'Jost',sans-serif;font-size:11px;padding:5px 12px;cursor:pointer;transition:all .15s}
+.pill{background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--ink3);font-family:'Jost',sans-serif;font-size:11px;padding:5px 11px;cursor:pointer;transition:all .15s}
 .pill:hover{border-color:var(--ink2);color:var(--ink)}
 .pill.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.tb-sep{width:1px;height:16px;background:var(--border);margin:0 2px;flex-shrink:0}
-.vis-bar{background:var(--blue4);border:1px solid rgba(45,91,227,.15);border-radius:4px;padding:8px 14px;margin-bottom:20px;font-size:10px;color:var(--blue);font-family:'DM Mono',monospace;letter-spacing:.3px;display:flex;align-items:center;gap:8px}
-.vis-bar::before{content:'◉';font-size:10px;color:var(--blue2)}
+.pill.lx-on{background:var(--lx);border-color:var(--lx);color:#fff}
+.tb-sep{width:1px;height:14px;background:var(--border);margin:0 2px;flex-shrink:0}
+.vis-bar{background:var(--blue4);border:1px solid rgba(45,91,227,.15);border-radius:4px;padding:7px 12px;margin-bottom:18px;font-size:10px;color:var(--blue);font-family:'DM Mono',monospace;display:flex;align-items:center;gap:8px}
+.vis-bar::before{content:'◉';font-size:9px;color:var(--blue2)}
 
 /* ── GRID ── */
-.obj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1px;background:var(--border);border:1px solid var(--border)}
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border)}
 .obj-grid>*{background:var(--bg)}
 
 /* ── CARD ── */
 .obj-card{position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .2s}
 .obj-card:hover{box-shadow:var(--shadow2);transform:translateY(-2px);z-index:2}
 .obj-card.hidden{display:none}
-
-.card-img{position:relative;height:180px;overflow:hidden;background:var(--bg3)}
-.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.22,1,.36,1),filter .3s;filter:brightness(.96) saturate(1.1)}
-.obj-card:hover .card-img img{transform:scale(1.05);filter:brightness(1) saturate(1.2)}
-.card-img canvas{position:absolute;inset:0;width:100%;height:100%}
-.card-top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start}
-
-.type-badge{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;background:rgba(250,249,246,.92);backdrop-filter:blur(8px);border-radius:2px;color:var(--ink2);border:1px solid rgba(26,22,18,.12)}
-.alt-badge{font-family:'DM Mono',monospace;font-size:9px;padding:3px 8px;border-radius:2px;backdrop-filter:blur(8px);display:flex;align-items:center;gap:4px;background:rgba(250,249,246,.92);border:1px solid transparent}
-.alt-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-
-/* alt bar at image bottom */
+.card-canvas-wrap{position:relative;height:175px;overflow:hidden}
+.card-canvas-wrap canvas{width:100%;height:100%;display:block}
+.card-top{position:absolute;top:9px;left:9px;right:9px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
+.type-badge{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;padding:3px 7px;background:rgba(250,249,246,.92);backdrop-filter:blur(8px);border-radius:2px;color:var(--ink2);border:1px solid rgba(26,22,18,.1)}
+.lx-tag-sm{font-family:'DM Mono',monospace;font-size:7px;padding:2px 6px;border-radius:2px;background:rgba(124,58,237,.18);border:1px solid rgba(167,139,250,.4);color:#7c3aed;backdrop-filter:blur(8px)}
+.alt-badge{font-family:'DM Mono',monospace;font-size:8px;padding:3px 7px;border-radius:2px;backdrop-filter:blur(8px);display:flex;align-items:center;gap:3px;background:rgba(250,249,246,.92);border:1px solid transparent}
+.alt-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
 .alt-meter{position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(0,0,0,.06)}
-.alt-meter-fill{height:100%;transition:width .5s ease,background .5s ease}
+.alt-meter-fill{height:100%;transition:width .5s,background .5s}
 
-/* card body */
-.card-body{padding:14px 16px 16px}
-.card-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--ink);line-height:1.1;margin-bottom:1px}
-.card-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);letter-spacing:.5px;margin-bottom:10px}
-.card-row2{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:9px}
-.cstat{background:var(--bg2);border-radius:2px;padding:6px 9px}
-.cs-lbl{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);font-family:'DM Mono',monospace;display:block;margin-bottom:2px}
-.cs-val{font-size:12px;color:var(--ink2)}
-.alt-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-family:'DM Mono',monospace;font-size:10px}
-.alt-num{font-size:13px;font-weight:400;min-width:32px}
-.alt-desc{color:var(--ink4);font-size:9px}
-.diff-row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.diff-lbl{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);font-family:'DM Mono',monospace;min-width:58px}
+.card-body{padding:12px 14px 14px}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);line-height:1.1;margin-bottom:1px}
+.card-cat{font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-bottom:9px}
+.card-row2{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px}
+.cstat{background:var(--bg2);border-radius:2px;padding:5px 8px}
+.cs-lbl{font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);font-family:'DM Mono',monospace;display:block;margin-bottom:1px}
+.cs-val{font-size:11px;color:var(--ink2)}
+.diff-row{display:flex;align-items:center;gap:5px;margin-bottom:7px}
+.diff-lbl{font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);font-family:'DM Mono',monospace;min-width:56px}
 .pips{display:flex;gap:2px}
-.pip{width:14px;height:2px;border-radius:1px;background:var(--border2)}
+.pip{width:12px;height:2px;border-radius:1px;background:var(--border2)}
 .pip.on{background:var(--ink)}
-.diff-txt{font-size:10px;color:var(--ink3);margin-left:3px}
-.focali-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
-.ftag{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:2px;border:1px solid var(--border);color:var(--ink4)}
+.diff-txt{font-size:9px;color:var(--ink3);margin-left:2px}
+.focali-row{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:8px}
+.ftag{font-family:'DM Mono',monospace;font-size:8px;padding:2px 6px;border-radius:2px;border:1px solid var(--border);color:var(--ink4)}
 .ftag.best{border-color:var(--blue2);color:var(--blue);background:var(--blue4)}
-.card-notes{font-size:10px;color:var(--ink3);line-height:1.7;font-style:italic;padding-top:9px;border-top:1px solid var(--border)}
+.card-notes{font-size:9px;color:var(--ink3);line-height:1.7;font-style:italic;padding-top:8px;border-top:1px solid var(--border)}
 
-.no-res{text-align:center;padding:64px 20px;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink4);letter-spacing:2px;grid-column:1/-1;background:var(--bg)}
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,8,6,.85);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg);max-width:880px;width:100%;max-height:90vh;overflow-y:auto;border-radius:2px;box-shadow:0 24px 80px rgba(0,0,0,.4);position:relative;transform:translateY(16px);transition:transform .25s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--bg3);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink3);transition:background .15s;z-index:10}
+.modal-close:hover{background:var(--border2)}
+.modal-canvas-wrap{height:320px;position:relative;overflow:hidden;background:var(--bg3)}
+.modal-canvas-wrap canvas{width:100%;height:100%}
+.modal-badges{position:absolute;top:16px;left:16px;display:flex;gap:6px;flex-wrap:wrap}
+.modal-badge{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;background:rgba(250,249,246,.92);backdrop-filter:blur(8px);border-radius:2px;color:var(--ink2);border:1px solid rgba(26,22,18,.1)}
+.modal-body{padding:28px 32px 32px}
+.modal-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:4px}
+.modal-name{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,46px);font-weight:700;line-height:.95;letter-spacing:-1px}
+.modal-cat{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);letter-spacing:.5px;margin-bottom:20px}
+.modal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.modal-stat{background:var(--bg2);border-radius:3px;padding:10px 12px;border:1px solid var(--border)}
+.modal-stat-lbl{font-size:7px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink4);font-family:'DM Mono',monospace;display:block;margin-bottom:4px}
+.modal-stat-val{font-size:14px;color:var(--ink);font-family:'Jost',sans-serif;font-weight:400}
+.modal-stat-val.big{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600}
+.modal-desc{font-size:13px;color:var(--ink2);line-height:1.85;margin-bottom:18px}
+.modal-section{margin-bottom:18px}
+.modal-section-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.modal-focali{display:flex;gap:6px;flex-wrap:wrap}
+.modal-ftag{font-family:'DM Mono',monospace;font-size:10px;padding:4px 10px;border-radius:2px;border:1px solid var(--border);color:var(--ink4)}
+.modal-ftag.best{border-color:var(--blue2);color:var(--blue);background:var(--blue4)}
+.modal-diff-row{display:flex;align-items:center;gap:10px}
+.modal-pips{display:flex;gap:3px}
+.modal-pip{width:18px;height:3px;border-radius:1px;background:var(--border2)}
+.modal-pip.on{background:var(--ink)}
+.lx-note-modal{background:var(--lx3);border:1px solid var(--lx2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--lx);line-height:1.6;margin-top:12px}
+.coord-row{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.coord-item span{color:var(--ink4);font-size:9px;margin-right:4px}
 
-
-/* ── L-EXTREME FILTER ── */
-.pill.lx-on{background:#7c3aed;border-color:#7c3aed;color:#fff}
-.pill.lx-on:hover{background:#6d28d9}
-.lx-badge{display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;background:#f5f3ff;border:1px solid #a78bfa;color:#7c3aed;border-radius:2px;padding:2px 8px;margin-bottom:8px}
-.lx-note{font-size:10px;color:#6d28d9;background:#f5f3ff;border:1px solid #c4b5fd;border-radius:3px;padding:7px 10px;margin-top:7px;line-height:1.6}
-.obj-card.lx-compat{outline:2px solid #a78bfa;outline-offset:-1px}
-.obj-card.lx-incompat{opacity:.28;pointer-events:none}
+/* ── MISC ── */
+.no-res{text-align:center;padding:56px 20px;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);letter-spacing:2px;grid-column:1/-1;background:var(--bg)}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg2)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-@media(max-width:900px){header,.ctrl,main{padding-left:20px;padding-right:20px}.mnav-track{padding:0 20px}.obj-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:580px){header{padding-top:28px}.obj-grid{grid-template-columns:1fr}.sec-hero{grid-template-columns:1fr}.sec-right{text-align:left}.time-block{min-width:100%;padding-top:0}}
+@media(max-width:900px){header,.ctrl,main{padding-left:20px;padding-right:20px}.mnav-track{padding:0 20px}.obj-grid{grid-template-columns:1fr 1fr}.header-inner{flex-direction:column;align-items:flex-start}}
+@media(max-width:580px){.obj-grid{grid-template-columns:1fr}.sec-hero{grid-template-columns:1fr}.sec-right{text-align:left}.modal-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
+<!-- ══ HEADER ══════════════════════════════════════════════════════ -->
 <header>
   <div class="header-inner">
     <div class="brand">
       <div class="brand-eye">// Tool Astrofoto</div>
       <h1 class="brand-title">Tool<br><em>Astro</em>Foto</h1>
-      <p class="brand-sub">Catalogo mensile · APS-C · 135–1625 mm · Post-tramonto → Mezzanotte</p>
     </div>
     <div class="header-chips">
-      <div class="chip"><span class="chip-lbl">Sensore</span><span class="chip-val">APS-C</span></div>
-      <div class="chip"><span class="chip-lbl">Focali disponibili</span><span class="chip-val">135 · 336 · 750 · 1085 · 1625 mm</span></div>
-      <div class="chip"><span class="chip-lbl">Catalogo</span><span class="chip-val" id="totCount">…</span></div>
+      <div class="chip interactive" title="Seleziona camera">
+        <span class="chip-lbl">Camera</span>
+        <span class="chip-val">
+          <select id="cameraSelect">
+            <option value="sony_a6000">Sony A6000</option>
+            <option value="zwo_asi224mc">ZWO ASI 224 MC Color</option>
+          </select>
+        </span>
+      </div>
+      <div class="chip">
+        <span class="chip-lbl">Sensore</span>
+        <span class="chip-val" id="sensorInfo">APS-C · 23.5×15.6mm</span>
+      </div>
+      <div class="chip">
+        <span class="chip-lbl">Pixel</span>
+        <span class="chip-val" id="pixelInfo">3.92 µm · 6000×4000</span>
+      </div>
+      <div class="chip">
+        <span class="chip-lbl">Catalogo</span>
+        <span class="chip-val" id="totCount">…</span>
+      </div>
     </div>
   </div>
 </header>
 
+<!-- ══ CONTROLS ════════════════════════════════════════════════════ -->
 <div class="ctrl">
   <div class="ctrl-inner">
     <div class="ctrl-block">
-      <div class="ctrl-lbl">Paese / Latitudine</div>
-      <div class="country-pills" id="countryPills"></div>
-      <div class="lat-note" id="latNote"></div>
+      <div class="ctrl-lbl">Paese / Posizione</div>
+      <div class="loc-row">
+        <select class="ctrl-sel" id="countrySelect"></select>
+        <div class="lat-lon-inputs">
+          <div class="latlon-field"><span>φ</span><input type="number" id="inpLat" class="latlon-inp" step="0.1" min="-90" max="90" value="45.5"></div>
+          <div class="latlon-field"><span>λ</span><input type="number" id="inpLon" class="latlon-inp" step="0.1" min="-180" max="180" value="10.0"></div>
+        </div>
+      </div>
     </div>
     <div class="ctrl-block time-block">
       <div class="ctrl-lbl">Finestra Osservativa</div>
@@ -207,26 +249,79 @@ main{max-width:1440px;margin:0 auto;padding:48px 64px 100px}
   </div>
 </div>
 
+<!-- ══ MONTH NAV ═══════════════════════════════════════════════════ -->
 <nav class="mnav"><div class="mnav-track" id="mnav"></div></nav>
 <main id="main"></main>
 
+<!-- ══ MODAL ═══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-canvas-wrap"><canvas id="modalCanvas"></canvas><div class="modal-badges" id="modalBadges"></div></div>
+    <div class="modal-body">
+      <div class="modal-title-row"><div class="modal-name" id="modalName"></div></div>
+      <div class="modal-cat" id="modalCat"></div>
+      <div class="coord-row" id="modalCoords"></div>
+      <div class="modal-grid" id="modalStats"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-section">
+        <div class="modal-section-title">Focali consigliate</div>
+        <div class="modal-focali" id="modalFocali"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Difficoltà</div>
+        <div class="modal-diff-row"><div class="modal-pips" id="modalPips"></div><span id="modalDiffTxt" style="font-size:12px;color:var(--ink3);margin-left:8px"></span></div>
+      </div>
+      <div id="modalLxNote"></div>
+    </div>
+  </div>
+</div>
+
 <script>
+// ═══════════════════════════════════════════════════════
+// CAMERAS
+// ═══════════════════════════════════════════════════════
+const CAMERAS = {
+  sony_a6000: {
+    name:'Sony A6000', type:'APS-C',
+    w:23.5, h:15.6,          // sensor mm
+    px:3.92, cols:6000, rows:4000,
+    // max angular FOV at each focal length (arcmin) = sensor_dim/fl * (180/PI) * 60
+    // stored as [focal, fov_w_arcmin, fov_h_arcmin]
+    fovs: [[135,594,393],[336,239,158],[750,107,71],[1085,74,49],[1625,49,33]],
+    minSize: 5,   // min object size (arcmin) to be worth imaging
+    maxSize: 700, // max (object too large for smallest fov)
+    desc:'APS-C · 23.5×15.6mm · 24.3MP'
+  },
+  zwo_asi224mc: {
+    name:'ZWO ASI 224 MC Color', type:'Piccolo',
+    w:4.8, h:3.6,
+    px:3.75, cols:1304, rows:976,
+    fovs: [[135,122,91],[336,49,37],[750,22,16],[1085,15,11],[1625,10,8]],
+    minSize: 0.3,
+    maxSize: 150,
+    desc:'1/3" · 4.8×3.6mm · 1.2MP · Pianeti/Luna'
+  }
+};
+let activeCamera = CAMERAS.sony_a6000;
+
 // ═══════════════════════════════════════════════════════
 // COUNTRIES
 // ═══════════════════════════════════════════════════════
-const COUNTRIES=[
-  {id:'it-n',lx:0,flag:'🇮🇹',label:'Nord Italia',  lat:45.5,lon:10.0},
-  {id:'it-c',lx:0,flag:'🇮🇹',label:'Centro Italia',lat:42.5,lon:12.5},
-  {id:'it-s',lx:0,flag:'🇮🇹',label:'Sud Italia',   lat:38.0,lon:15.5},
-  {id:'fr',lx:0,  flag:'🇫🇷',label:'Francia',       lat:46.5,lon:2.5},
-  {id:'de',lx:0,  flag:'🇩🇪',label:'Germania',      lat:51.0,lon:10.0},
-  {id:'es',lx:0,  flag:'🇪🇸',label:'Spagna',        lat:40.0,lon:-3.5},
-  {id:'uk',lx:0,  flag:'🇬🇧',label:'UK',            lat:52.5,lon:-1.5},
-  {id:'no',lx:0,  flag:'🇳🇴',label:'Norvegia',      lat:60.0,lon:10.5},
-  {id:'gr',lx:0,  flag:'🇬🇷',label:'Grecia',        lat:38.0,lon:23.5},
+const COUNTRIES = [
+  {id:'it-n', label:'🇮🇹 Nord Italia',    lat:45.5, lon:10.0},
+  {id:'it-c', label:'🇮🇹 Centro Italia',  lat:42.5, lon:12.5},
+  {id:'it-s', label:'🇮🇹 Sud Italia',     lat:38.0, lon:15.5},
+  {id:'fr',   label:'🇫🇷 Francia',         lat:46.5, lon:2.5},
+  {id:'de',   label:'🇩🇪 Germania',        lat:51.0, lon:10.0},
+  {id:'es',   label:'🇪🇸 Spagna',          lat:40.0, lon:-3.5},
+  {id:'uk',   label:'🇬🇧 UK',              lat:52.5, lon:-1.5},
+  {id:'no',   label:'🇳🇴 Norvegia',        lat:60.0, lon:10.5},
+  {id:'gr',   label:'🇬🇷 Grecia',          lat:38.0, lon:23.5},
+  {id:'custom',label:'📍 Personalizzato', lat:45.5, lon:10.0},
 ];
-let activeLat=45.5,activeLon=10.0,activeCountry='it-n';
-let timeStart=20,timeEnd=24,activeMonth=1;
+let activeLat=45.5, activeLon=10.0;
+let timeStart=20, timeEnd=24, activeMonth=1;
 let activeFilt={type:null,focal:null,lx:false};
 
 // ═══════════════════════════════════════════════════════
@@ -244,45 +339,406 @@ function maxAlt(ra,dec,month,lat,lon,t0,t1){
 function fmtH(h){const hh=Math.floor(h%24),mm=Math.round((h%1)*60);return`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;}
 
 // ═══════════════════════════════════════════════════════
-// IMAGE SYSTEM — NASA Images API (CORS-open) + fallbacks
+// CAMERA FOV FILTERING
 // ═══════════════════════════════════════════════════════
-// Each object has a nasaQ (NASA image search query) and optionally a direct img URL
-// The system tries: 1) direct img URL  2) NASA Images API  3) canvas fallback
-
-const IMGS={"m42":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg/1280px-Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg&w=400&output=jpg&q=82","ic434":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Barnard_33.jpg/1024px-Barnard_33.jpg&w=400&output=jpg&q=82","ngc1977":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Running_Man_Nebula.jpg/1024px-Running_Man_Nebula.jpg&w=400&output=jpg&q=82","m78":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/M78_2006_Spitzer.jpg/1024px-M78_2006_Spitzer.jpg&w=400&output=jpg&q=82","m1":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Crab_Nebula.jpg/1024px-Crab_Nebula.jpg&w=400&output=jpg&q=82","ngc2174":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/NGC_2174_Hubble_WikiSky.jpg/1280px-NGC_2174_Hubble_WikiSky.jpg&w=400&output=jpg&q=82","ngc2244":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Rosette_Nebula_Narrowband_HDR.jpg/1280px-Rosette_Nebula_Narrowband_HDR.jpg&w=400&output=jpg&q=82","ngc1499":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/California_Nebula.jpg/1280px-California_Nebula.jpg&w=400&output=jpg&q=82","ic1805":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Heart_Nebula_-_IC_1805.jpg/1280px-Heart_Nebula_-_IC_1805.jpg&w=400&output=jpg&q=82","ic1848":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Soul_Nebula_-_Hubble_Palette.jpg/1280px-Soul_Nebula_-_Hubble_Palette.jpg&w=400&output=jpg&q=82","ngc2261":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/NGC2261.jpg/800px-NGC2261.jpg&w=400&output=jpg&q=82","ngc2392":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/NGC_2392_Hubble.jpg/800px-NGC_2392_Hubble.jpg&w=400&output=jpg&q=82","ngc7000":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/NGC7000.jpg/1280px-NGC7000.jpg&w=400&output=jpg&q=82","ic5070":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/IC5070-Pelican-Nebula.jpg/1280px-IC5070-Pelican-Nebula.jpg&w=400&output=jpg&q=82","ngc6992":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/NGC_6992_-_Eastern_Veil_Nebula.jpg/1280px-NGC_6992_-_Eastern_Veil_Nebula.jpg&w=400&output=jpg&q=82","ngc6960":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/NGC_6960_Witch_Broom_Nebula.jpg/1280px-NGC_6960_Witch_Broom_Nebula.jpg&w=400&output=jpg&q=82","ic5146":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Cocoon_nebula.jpg/1280px-Cocoon_nebula.jpg&w=400&output=jpg&q=82","ngc6888":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/NGC6888_Crescent_Nebula.jpg/1280px-NGC6888_Crescent_Nebula.jpg&w=400&output=jpg&q=82","m57":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Ring_Nebula_in_Lyra_-_Hubble_2013_-_high_quality.jpg/1024px-Ring_Nebula_in_Lyra_-_Hubble_2013_-_high_quality.jpg&w=400&output=jpg&q=82","m27":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Messier27.jpg/1024px-Messier27.jpg&w=400&output=jpg&q=82","ngc6543":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Cat's_Eye_Nebula_Hubble.jpg/1024px-Cat's_Eye_Nebula_Hubble.jpg&w=400&output=jpg&q=82","ngc7293":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/NGC7293_(2004).jpg/1024px-NGC7293_(2004).jpg&w=400&output=jpg&q=82","ngc6302":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/NGC_6302.jpg/1024px-NGC_6302.jpg&w=400&output=jpg&q=82","m8":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Lagoon_Nebula_ESO.jpg/1280px-Lagoon_Nebula_ESO.jpg&w=400&output=jpg&q=82","m20":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Trifid.nebula.jpg/1280px-Trifid.nebula.jpg&w=400&output=jpg&q=82","m16":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg/800px-Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg&w=400&output=jpg&q=82","m17":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/ESO-M17.jpg/1280px-ESO-M17.jpg&w=400&output=jpg&q=82","sh2101":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Sh2-101_and_Cygnus_X-1.jpg/1280px-Sh2-101_and_Cygnus_X-1.jpg&w=400&output=jpg&q=82","ngc1333":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/NGC_1333_Herbig-Haro.jpg/1024px-NGC_1333_Herbig-Haro.jpg&w=400&output=jpg&q=82","ngc2264":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/NGC_2264_Cone_Nebula.jpg/800px-NGC_2264_Cone_Nebula.jpg&w=400&output=jpg&q=82","ngc2359":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/NGC_2359_Thors_Helmet.jpg/1280px-NGC_2359_Thors_Helmet.jpg&w=400&output=jpg&q=82","sh2240":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Simeis_147_(Spaghetti_Nebula).jpg/1280px-Simeis_147_(Spaghetti_Nebula).jpg&w=400&output=jpg&q=82","ngc7635":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/NGC_7635_Hubble.jpg/1280px-NGC_7635_Hubble.jpg&w=400&output=jpg&q=82","ngc896":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/IC_1795_Fish_Head_nebula.jpg/1280px-IC_1795_Fish_Head_nebula.jpg&w=400&output=jpg&q=82","ngc281":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/NGC_281_-_Pacman_Nebula.jpg/1280px-NGC_281_-_Pacman_Nebula.jpg&w=400&output=jpg&q=82","ngc6334":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/CatsPaw.jpg/1280px-CatsPaw.jpg&w=400&output=jpg&q=82","ngc6357":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/NGC6357.jpg/1280px-NGC6357.jpg&w=400&output=jpg&q=82","vdb1":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Vdb142.jpg/1280px-Vdb142.jpg&w=400&output=jpg&q=82","ic1396":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/IC1396A_Hubble_WikiSky.jpg/1280px-IC1396A_Hubble_WikiSky.jpg&w=400&output=jpg&q=82","sh2157":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/SH2-157.jpg/1280px-SH2-157.jpg&w=400&output=jpg&q=82","ngc7822":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/NGC_7822_in_Cepheus.jpg/1280px-NGC_7822_in_Cepheus.jpg&w=400&output=jpg&q=82","ngc2068b":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Barnard%27s_Loop.jpg/1280px-Barnard%27s_Loop.jpg&w=400&output=jpg&q=82","ngc2023":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Reflection_nebula_NGC2023.jpg/1280px-Reflection_nebula_NGC2023.jpg&w=400&output=jpg&q=82","ngc2070":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/911/Tarantula_Nebula_Hubble_2012.jpg/1280px-Tarantula_Nebula_Hubble_2012.jpg&w=400&output=jpg&q=82","ic2177":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/IC2177.jpg/1280px-IC2177.jpg&w=400&output=jpg&q=82","ngc1893":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/IC410_Tadpoles.jpg/1280px-IC410_Tadpoles.jpg&w=400&output=jpg&q=82","ngc6820":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/NGC6820.jpg/1280px-NGC6820.jpg&w=400&output=jpg&q=82","sh2132":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Sh2-132.jpg/1280px-Sh2-132.jpg&w=400&output=jpg&q=82","sh2155":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Cave_Nebula.jpg/1280px-Cave_Nebula.jpg&w=400&output=jpg&q=82","ngc40":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/NGC_40.jpg/800px-NGC_40.jpg&w=400&output=jpg&q=82","m31":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Andromeda_Galaxy_(with_h-alpha).jpg/1280px-Andromeda_Galaxy_(with_h-alpha).jpg&w=400&output=jpg&q=82","m33":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/M33_Triangulum_Galaxy.jpg/1280px-M33_Triangulum_Galaxy.jpg&w=400&output=jpg&q=82","ngc891":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/NGC891_Hubble.jpg/1280px-NGC891_Hubble.jpg&w=400&output=jpg&q=82","m74":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Messier74_phot-06a-01-fullres.jpg/1280px-Messier74_phot-06a-01-fullres.jpg&w=400&output=jpg&q=82","m81":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Messier_81_HST.jpg/1280px-Messier_81_HST.jpg&w=400&output=jpg&q=82","m82":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/M82_HST_ACS_2006-14-a-large_web.jpg/1280px-M82_HST_ACS_2006-14-a-large_web.jpg&w=400&output=jpg&q=82","m51":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Messier51_sRGB.jpg/1280px-Messier51_sRGB.jpg&w=400&output=jpg&q=82","m101":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/M101_hires_STScI-PRC2006-10a.jpg/1280px-M101_hires_STScI-PRC2006-10a.jpg&w=400&output=jpg&q=82","m63":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Messier_63_GALEX_WikiSky.jpg/1024px-Messier_63_GALEX_WikiSky.jpg&w=400&output=jpg&q=82","m64":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Black_Eye_Galaxy_-_Hubble_2021.jpg/1024px-Black_Eye_Galaxy_-_Hubble_2021.jpg&w=400&output=jpg&q=82","ngc4565":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/NGC4565_LGMSky.jpg/1280px-NGC4565_LGMSky.jpg&w=400&output=jpg&q=82","ngc4631":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/NGC_4631_Herschel_400.jpg/1280px-NGC_4631_Herschel_400.jpg&w=400&output=jpg&q=82","ngc4038":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Antennae_galaxies_xl.jpg/1280px-Antennae_galaxies_xl.jpg&w=400&output=jpg&q=82","m65m66":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Messier_66_HST_2006-10-07.jpg/1024px-Messier_66_HST_2006-10-07.jpg&w=400&output=jpg&q=82","ngc3628":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/NGC_3628.jpg/1280px-NGC_3628.jpg&w=400&output=jpg&q=82","ngc4244":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/NGC4244.jpg/1280px-NGC4244.jpg&w=400&output=jpg&q=82","m84virgo":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Virgo_Cluster_cropped.jpg/1280px-Virgo_Cluster_cropped.jpg&w=400&output=jpg&q=82","m87":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Messier_87_Hubble_WikiSky.jpg/1280px-Messier_87_Hubble_WikiSky.jpg&w=400&output=jpg&q=82","m102":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Spindle_galaxy_NGC_5866.jpg/1280px-Spindle_galaxy_NGC_5866.jpg&w=400&output=jpg&q=82","m106":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/NGC_4258_(captured_by_the_Hubble_Space_Telescope).jpg/1280px-NGC_4258_(captured_by_the_Hubble_Space_Telescope).jpg&w=400&output=jpg&q=82","ngc5128":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Cen_A_full_movie.jpg/1280px-Cen_A_full_movie.jpg&w=400&output=jpg&q=82","ngc6946":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/NGC_6946.jpg/1024px-NGC_6946.jpg&w=400&output=jpg&q=82","ngc7331":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/NGC7331e2005.jpg/1280px-NGC7331e2005.jpg&w=400&output=jpg&q=82","ic342":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/IC_342.jpg/1280px-IC_342.jpg&w=400&output=jpg&q=82","ngc2903":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/NGC_2903_(2013).jpg/1280px-NGC_2903_(2013).jpg&w=400&output=jpg&q=82","ngc772":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/NGC_772.jpg/1280px-NGC_772.jpg&w=400&output=jpg&q=82","ngc4594":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/M104_ngc4594_sombrero_galaxy_hi-res.jpg/1280px-M104_ngc4594_sombrero_galaxy_hi-res.jpg&w=400&output=jpg&q=82","ngc253":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/NGC_253_Sculptor_Galaxy_-_ESO.jpg/1280px-NGC_253_Sculptor_Galaxy_-_ESO.jpg&w=400&output=jpg&q=82","ngc1316":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/NGC_1316_(Fornax_A).jpg/1280px-NGC_1316_(Fornax_A).jpg&w=400&output=jpg&q=82","ngc2403":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/NGC_2403_(captured_by_the_Hubble_Space_Telescope).jpg/1280px-NGC_2403_(captured_by_the_Hubble_Space_Telescope).jpg&w=400&output=jpg&q=82","ngc247":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/NGC_247.jpg/1280px-NGC_247.jpg&w=400&output=jpg&q=82","ngc4725":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/NGC_4725.jpg/1280px-NGC_4725.jpg&w=400&output=jpg&q=82","ngc2841":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/NGC_2841.jpg/1280px-NGC_2841.jpg&w=400&output=jpg&q=82","ngc7479":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/NGC7479.jpg/1280px-NGC7479.jpg&w=400&output=jpg&q=82","ngc7814":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Little_sombrero_galaxy.jpg/1280px-Little_sombrero_galaxy.jpg&w=400&output=jpg&q=82","ngc3521":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/NGC_3521.jpg/1280px-NGC_3521.jpg&w=400&output=jpg&q=82","ngc5055":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Messier_63_GALEX_WikiSky.jpg/1024px-Messier_63_GALEX_WikiSky.jpg&w=400&output=jpg&q=82","ngc4490":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Ngc4490_and_4485.jpg/1280px-Ngc4490_and_4485.jpg&w=400&output=jpg&q=82","ngc5139":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Omega_Centauri_HST.jpg/1280px-Omega_Centauri_HST.jpg&w=400&output=jpg&q=82","ngc1232":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/NGC1232.jpg/1280px-NGC1232.jpg&w=400&output=jpg&q=82","ngc300":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/NGC_300.jpg/1280px-NGC_300.jpg&w=400&output=jpg&q=82","ngc55":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/NGC_55.jpg/1280px-NGC_55.jpg&w=400&output=jpg&q=82","ngc6744":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/NGC_6744.jpg/1280px-NGC_6744.jpg&w=400&output=jpg&q=82","m13":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Messier_13_Hubble_WikiSky.jpg/1024px-Messier_13_Hubble_WikiSky.jpg&w=400&output=jpg&q=82","m92":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Messier92_Hubble.jpg/1024px-Messier92_Hubble.jpg&w=400&output=jpg&q=82","m3":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Messier_3_Hubble.jpg/1024px-Messier_3_Hubble.jpg&w=400&output=jpg&q=82","m5":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Messier_5_Hubble_WikiSky.jpg/1024px-Messier_5_Hubble_WikiSky.jpg&w=400&output=jpg&q=82","m15":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Messier_15_HST.jpg/1024px-Messier_15_HST.jpg&w=400&output=jpg&q=82","m2":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Messier_2_Hubble_WikiSky.jpg/1024px-Messier_2_Hubble_WikiSky.jpg&w=400&output=jpg&q=82","ngc104":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/47Tuc_HST.jpg/1024px-47Tuc_HST.jpg&w=400&output=jpg&q=82","m4":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Messier_4_Hubble_WikiSky.jpg/1024px-Messier_4_Hubble_WikiSky.jpg&w=400&output=jpg&q=82","m22":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Messier_22.jpg/1024px-Messier_22.jpg&w=400&output=jpg&q=82","m10":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Messier_10_Hubble.jpg/1024px-Messier_10_Hubble.jpg&w=400&output=jpg&q=82","m12":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Messier_12.jpg/1024px-Messier_12.jpg&w=400&output=jpg&q=82","m80":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Messier_80_Hubble.jpg/1024px-Messier_80_Hubble.jpg&w=400&output=jpg&q=82","ngc6397":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NGC_6397_Hubble.jpg/1024px-NGC_6397_Hubble.jpg&w=400&output=jpg&q=82","m56":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Messier_56_Hubble.jpg/1024px-Messier_56_Hubble.jpg&w=400&output=jpg&q=82","m107":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Messier_107_Hubble.jpg/1024px-Messier_107_Hubble.jpg&w=400&output=jpg&q=82","m62":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Messier_62.jpg/1024px-Messier_62.jpg&w=400&output=jpg&q=82","m79":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Messier_79_Hubble.jpg/1024px-Messier_79_Hubble.jpg&w=400&output=jpg&q=82","ngc5024":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/NGC_5024_Hubble.jpg/1024px-NGC_5024_Hubble.jpg&w=400&output=jpg&q=82","ngc6752":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/NGC6752.jpg/1024px-NGC6752.jpg&w=400&output=jpg&q=82","m45":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Pleiades_large.jpg/1200px-Pleiades_large.jpg&w=400&output=jpg&q=82","ngc869":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Double_cluster_h_chi_Persei.jpg/1280px-Double_cluster_h_chi_Persei.jpg&w=400&output=jpg&q=82","ngc884b":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Double_cluster_h_chi_Persei.jpg/1280px-Double_cluster_h_chi_Persei.jpg&w=400&output=jpg&q=82","ngc7789":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/NGC_7789.jpg/1024px-NGC_7789.jpg&w=400&output=jpg&q=82","ngc457":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/ET_Cluster_NGC_457.jpg/1024px-ET_Cluster_NGC_457.jpg&w=400&output=jpg&q=82","m35":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Messier35.jpg/1024px-Messier35.jpg&w=400&output=jpg&q=82","m36":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Messier_object_036.jpg/1024px-Messier_object_036.jpg&w=400&output=jpg&q=82","m37":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Messier_object_037.jpg/1024px-Messier_object_037.jpg&w=400&output=jpg&q=82","m38":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Messier_object_038.jpg/1024px-Messier_object_038.jpg&w=400&output=jpg&q=82","m34":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Messier_34.jpg/1024px-Messier_34.jpg&w=400&output=jpg&q=82","m11":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Wild_duck_cluster.jpg/1024px-Wild_duck_cluster.jpg&w=400&output=jpg&q=82","m41":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Messier_41.jpg/1024px-Messier_41.jpg&w=400&output=jpg&q=82","m50":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Messier_50.jpg/1024px-Messier_50.jpg&w=400&output=jpg&q=82","m52":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Messier52.jpg/1024px-Messier52.jpg&w=400&output=jpg&q=82","m67":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Messier_67.jpg/1024px-Messier_67.jpg&w=400&output=jpg&q=82","m44":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Beehive_Cluster_-_Praesepe_-_M44.jpg/1280px-Beehive_Cluster_-_Praesepe_-_M44.jpg&w=400&output=jpg&q=82","m47":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Messier_47.jpg/1024px-Messier_47.jpg&w=400&output=jpg&q=82","m46":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Messier_46.jpg/1024px-Messier_46.jpg&w=400&output=jpg&q=82","m48":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Messier_48.jpg/1024px-Messier_48.jpg&w=400&output=jpg&q=82","m39":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Messier_39.jpg/1024px-Messier_39.jpg&w=400&output=jpg&q=82","m29":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Messier_29.jpg/1024px-Messier_29.jpg&w=400&output=jpg&q=82","m26":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Messier_26.jpg/1024px-Messier_26.jpg&w=400&output=jpg&q=82","luna":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/1024px-FullMoon2010.jpg&w=400&output=jpg&q=82","giove":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg/1024px-Jupiter_and_its_shrunken_Great_Red_Spot.jpg&w=400&output=jpg&q=82","saturno":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/1280px-Saturn_during_Equinox.jpg&w=400&output=jpg&q=82","marte":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/1024px-OSIRIS_Mars_true_color.jpg&w=400&output=jpg&q=82","venere":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Venus-real_color.jpg/1024px-Venus-real_color.jpg&w=400&output=jpg&q=82","urano":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Uranus2.jpg/1024px-Uranus2.jpg&w=400&output=jpg&q=82","nettuno":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Neptune_-_Voyager_2_(29347980845)_flatten_crop.jpg/1280px-Neptune_-_Voyager_2_(29347980845)_flatten_crop.jpg&w=400&output=jpg&q=82","albireo":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Albireo_(beta_Cygni).jpg/800px-Albireo_(beta_Cygni).jpg&w=400&output=jpg&q=82","mizar":"https://wsrv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Mizar_%26_Alcor_double_star.jpg/800px-Mizar_%26_Alcor_double_star.jpg&w=400&output=jpg&q=82"};
-// ═══════════════════════════════════════════════════════
-// PROCEDURAL CANVAS FALLBACK
-// ═══════════════════════════════════════════════════════
-function seededRNG(seed){let s=[...String(seed)].reduce((a,c)=>a+c.charCodeAt(0),0);return()=>{s=(s*1664525+1013904223)&0xffffffff;return(s>>>0)/4294967296;};}
-function drawFallback(canvas,obj){
-  const W=canvas.offsetWidth||290,H=canvas.offsetHeight||180;
-  canvas.width=W;canvas.height=H;
-  const ctx=canvas.getContext('2d'),rng=seededRNG(obj.id);
-  // Background gradient
-  const bg=ctx.createLinearGradient(0,0,W,H);
-  bg.addColorStop(0,'#0a0e1a');bg.addColorStop(1,'#04080f');
-  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-  // Stars
-  for(let i=0;i<55;i++){const x=rng()*W,y=rng()*H,r=rng()*.8+.2;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=`rgba(200,210,240,${rng()*.45+.1})`;ctx.fill();}
-  const cx=W*.5+(rng()-.5)*30,cy=H*.45+(rng()-.5)*20;
-  if(obj.type==='nebula'){
-    const cols=[['#a78bfa','#6366f1'],['#c084fc','#818cf8'],['#22d3ee','#6366f1'],['#86efac','#22d3ee']];
-    const [c1,c2]=cols[Math.floor(rng()*cols.length)];
-    for(let l=0;l<3;l++){const g=ctx.createRadialGradient(cx+(rng()-.5)*20,cy+(rng()-.5)*15,l*3,cx,cy,55+l*18);g.addColorStop(0,c1+'99');g.addColorStop(.5,c2+'33');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(cx,cy,60+rng()*20,36+rng()*14,rng()*Math.PI,0,Math.PI*2);ctx.fill();}
-    const g2=ctx.createRadialGradient(cx,cy,0,cx,cy,18);g2.addColorStop(0,'rgba(255,255,255,.7)');g2.addColorStop(1,'transparent');ctx.fillStyle=g2;ctx.beginPath();ctx.arc(cx,cy,18,0,Math.PI*2);ctx.fill();
-  } else if(obj.type==='galaxy'){
-    ctx.save();ctx.translate(cx,cy);ctx.rotate(rng()*Math.PI);
-    const g=ctx.createRadialGradient(0,0,1,0,0,50);g.addColorStop(0,'rgba(255,240,170,.9)');g.addColorStop(.3,'rgba(220,170,80,.4)');g.addColorStop(1,'transparent');
-    ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(0,0,50+rng()*15,14+rng()*8,0,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='rgba(8,14,30,.5)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-45,0);ctx.lineTo(45,0);ctx.stroke();
-    ctx.restore();
-  } else if(obj.type==='cluster'){
-    for(let i=0;i<50;i++){const a=rng()*Math.PI*2,d=Math.pow(rng(),.45)*48;ctx.beginPath();ctx.arc(cx+Math.cos(a)*d,cy+Math.sin(a)*d,rng()*1.6+.3,0,Math.PI*2);ctx.fillStyle=rng()>.7?`rgba(255,250,200,${rng()*.35+.5})`:`rgba(160,195,255,${rng()*.25+.2})`;ctx.fill();}
-  } else {
-    const g=ctx.createRadialGradient(cx-7,cy-7,2,cx,cy,28);g.addColorStop(0,'rgba(230,210,150,.95)');g.addColorStop(1,'rgba(140,100,50,.4)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);ctx.fill();
+function isCameraCompatible(obj){
+  // Planets/doubles always ok
+  if(obj.type==='planet'||obj.type==='double') return true;
+  // Parse object size
+  const sizeStr=obj.size||'5\'';
+  const m=sizeStr.match(/([\d.]+)/);
+  if(!m) return true;
+  let sz=parseFloat(m[1]);
+  if(sizeStr.includes('°')) sz*=60;
+  const cam=activeCamera;
+  // Check if at least one focal length gives a good framing
+  // Object should fit in >25% and <85% of the sensor width
+  for(const [fl,fw,fh] of cam.fovs){
+    const ratio=sz/fw;
+    if(ratio>0.15 && ratio<0.9) return true;
   }
-  // Label
-  ctx.fillStyle='rgba(200,210,240,.35)';ctx.font='9px monospace';ctx.fillText(obj.cat||obj.name,10,H-10);
+  // Also ok if it's within camera's range
+  return sz>=cam.minSize && sz<=cam.maxSize;
+}
+
+function bestFocalsForCamera(obj){
+  const cam=activeCamera;
+  if(obj.type==='planet'||obj.type==='double') return obj.best;
+  const sizeStr=obj.size||'5\'';
+  const m=sizeStr.match(/([\d.]+)/);
+  if(!m) return obj.best;
+  let sz=parseFloat(m[1]);
+  if(sizeStr.includes('°')) sz*=60;
+  const good=[];
+  for(const [fl,fw,fh] of cam.fovs){
+    const ratio=sz/fw;
+    if(ratio>0.15 && ratio<0.9) good.push(fl);
+  }
+  return good.length>0 ? good : obj.best;
+}
+
+// ═══════════════════════════════════════════════════════
+// CANVAS RENDERING — HIGH QUALITY PROCEDURAL
+// ═══════════════════════════════════════════════════════
+function seededRNG(seed){
+  let s=[...String(seed)].reduce((a,c)=>a+c.charCodeAt(0),0)*2654435761;
+  return()=>{s=(s*1664525+1013904223)&0xffffffff;return(s>>>0)/4294967296;};
+}
+
+function renderCanvas(canvas,obj,large=false){
+  const W=large?880:canvas.offsetWidth||280;
+  const H=large?320:canvas.offsetHeight||175;
+  canvas.width=W; canvas.height=H;
+  const ctx=canvas.getContext('2d');
+  const rng=seededRNG(obj.id+obj.type);
+  const cx=W*(0.42+rng()*0.16), cy=H*(0.38+rng()*0.24);
+
+  // ── Background ──
+  const bgG=ctx.createRadialGradient(cx,cy,0,W/2,H/2,Math.max(W,H)*.85);
+  const bgCols={
+    nebula:  ['#060a14','#04080f'],
+    galaxy:  ['#070508','#03040a'],
+    cluster: ['#040810','#020408'],
+    planet:  ['#020408','#010206'],
+    double:  ['#030609','#020408'],
+  };
+  const [c1,c2]=(bgCols[obj.type]||bgCols.nebula);
+  bgG.addColorStop(0,c1); bgG.addColorStop(1,c2);
+  ctx.fillStyle=bgG; ctx.fillRect(0,0,W,H);
+
+  // ── Stars ──
+  const nStars=large?120:70;
+  for(let i=0;i<nStars;i++){
+    const x=rng()*W, y=rng()*H;
+    const r=rng()<0.05?(rng()*2+0.8):(rng()*0.7+0.15);
+    const br=rng()*0.5+0.15;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
+    const isColor=rng()<0.2;
+    if(isColor){
+      const starCols=['rgba(200,215,255,','rgba(255,240,200,','rgba(255,200,150,'];
+      ctx.fillStyle=starCols[Math.floor(rng()*starCols.length)]+br+')';
+    } else {
+      ctx.fillStyle=`rgba(210,220,240,${br})`;
+    }
+    ctx.fill();
+    if(r>0.8){
+      ctx.beginPath(); ctx.arc(x,y,r*2.5,0,Math.PI*2);
+      ctx.fillStyle=`rgba(180,200,240,${br*0.08})`;
+      ctx.fill();
+    }
+  }
+
+  if(obj.type==='nebula') drawNebula(ctx,W,H,cx,cy,rng,obj,large);
+  else if(obj.type==='galaxy') drawGalaxy(ctx,W,H,cx,cy,rng,obj,large);
+  else if(obj.type==='cluster') drawCluster(ctx,W,H,cx,cy,rng,obj,large);
+  else if(obj.type==='planet') drawPlanet(ctx,W,H,cx,cy,rng,obj,large);
+  else if(obj.type==='double') drawDouble(ctx,W,H,cx,cy,rng,obj,large);
+
+  // ── Label ──
+  ctx.fillStyle='rgba(180,190,220,.28)';
+  ctx.font=`${large?11:8}px 'DM Mono',monospace`;
+  ctx.fillText(obj.cat||obj.name, large?16:8, H-(large?14:8));
+}
+
+function drawNebula(ctx,W,H,cx,cy,rng,obj,large){
+  const scale=large?1.6:1;
+  // Pick palette by sub-type
+  const palettes=[
+    {main:'#c084fc',sec:'#818cf8',glow:'#6366f1'}, // purple/blue - Orion-like
+    {main:'#f97316',sec:'#fb923c',glow:'#fbbf24'}, // orange - emission
+    {main:'#06b6d4',sec:'#67e8f9',glow:'#a5f3fc'}, // cyan - OIII
+    {main:'#4ade80',sec:'#86efac',glow:'#6ee7b7'}, // green - OIII rich
+    {main:'#f472b6',sec:'#fb7185',glow:'#fda4af'}, // pink/Ha
+  ];
+  const pal=palettes[Math.abs(obj.id.charCodeAt(0)+obj.id.length)%palettes.length];
+
+  // Outer glow
+  const gOuter=ctx.createRadialGradient(cx,cy,0,cx,cy,80*scale);
+  gOuter.addColorStop(0,pal.glow+'18'); gOuter.addColorStop(1,'transparent');
+  ctx.fillStyle=gOuter;
+  ctx.beginPath(); ctx.ellipse(cx,cy,80*scale,55*scale,rng()*Math.PI,0,Math.PI*2); ctx.fill();
+
+  // Main nebula body — 2-3 overlapping lobes
+  const nLobes=2+Math.floor(rng()*2);
+  for(let l=0;l<nLobes;l++){
+    const lx=cx+(rng()-.5)*30*scale, ly=cy+(rng()-.5)*20*scale;
+    const rx=(28+rng()*28)*scale, ry=(16+rng()*18)*scale;
+    const angle=rng()*Math.PI;
+    const g=ctx.createRadialGradient(lx-rx*.3,ly-ry*.2,2*scale,lx,ly,Math.max(rx,ry));
+    const alpha=(0.55+rng()*0.25);
+    g.addColorStop(0,pal.main+Math.round(alpha*255).toString(16).padStart(2,'0'));
+    g.addColorStop(0.5,pal.sec+Math.round(alpha*.35*255).toString(16).padStart(2,'0'));
+    g.addColorStop(1,'transparent');
+    ctx.globalCompositeOperation='screen';
+    ctx.fillStyle=g;
+    ctx.beginPath(); ctx.ellipse(lx,ly,rx,ry,angle,0,Math.PI*2); ctx.fill();
+  }
+  ctx.globalCompositeOperation='source-over';
+
+  // Dust lanes (dark filaments)
+  ctx.globalCompositeOperation='multiply';
+  for(let d=0;d<3;d++){
+    const x1=cx+(rng()-.5)*50*scale, y1=cy+(rng()-.5)*30*scale;
+    const x2=x1+(rng()-.5)*40*scale, y2=y1+(rng()-.5)*25*scale;
+    const gd=ctx.createLinearGradient(x1,y1,x2,y2);
+    gd.addColorStop(0,'transparent');
+    gd.addColorStop(0.5,'rgba(2,4,10,.55)');
+    gd.addColorStop(1,'transparent');
+    ctx.strokeStyle=gd; ctx.lineWidth=(1+rng()*2)*scale;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  }
+  ctx.globalCompositeOperation='source-over';
+
+  // Central bright star(s)
+  const nStars=1+Math.floor(rng()*3);
+  for(let s=0;s<nStars;s++){
+    const sx=cx+(rng()-.5)*20*scale, sy=cy+(rng()-.5)*14*scale;
+    const sr=(1.5+rng()*2)*scale;
+    const sg=ctx.createRadialGradient(sx,sy,0,sx,sy,sr*6);
+    sg.addColorStop(0,'rgba(255,255,255,1)');
+    sg.addColorStop(0.15,'rgba(255,255,255,.7)');
+    sg.addColorStop(0.4,'rgba(200,220,255,.2)');
+    sg.addColorStop(1,'transparent');
+    ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(sx,sy,sr*6,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,1)'; ctx.beginPath(); ctx.arc(sx,sy,sr,0,Math.PI*2); ctx.fill();
+    // Diffraction spikes
+    ctx.strokeStyle='rgba(255,255,255,.3)'; ctx.lineWidth=.5*scale;
+    ctx.beginPath(); ctx.moveTo(sx-20*scale,sy); ctx.lineTo(sx+20*scale,sy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx,sy-20*scale); ctx.lineTo(sx,sy+20*scale); ctx.stroke();
+  }
+}
+
+function drawGalaxy(ctx,W,H,cx,cy,rng,obj,large){
+  const scale=large?1.5:1;
+  const angle=(rng()*0.8-0.4);
+  const inclination=rng()>.4?(rng()*.5+.1):(rng()*.15+.85); // edge-on vs face-on
+  ctx.save(); ctx.translate(cx,cy); ctx.rotate(angle);
+
+  const rx=(38+rng()*28)*scale, ry=rx*inclination;
+
+  // Outer halo
+  const gh=ctx.createRadialGradient(0,0,ry*.3,0,0,rx*1.4);
+  gh.addColorStop(0,'rgba(255,240,180,.04)'); gh.addColorStop(1,'transparent');
+  ctx.fillStyle=gh; ctx.beginPath(); ctx.ellipse(0,0,rx*1.4,ry*1.4,0,0,Math.PI*2); ctx.fill();
+
+  // Disk
+  const gd=ctx.createRadialGradient(-rx*.15,-ry*.1,1,0,0,rx);
+  gd.addColorStop(0,'rgba(255,250,200,.95)');
+  gd.addColorStop(0.1,'rgba(255,230,140,.8)');
+  gd.addColorStop(0.35,'rgba(200,150,60,.35)');
+  gd.addColorStop(0.65,'rgba(120,80,30,.12)');
+  gd.addColorStop(1,'transparent');
+  ctx.globalCompositeOperation='screen';
+  ctx.fillStyle=gd; ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI*2); ctx.fill();
+  ctx.globalCompositeOperation='source-over';
+
+  // Dust lane (for edge-on)
+  if(inclination<0.3){
+    ctx.globalCompositeOperation='multiply';
+    const dlg=ctx.createLinearGradient(0,-ry*.6,0,ry*.6);
+    dlg.addColorStop(0,'transparent');
+    dlg.addColorStop(0.45,'rgba(3,5,12,.85)');
+    dlg.addColorStop(0.5,'rgba(2,3,8,.92)');
+    dlg.addColorStop(0.55,'rgba(3,5,12,.85)');
+    dlg.addColorStop(1,'transparent');
+    ctx.fillStyle=dlg; ctx.beginPath(); ctx.ellipse(0,0,rx*1.05,ry*.8,0,0,Math.PI*2); ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+  }
+
+  // Spiral arms (face-on)
+  if(inclination>0.5){
+    ctx.globalCompositeOperation='screen';
+    for(let arm=0;arm<2;arm++){
+      ctx.beginPath();
+      const startA=arm*Math.PI;
+      for(let t=0;t<Math.PI*1.8;t+=0.05){
+        const r=(8+t*12)*scale;
+        const x=Math.cos(startA+t)*r, y=Math.sin(startA+t)*r*inclination;
+        if(t===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle=`rgba(255,220,120,.${Math.floor(rng()*2+1)})`;
+      ctx.lineWidth=(1+rng())*scale; ctx.stroke();
+    }
+    ctx.globalCompositeOperation='source-over';
+  }
+
+  // Core
+  const gc=ctx.createRadialGradient(0,0,0,0,0,10*scale);
+  gc.addColorStop(0,'rgba(255,255,240,1)'); gc.addColorStop(0.3,'rgba(255,230,160,.8)');
+  gc.addColorStop(1,'transparent');
+  ctx.fillStyle=gc; ctx.beginPath(); ctx.arc(0,0,10*scale,0,Math.PI*2); ctx.fill();
+  // Diffraction spikes on core
+  ctx.strokeStyle='rgba(255,255,220,.25)'; ctx.lineWidth=.6*scale;
+  ctx.beginPath(); ctx.moveTo(-28*scale,0); ctx.lineTo(28*scale,0); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,-28*scale); ctx.lineTo(0,28*scale); ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawCluster(ctx,W,H,cx,cy,rng,obj,large){
+  const scale=large?1.5:1;
+  const isGlobular=obj.cat&&(obj.cat.includes('M13')||obj.cat.includes('M92')||obj.cat.includes('NGC 6')||obj.id.startsWith('m1')||obj.id.startsWith('m2')||obj.id.startsWith('m3')||obj.id.startsWith('m4')||obj.id.startsWith('m5')||obj.id.startsWith('ngc104')||obj.id.startsWith('ngc6')||obj.id.startsWith('m6')||obj.id.startsWith('m7')||obj.id.startsWith('m8')||obj.id.startsWith('m9')||obj.id.startsWith('ngc5'));
+  
+  if(isGlobular){
+    // Globular cluster — dense core with radial gradient + stars
+    const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,45*scale);
+    cg.addColorStop(0,'rgba(255,250,220,.75)');
+    cg.addColorStop(0.25,'rgba(255,230,160,.3)');
+    cg.addColorStop(0.6,'rgba(200,170,80,.1)');
+    cg.addColorStop(1,'transparent');
+    ctx.globalCompositeOperation='screen';
+    ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(cx,cy,50*scale,0,Math.PI*2); ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+    const n=large?300:160;
+    for(let i=0;i<n;i++){
+      const d=Math.pow(rng(),.4)*42*scale;
+      const a=rng()*Math.PI*2;
+      const x=cx+Math.cos(a)*d, y=cy+Math.sin(a)*d;
+      const r=(rng()<0.9?rng()*.8+.2:rng()*1.4+.5)*scale;
+      const br=Math.exp(-d/(25*scale))*.6+rng()*.3+.1;
+      ctx.fillStyle=rng()>.7?`rgba(255,240,200,${br})`:`rgba(200,215,255,${br*.6+.1})`;
+      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    }
+  } else {
+    // Open cluster — scattered stars, possibly with nebulosity
+    const hasNeb=rng()>.5;
+    if(hasNeb){
+      const ng=ctx.createRadialGradient(cx,cy,0,cx,cy,55*scale);
+      ng.addColorStop(0,'rgba(100,140,220,.08)'); ng.addColorStop(1,'transparent');
+      ctx.globalCompositeOperation='screen';
+      ctx.fillStyle=ng; ctx.beginPath(); ctx.arc(cx,cy,60*scale,0,Math.PI*2); ctx.fill();
+      ctx.globalCompositeOperation='source-over';
+    }
+    const n=large?80:45;
+    const colPref=rng()>.5;
+    for(let i=0;i<n;i++){
+      const d=Math.pow(rng(),.6)*52*scale;
+      const a=rng()*Math.PI*2;
+      const x=cx+Math.cos(a)*d, y=cy+Math.sin(a)*d;
+      const r=(rng()<0.85?rng()*1.2+.3:rng()*2.2+.8)*scale;
+      const br=rng()*.4+.2;
+      const isRed=rng()<.12;
+      if(isRed) ctx.fillStyle=`rgba(255,170,120,${br+.1})`;
+      else if(colPref) ctx.fillStyle=`rgba(180,210,255,${br})`;
+      else ctx.fillStyle=`rgba(255,250,220,${br})`;
+      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+      if(r>1.2*scale){
+        ctx.fillStyle=`rgba(220,230,255,${br*.12})`; 
+        ctx.beginPath(); ctx.arc(x,y,r*2.8,0,Math.PI*2); ctx.fill();
+      }
+    }
+  }
+}
+
+function drawPlanet(ctx,W,H,cx,cy,rng,obj,large){
+  const scale=large?1.6:1;
+  const pr=obj.id==='luna'?38:obj.id==='saturno'?24:obj.id==='giove'?22:18;
+  const r=pr*scale;
+
+  if(obj.id==='saturno'){
+    // Saturn rings
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(-0.2);
+    const rg=ctx.createLinearGradient(-r*2.4,0,r*2.4,0);
+    rg.addColorStop(0,'transparent');
+    rg.addColorStop(0.15,'rgba(200,175,120,.35)');
+    rg.addColorStop(0.38,'rgba(230,200,140,.7)');
+    rg.addColorStop(0.48,'rgba(180,150,90,.25)'); // Cassini
+    rg.addColorStop(0.52,'rgba(180,150,90,.25)');
+    rg.addColorStop(0.62,'rgba(220,195,130,.65)');
+    rg.addColorStop(0.85,'rgba(190,165,100,.3)');
+    rg.addColorStop(1,'transparent');
+    ctx.fillStyle=rg; ctx.beginPath(); ctx.ellipse(0,0,r*2.4,r*.55,0,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+
+  // Planet sphere
+  const pg=ctx.createRadialGradient(cx-r*.3,cy-r*.25,r*.05,cx,cy,r);
+  if(obj.id==='giove'){
+    pg.addColorStop(0,'rgba(240,210,160,1)');
+    pg.addColorStop(0.4,'rgba(200,160,100,.9)');
+    pg.addColorStop(0.8,'rgba(160,110,70,.7)');
+    pg.addColorStop(1,'rgba(90,55,30,.4)');
+  } else if(obj.id==='marte'){
+    pg.addColorStop(0,'rgba(240,160,100,1)');
+    pg.addColorStop(0.45,'rgba(200,100,60,.9)');
+    pg.addColorStop(0.8,'rgba(140,60,30,.7)');
+    pg.addColorStop(1,'rgba(80,30,15,.4)');
+  } else if(obj.id==='luna'){
+    pg.addColorStop(0,'rgba(230,225,215,1)');
+    pg.addColorStop(0.5,'rgba(180,175,165,.9)');
+    pg.addColorStop(0.85,'rgba(110,105,95,.7)');
+    pg.addColorStop(1,'rgba(60,55,50,.3)');
+  } else if(obj.id==='urano'||obj.id==='nettuno'){
+    const col=obj.id==='urano'?'100,200,200':'80,130,220';
+    pg.addColorStop(0,`rgba(${col},.95)`);
+    pg.addColorStop(0.6,`rgba(${col},.7)`);
+    pg.addColorStop(1,`rgba(${col},.2)`);
+  } else {
+    pg.addColorStop(0,'rgba(255,230,180,1)');
+    pg.addColorStop(0.5,'rgba(200,170,100,.85)');
+    pg.addColorStop(1,'rgba(120,80,30,.3)');
+  }
+  ctx.fillStyle=pg; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+
+  // Jupiter bands
+  if(obj.id==='giove'){
+    for(let b=0;b<6;b++){
+      const by=cy-r+r*(b/3.2)+r*.1;
+      const bh=r*.12;
+      const bg=ctx.createLinearGradient(0,by,0,by+bh);
+      bg.addColorStop(0,'transparent');
+      bg.addColorStop(0.5,b%2===0?'rgba(140,80,40,.35)':'rgba(220,180,110,.2)');
+      bg.addColorStop(1,'transparent');
+      ctx.fillStyle=bg;
+      ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.clip();
+      ctx.fillRect(cx-r,by,r*2,bh); ctx.restore();
+    }
+    // GRS
+    const grsG=ctx.createRadialGradient(cx+r*.2,cy+r*.12,1,cx+r*.2,cy+r*.12,r*.18);
+    grsG.addColorStop(0,'rgba(200,80,40,.6)'); grsG.addColorStop(1,'transparent');
+    ctx.fillStyle=grsG; ctx.beginPath(); ctx.ellipse(cx+r*.2,cy+r*.12,r*.18,r*.1,0,0,Math.PI*2); ctx.fill();
+  }
+
+  // Luna craters
+  if(obj.id==='luna'){
+    ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.clip();
+    for(let cr=0;cr<(large?18:10);cr++){
+      const ca=rng()*Math.PI*2, cd=rng()*.7*r;
+      const crx=cx+Math.cos(ca)*cd, cry=cy+Math.sin(ca)*cd;
+      const crr=(rng()*r*.12+r*.03);
+      ctx.strokeStyle=`rgba(80,75,70,${rng()*.3+.1})`; ctx.lineWidth=.5;
+      ctx.beginPath(); ctx.arc(crx,cry,crr,0,Math.PI*2); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Atmosphere glow
+  const ag=ctx.createRadialGradient(cx,cy,r*.8,cx,cy,r*1.25);
+  ag.addColorStop(0,'transparent');
+  ag.addColorStop(0.5,obj.id==='giove'?'rgba(200,160,80,.08)':obj.id==='marte'?'rgba(220,100,50,.1)':'rgba(200,210,230,.06)');
+  ag.addColorStop(1,'transparent');
+  ctx.fillStyle=ag; ctx.beginPath(); ctx.arc(cx,cy,r*1.25,0,Math.PI*2); ctx.fill();
+}
+
+function drawDouble(ctx,W,H,cx,cy,rng,obj,large){
+  const scale=large?1.4:1;
+  const sep=(20+rng()*25)*scale;
+  const pairs=[
+    {c1:'rgba(255,170,60,1)',c2:'rgba(80,160,255,1)'},
+    {c1:'rgba(255,255,200,1)',c2:'rgba(255,120,80,1)'},
+    {c1:'rgba(200,230,255,1)',c2:'rgba(255,200,120,1)'},
+  ];
+  const {c1,c2}=pairs[obj.id.charCodeAt(0)%3];
+  [[cx-sep/2,cy,c1,2.2],[cx+sep/2,cy,c2,1.6]].forEach(([x,y,col,sr])=>{
+    sr*=scale;
+    const sg=ctx.createRadialGradient(x,y,0,x,y,sr*8);
+    sg.addColorStop(0,col); sg.addColorStop(0.1,col.replace(',1)',',0.6)')); sg.addColorStop(0.4,col.replace(',1)',',0.12)')); sg.addColorStop(1,'transparent');
+    ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(x,y,sr*8,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,y,sr,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle=col.replace(',1)',',0.25)'); ctx.lineWidth=.5*scale;
+    ctx.beginPath(); ctx.moveTo(x-18*scale,y); ctx.lineTo(x+18*scale,y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x,y-18*scale); ctx.lineTo(x,y+18*scale); ctx.stroke();
+  });
 }
 
 // ═══════════════════════════════════════════════════════
@@ -300,7 +756,27 @@ function getAlt(obj,month){
 }
 
 // ═══════════════════════════════════════════════════════
-// CATALOG — 300 objects with correct RA/Dec (J2000)
+// EXTENDED INFO PER OBJECT
+// ═══════════════════════════════════════════════════════
+const OBJ_INFO = {
+  'm42':  {dist:'1344 al',type_detail:'Nebulosa a Emissione / Riflessione',const:'Orione',desc:'La più famosa nebulosa del cielo. Visibile a occhio nudo come la "stella" centrale di Orione. Regione di formazione stellare attiva con il Trapezio al centro, un gruppo di giovani stelle massicce.'},
+  'ic434':{dist:'1375 al',type_detail:'Nebulosa Oscura su Emissione',const:'Orione',desc:'La iconica Testa di Cavallo è una nebulosa oscura (Barnard 33) che si staglia davanti alla nebulosa a emissione IC 434. Richiede filtro Hα stretto o banda stretta.'},
+  'm1':   {dist:'6523 al',type_detail:'Resto di Supernova',const:'Toro',desc:'Resto della supernova SN 1054 osservata dai cinesi nell\'anno 1054. Al suo centro si trova una pulsar che ruota 30 volte al secondo.'},
+  'm31':  {dist:'2.537 Mly',type_detail:'Galassia Spirale (SA(s)b)',const:'Andromeda',desc:'La galassia più grande del Gruppo Locale. Si avvicina alla Via Lattea a ~110 km/s e si fonderà con essa tra circa 4.5 miliardi di anni. Contiene circa 1 trilione di stelle.'},
+  'm51':  {dist:'23 Mly',type_detail:'Galassia Spirale Interagente',const:'Cani da Caccia',desc:'La Galassia Vortice in piena interazione con NGC 5195. La loro collisione gravitazionale ha amplificato la struttura spirale di M51, rendendola una delle più fotografate.'},
+  'm81':  {dist:'11.74 Mly',type_detail:'Galassia Spirale (SA(s)ab)',const:'Orsa Maggiore',desc:'La galassia di Bode, capo del Gruppo M81. Quasi circumpolare dall\'Europa. La sua simmetria la rende uno dei soggetti galattici più belli del cielo boreale.'},
+  'm82':  {dist:'12 Mly',type_detail:'Galassia Starburst (Irr)',const:'Orsa Maggiore',desc:'La Galassia Sigaro, perturbata gravitazionalmente da M81. I getti di gas ionizzato in Hα fuoriescono perpendicolarmente al disco. Uno dei soggetti più spettacolari in banda stretta.'},
+  'm13':  {dist:'25.1 kly',type_detail:'Ammasso Globulare',const:'Ercole',desc:'Il Grande Ammasso di Ercole. Contiene circa 300.000 stelle e si trova a 25.100 anni luce. È il più bello ammasso globulare del cielo boreale. Nel 1974 fu inviato il Messaggio di Arecibo verso di esso.'},
+  'm57':  {dist:'2300 al',type_detail:'Nebulosa Planetaria',const:'Lira',desc:'La Nebulosa Anello, archetipo delle nebulose planetarie. La struttura toroidale è dovuta all\'espulsione degli strati esterni di una stella simile al Sole. La stella centrale, di magnitudine 15, è visibile in esposizioni profonde.'},
+  'm27':  {dist:'1360 al',type_detail:'Nebulosa Planetaria',const:'Volpetta',desc:'La più grande nebulosa planetaria visibile dal nostro emisfero. Visibile persino in binocolo (mag 7.4). La sua forma bilobata le vale i soprannomi "Manubrio" o "Mela".'},
+  'm45':  {dist:'444 al',type_detail:'Ammasso Aperto con Nebulosità',const:'Toro',desc:'Le Pleiadi, ammasso aperto di stelle giovani (100 milioni di anni). La nebulosità di riflessione blu è visibile in fotografia a lunga posa. Nell\'antichità era usato come test per la vista.'},
+  'luna': {dist:'384.400 km',type_detail:'Satellite Naturale',const:'—',desc:'Il satellite naturale della Terra. A 1625mm si possono risolvere dettagli fini come le creste dei crateri, i valles e i mari. Evitare le notti intorno al plenilunio per il deep sky.'},
+  'giove':{dist:'~628-928 Mkm',type_detail:'Pianeta Gassoso',const:'—',desc:'Il pianeta più grande del Sistema Solare. Le bande nuvolose, la Grande Macchia Rossa e le quattro lune galileiane sono visibili già a 750mm. Il lucky imaging a 1085+ mm rivela strutture dettagliate.'},
+  'saturno':{dist:'~1.2-1.7 Mkm',type_detail:'Pianeta Gassoso con Anelli',const:'—',desc:'Saturno e i suoi anelli sono uno dei soggetti più emozionanti per chi inizia. La Divisione di Cassini negli anelli è visibile a 750mm. L\'inclinazione degli anelli varia nel tempo.'},
+};
+
+// ═══════════════════════════════════════════════════════
+// CATALOG
 // ═══════════════════════════════════════════════════════
 const OBJ=[
 // ══ NEBULOSE A EMISSIONE / RIFLESSIONE ══════════════════
@@ -844,66 +1320,165 @@ const OBJ=[
 ];
 
 // ═══════════════════════════════════════════════════════
-// UI — COUNTRIES
+// MONTHS
 // ═══════════════════════════════════════════════════════
-document.getElementById('totCount').textContent=OBJ.length+' oggetti';
+const MONTHS=[
+  {n:1,name:'Gennaio',desc:'Orione, Toro, Gemelli al culmine'},
+  {n:2,name:'Febbraio',desc:'Orione al tramonto, Leone emerge'},
+  {n:3,name:'Marzo',desc:'Galassie del Leone, M81/M82'},
+  {n:4,name:'Aprile',desc:'Ammasso della Vergine, M51'},
+  {n:5,name:'Maggio',desc:'M51, M101, galassie di primavera'},
+  {n:6,name:'Giugno',desc:'Via Lattea, M13, nebulose estive'},
+  {n:7,name:'Luglio',desc:'Sagittario, Scorpione, cuore della Via Lattea'},
+  {n:8,name:'Agosto',desc:'Cygnus, Aquila, nebulosa del Velo'},
+  {n:9,name:'Settembre',desc:'Nebulosa di Andromeda, IC 1805'},
+  {n:10,name:'Ottobre',desc:'M31, Perseus, doppio ammasso'},
+  {n:11,name:'Novembre',desc:'Andromeda alta, Orione sorge'},
+  {n:12,name:'Dicembre',desc:'Orione, Nebulosa Testa di Cavallo'},
+];
 
-const cpContainer=document.getElementById('countryPills');
-COUNTRIES.forEach(c=>{
-  const b=document.createElement('button');
-  b.className='cpill'+(c.id==='it-n'?' on':'');
-  b.innerHTML=`<span>${c.flag}</span>${c.label}`;
-  b.addEventListener('click',()=>{
-    activeCountry=c.id;activeLat=c.lat;activeLon=c.lon;
-    document.querySelectorAll('.cpill').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');
-    document.getElementById('latNote').textContent=`φ ${c.lat}°N  λ ${c.lon>=0?'+':''}${c.lon}°`;
-    refreshActive();
+// ═══════════════════════════════════════════════════════
+// INIT UI
+// ═══════════════════════════════════════════════════════
+function initCountrySelect(){
+  const sel=document.getElementById('countrySelect');
+  COUNTRIES.forEach(c=>{
+    const o=document.createElement('option');
+    o.value=c.id; o.textContent=c.label;
+    sel.appendChild(o);
   });
-  cpContainer.appendChild(b);
-});
-document.getElementById('latNote').textContent=`φ 45.5°N  λ +10.0°`;
-
-// ═══════════════════════════════════════════════════════
-// UI — TIME SLIDER
-// ═══════════════════════════════════════════════════════
-const rS=document.getElementById('rS'),rE=document.getElementById('rE');
-const sFill=document.getElementById('sFill');
-
-function updateSlider(){
-  const min=17,max=30,range=max-min;
-  const s=parseFloat(rS.value),e=parseFloat(rE.value);
-  sFill.style.left=((s-min)/range*100)+'%';
-  sFill.style.width=((e-s)/range*100)+'%';
-  document.getElementById('tStart').textContent=fmtH(s);
-  document.getElementById('tEnd').textContent=fmtH(e%24);
-  document.getElementById('winInfo').textContent=`(${(e-s).toFixed(1)}h)`;
-}
-rS.addEventListener('input',()=>{if(+rS.value>=+rE.value-.5)rS.value=+rE.value-.5;timeStart=+rS.value;updateSlider();refreshActive();});
-rE.addEventListener('input',()=>{if(+rE.value<=+rS.value+.5)rE.value=+rS.value+.5;timeEnd=+rE.value;updateSlider();refreshActive();});
-updateSlider();
-
-// ═══════════════════════════════════════════════════════
-// IMAGE LOADING
-// ═══════════════════════════════════════════════════════
-const imgCache={};
-async function getImg(obj){
-  if(imgCache[obj.id]) return imgCache[obj.id];
-  // 1) Try NASA images API
-  const url=await fetchNasaImg(obj.nasaQ);
-  imgCache[obj.id]=url||null;
-  return url;
+  sel.addEventListener('change',()=>{
+    const c=COUNTRIES.find(x=>x.id===sel.value);
+    if(c&&c.id!=='custom'){
+      activeLat=c.lat; activeLon=c.lon;
+      document.getElementById('inpLat').value=activeLat;
+      document.getElementById('inpLon').value=activeLon;
+    }
+    refreshAll();
+  });
+  document.getElementById('inpLat').addEventListener('change',e=>{
+    activeLat=parseFloat(e.target.value)||45.5;
+    document.getElementById('countrySelect').value='custom';
+    refreshAll();
+  });
+  document.getElementById('inpLon').addEventListener('change',e=>{
+    activeLon=parseFloat(e.target.value)||10.0;
+    document.getElementById('countrySelect').value='custom';
+    refreshAll();
+  });
 }
 
-async function fetchNasaImg(query){
-  try{
-    const r=await fetch(`https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page_size=1`,{signal:AbortSignal.timeout(5000)});
-    if(!r.ok) return null;
-    const j=await r.json();
-    const item=j.collection?.items?.[0];
-    if(!item||!item.links) return null;
-    return item.links[0]?.href||null;
-  }catch{return null;}
+function initCameraSelect(){
+  const sel=document.getElementById('cameraSelect');
+  sel.addEventListener('change',()=>{
+    activeCamera=CAMERAS[sel.value];
+    updateCameraInfo();
+    refreshAll();
+  });
+  updateCameraInfo();
+}
+
+function updateCameraInfo(){
+  const cam=activeCamera;
+  document.getElementById('sensorInfo').textContent=`${cam.type} · ${cam.w}×${cam.h}mm`;
+  document.getElementById('pixelInfo').textContent=`${cam.px}µm · ${cam.cols}×${cam.rows}`;
+}
+
+function initSliders(){
+  const rS=document.getElementById('rS'),rE=document.getElementById('rE');
+  const fill=document.getElementById('sFill');
+  function updateSlider(){
+    let s=parseFloat(rS.value),e=parseFloat(rE.value);
+    if(e<=s+0.5){e=s+0.5;rE.value=e;}
+    if(s>=e-0.5){s=e-0.5;rS.value=s;}
+    timeStart=s; timeEnd=e;
+    const min=17,max=30,range=max-min;
+    fill.style.left=((s-min)/range*100)+'%';
+    fill.style.width=((e-s)/range*100)+'%';
+    document.getElementById('tStart').textContent=fmtH(s%24);
+    document.getElementById('tEnd').textContent=fmtH(e%24);
+    const hrs=Math.round((e-s)*10)/10;
+    document.getElementById('winInfo').textContent=`${hrs}h di finestra`;
+    refreshAll();
+  }
+  rS.addEventListener('input',updateSlider);
+  rE.addEventListener('input',updateSlider);
+  updateSlider();
+}
+
+function initMonthNav(){
+  const nav=document.getElementById('mnav');
+  const main=document.getElementById('main');
+  MONTHS.forEach(m=>{
+    const btn=document.createElement('button');
+    btn.className='mnav-btn'+(m.n===activeMonth?' active':'');
+    btn.dataset.n=m.n;
+    btn.innerHTML=`${m.name}<span class="cnt" id="nc-${m.n}">…</span>`;
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.month-sec').forEach(s=>s.classList.remove('active'));
+      const sec=document.getElementById('sec-'+m.n);
+      if(sec){sec.classList.add('active');activeMonth=m.n;resetFilters(m.n);renderGrid(m.n);}
+    });
+    nav.appendChild(btn);
+
+    // Build section
+    const sec=document.createElement('div');
+    sec.className='month-sec'+(m.n===activeMonth?' active':'');
+    sec.id='sec-'+m.n;
+    sec.innerHTML=`
+    <div class="sec-hero">
+      <div class="sec-month">${m.name}</div>
+      <div class="sec-right">
+        <div class="sec-desc">${m.desc}</div>
+        <p class="sec-count" id="scnt-${m.n}">…</p>
+      </div>
+    </div>
+    <div class="vis-bar" id="vbar-${m.n}">Calcolo altitudini…</div>
+    <div class="toolbar" id="tb-${m.n}">
+      <span class="tb-lbl">Tipo:</span>
+      <button class="pill on" data-f="all">Tutti</button>
+      ${Object.entries(TYPE_N).map(([k,v])=>`<button class="pill" data-f="${k}">${v}</button>`).join('')}
+      <div class="tb-sep"></div>
+      <span class="tb-lbl">Focale:</span>
+      ${FOCALS.map(f=>`<button class="pill" data-focal="${f}">${f}mm</button>`).join('')}
+      <div class="tb-sep"></div>
+      <button class="pill" id="lxbtn-${m.n}">⬡ L-Extreme</button>
+      <div class="tb-sep"></div>
+      <button class="pill" id="srt-${m.n}">↓ Altitudine</button>
+    </div>
+    <div class="obj-grid" id="grid-${m.n}"></div>`;
+    main.appendChild(sec);
+
+    // Filter listeners
+    sec.querySelectorAll('[data-f]').forEach(b=>b.addEventListener('click',()=>{
+      sec.querySelectorAll('[data-f]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      activeFilt.type=b.dataset.f==='all'?null:b.dataset.f;
+      applyFilters(m.n);
+    }));
+    sec.querySelectorAll('[data-focal]').forEach(b=>b.addEventListener('click',()=>{
+      const was=b.classList.contains('on');
+      sec.querySelectorAll('[data-focal]').forEach(x=>x.classList.remove('on'));
+      activeFilt.focal=was?null:+b.dataset.focal;
+      if(!was)b.classList.add('on');
+      applyFilters(m.n);
+    }));
+    const lxBtn=sec.querySelector(`#lxbtn-${m.n}`);
+    lxBtn.addEventListener('click',()=>{
+      activeFilt.lx=!activeFilt.lx;
+      lxBtn.classList.toggle('lx-on',activeFilt.lx);
+      lxBtn.textContent=activeFilt.lx?'⬡ L-Extreme ON':'⬡ L-Extreme';
+      applyFilters(m.n);
+    });
+    let srtMode='alt';
+    sec.querySelector(`#srt-${m.n}`).addEventListener('click',e=>{
+      srtMode=srtMode==='alt'?'mag':'alt';
+      e.target.textContent=srtMode==='alt'?'↓ Altitudine':'↓ Magnitudine';
+      renderGrid(m.n,srtMode);
+    });
+  });
 }
 
 // ═══════════════════════════════════════════════════════
@@ -912,198 +1487,235 @@ async function fetchNasaImg(query){
 function buildCard(obj,month){
   const info=getAlt(obj,month);
   const ac=altColor(info.alt);
-  const pct=Math.min(Math.max(info.alt,0)/85*100,100);
-  const focali=FOCALS.map(f=>`<span class="ftag${obj.best.includes(f)?' best':''}">${f}mm</span>`).join('');
-  const pips=Array.from({length:5},(_,i)=>`<div class="pip${i<obj.diff?' on':''}"></div>`).join('');
+  const camBest=bestFocalsForCamera(obj);
+  const camOk=isCameraCompatible(obj);
 
   const d=document.createElement('div');
-  d.className='obj-card';
-  if(info.alt<MIN_ALT) d.classList.add('hidden');
+  d.className='obj-card'+(info.alt<MIN_ALT?' hidden':'');
   d.dataset.alt=info.alt;
   d.dataset.lx=obj.lx||0;
-  d.dataset.best=JSON.stringify(obj.best||[]);
+  d.dataset.best=JSON.stringify(camBest);
+  d.dataset.type=obj.type;
+  d.dataset.id=obj.id;
+  if(!camOk) d.classList.add('hidden'); // hide if camera incompatible
 
-  const altDesc=info.alt>50?'Altissima':info.alt>35?'Alta':info.alt>20?'Moderata':info.alt>10?'Bassa':'Limite';
+  const diffPips=Array.from({length:5},(_,i)=>`<span class="pip${i<(obj.diff||1)?' on':''}"></span>`).join('');
+  const focalTags=FOCALS.map(f=>`<span class="ftag${camBest.includes(f)?' best':''}">${f}mm</span>`).join('');
+
+  let lxBadge='';
+  if(obj.lx===3) lxBadge=`<span class="lx-tag-sm">L-EX ★</span>`;
+  else if(obj.lx===2) lxBadge=`<span class="lx-tag-sm">L-EX ◎</span>`;
+  else if(obj.lx===1) lxBadge=`<span class="lx-tag-sm">L-EX ◐</span>`;
 
   d.innerHTML=`
-    <div class="card-img">
-      <canvas class="fb-canvas"></canvas>
-      <img alt="${obj.name}" loading="lazy" style="opacity:0;transition:opacity .3s">
-      <div class="card-top">
+  <div class="card-canvas-wrap">
+    <canvas></canvas>
+    <div class="card-top">
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
         <span class="type-badge">${TYPE_N[obj.type]||obj.type}</span>
-        ${obj.lx>0?`<span style="background:rgba(167,139,250,.18);border:1px solid rgba(124,58,237,.3);color:#7c3aed;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;padding:2px 7px;border-radius:2px;backdrop-filter:blur(8px)">L-EX${obj.lx===3?' ★':obj.lx===2?' ◎':' ◐'}</span>`:''}
-        <span class="alt-badge" style="border-color:${ac.c}33;color:${ac.c}">
-          <span class="alt-dot" style="background:${ac.c}"></span>${info.alt}°
-        </span>
+        ${lxBadge}
       </div>
-      <div class="alt-meter"><div class="alt-meter-fill" style="width:${pct}%;background:${ac.c}"></div></div>
+      <div class="alt-badge" style="color:${ac.c};background:rgba(250,249,246,.92);border-color:${ac.c}22">
+        <span class="alt-dot" style="background:${ac.c}"></span>
+        ${info.alt}°
+      </div>
     </div>
-    <div class="card-body">
-      <div class="card-name">${obj.name}</div>
-      <div class="card-cat">${obj.cat}</div>
-      <div class="card-row2">
-        <div class="cstat"><span class="cs-lbl">Magnitudine</span><span class="cs-val">${obj.mag}</span></div>
-        <div class="cstat"><span class="cs-lbl">Dimensione</span><span class="cs-val">${obj.size||'—'}</span></div>
-      </div>
-      <div class="alt-row">
-        <span class="cs-lbl" style="min-width:48px">Altitudine</span>
-        <span class="alt-num" style="color:${ac.c}">${info.alt}°</span>
-        <span class="alt-desc">${altDesc} · max alle ${fmtH(info.hour)}</span>
-      </div>
-      <div class="diff-row">
-        <span class="diff-lbl">Difficoltà</span>
-        <div class="pips">${pips}</div>
-        <span class="diff-txt">${DIFF_N[obj.diff]}</span>
-      </div>
-      <div style="margin-bottom:4px"><span style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);font-family:'DM Mono',monospace">Focale consigliata</span></div>
-      <div class="focali-row">${focali}</div>
-      <div class="card-notes">${obj.notes}</div>
-      ${obj.lx===3?'<div class=\"lx-badge\">L-Extreme ★ Ottimo</div><div class=\"lx-note\">Forte emissione Hα+OIII. Eccellente anche da cielo urbano.</div>':obj.lx===2?'<div class=\"lx-badge\">L-Extreme ◎ Buono</div><div class=\"lx-note\">Emissione Hα/OIII presente. Risultati migliori da cieli bui.</div>':obj.lx===1?'<div class=\"lx-badge\">L-Extreme ◐ Parziale</div><div class=\"lx-note\">Debole componente Hα. Meglio senza filtro da cieli bui.</div>':''}
-    </div>`;
+    <div class="alt-meter"><div class="alt-meter-fill" style="width:${Math.min(100,Math.max(0,info.alt))}%;background:${ac.c}44"></div></div>
+  </div>
+  <div class="card-body">
+    <div class="card-name">${obj.name}</div>
+    <div class="card-cat">${obj.cat||''} · ${TYPE_N[obj.type]}</div>
+    <div class="card-row2">
+      <div class="cstat"><span class="cs-lbl">Magnitudine</span><span class="cs-val">${obj.mag}</span></div>
+      <div class="cstat"><span class="cs-lbl">Dimensione</span><span class="cs-val">${obj.size||'—'}</span></div>
+    </div>
+    <div class="diff-row">
+      <span class="diff-lbl">Difficoltà</span>
+      <div class="pips">${diffPips}</div>
+      <span class="diff-txt">${DIFF_N[obj.diff||1]}</span>
+    </div>
+    <div class="focali-row">${focalTags}</div>
+    <div class="card-notes">${obj.notes}</div>
+  </div>`;
 
-  // Draw fallback canvas immediately
-  const canvas=d.querySelector('.fb-canvas');
-  const imgEl=d.querySelector('img');
-  // Size canvas after append
-  requestAnimationFrame(()=>drawFallback(canvas,obj));
+  // Draw canvas
+  const canvas=d.querySelector('canvas');
+  requestAnimationFrame(()=>renderCanvas(canvas,obj,false));
 
-  // Direct image load from Wikimedia Commons
-  const _imgUrl=IMGS[obj.id];
-  if(_imgUrl){ imgEl.src=_imgUrl; imgEl.onload=()=>{imgEl.style.opacity='1';}; imgEl.onerror=()=>{}; }
-
+  // Click → modal
+  d.addEventListener('click',()=>openModal(obj,month));
   return d;
 }
 
 // ═══════════════════════════════════════════════════════
-// BUILD SECTIONS
+// MODAL
 // ═══════════════════════════════════════════════════════
-const MONTHS_DATA=[
-  {n:1,name:'Gennaio',desc:'Notti ~14h. Orione in meridiano. Stagione d\'oro per le nebulose invernali.'},
-  {n:2,name:'Febbraio',desc:'Auriga in zenith, galassie dell\'Orsa iniziano a salire.'},
-  {n:3,name:'Marzo',desc:'Transizione inverno/primavera. Prime galassie primaverili emergono.'},
-  {n:4,name:'Aprile',desc:'Primavera galattica. Leone, Vergine e Cani da Caccia dominano.'},
-  {n:5,name:'Maggio',desc:'M51, M101 in zenith. M13 sale in serata. Galassie primaverili al top.'},
-  {n:6,name:'Giugno',desc:'Notti brevi (~6h) ma Via Lattea estiva emerge. Cigno e Lira dominano.'},
-  {n:7,name:'Luglio',desc:'Estate al massimo. NGC 7000 in zenith. Globulari al top.'},
-  {n:8,name:'Agosto',desc:'Perseidi! Via Lattea al culmine. Andromeda sale in seconda serata.'},
-  {n:9,name:'Settembre',desc:'M31 alta. Cassiopea e Perseo prominenti. Notti ~11h.'},
-  {n:10,name:'Ottobre',desc:'Autunno galattico. Andromeda al top. NGC 7331 in bella vista.'},
-  {n:11,name:'Novembre',desc:'Cassiopea domina. Prime nebulose invernali. Notti ~13h.'},
-  {n:12,name:'Dicembre',desc:'Orione sorge in prima serata. Notti lunghissime ~14h.'},
-];
+function openModal(obj,month){
+  const info=getAlt(obj,month);
+  const ac=altColor(info.alt);
+  const camBest=bestFocalsForCamera(obj);
+  const extra=OBJ_INFO[obj.id]||{};
 
-const nav=document.getElementById('mnav'),mainEl=document.getElementById('main');
+  // Canvas
+  const mc=document.getElementById('modalCanvas');
+  renderCanvas(mc,obj,true);
 
-MONTHS_DATA.forEach((m,mi)=>{
-  const objs=OBJ.filter(o=>o.months.includes(m.n));
-  const types=[...new Set(objs.map(o=>o.type))];
+  // Badges
+  document.getElementById('modalBadges').innerHTML=`
+    <span class="modal-badge">${TYPE_N[obj.type]||obj.type}</span>
+    <span class="modal-badge" style="color:${ac.c}">${info.alt}° · ${fmtH(info.hour%24)}</span>
+    ${obj.lx>0?`<span class="modal-badge" style="color:#7c3aed">L-Extreme ${obj.lx===3?'★ Ottimo':obj.lx===2?'◎ Buono':'◐ Parziale'}</span>`:''}
+  `;
 
-  const btn=document.createElement('button');
-  btn.className='mnav-btn'+(mi===0?' active':'');
-  btn.dataset.m=m.n;
-  btn.innerHTML=`${m.name}<span class="cnt" id="cnt-${m.n}">…</span>`;
-  btn.addEventListener('click',()=>switchMonth(m.n));
-  nav.appendChild(btn);
+  document.getElementById('modalName').textContent=obj.name;
+  document.getElementById('modalCat').textContent=(obj.cat||'')+(extra.const?` · Costellazione: ${extra.const}`:'');
 
-  const sec=document.createElement('section');
-  sec.className='month-sec'+(mi===0?' active':'');
-  sec.id='sec-'+m.n;
-  sec.innerHTML=`
-    <div class="sec-hero">
-      <div class="sec-month">${m.name}</div>
-      <div class="sec-right">
-        <p class="sec-desc">${m.desc}</p>
-        <p class="sec-count" id="scnt-${m.n}">…</p>
-      </div>
-    </div>
-    <div class="vis-bar" id="vbar-${m.n}">Calcolo altitudini…</div>
-    <div class="toolbar" id="tb-${m.n}">
-      <span class="tb-lbl">Tipo:</span>
-      <button class="pill on" data-f="all">Tutti</button>
-      ${types.map(t=>`<button class="pill" data-f="${t}">${TYPE_N[t]||t}</button>`).join('')}
-      <div class="tb-sep"></div>
-      <span class="tb-lbl">Focale:</span>
-      ${FOCALS.map(f=>`<button class="pill" data-focal="${f}">${f}mm</button>`).join('')}
-      <div class="tb-sep"></div>
-      <button class="pill" id="lx-${m.n}" title="Mostra solo oggetti compatibili con filtro dual-narrowband Hα+OIII">⬡ L-Extreme</button>
-      <div class="tb-sep"></div>
-      <button class="pill" id="srt-${m.n}">↓ Altitudine</button>
-    </div>
-    <div class="obj-grid" id="grid-${m.n}"></div>`;
-  mainEl.appendChild(sec);
+  // Coords
+  const raH=Math.floor(obj.ra/15),raM=Math.round((obj.ra/15-raH)*60);
+  const decSign=obj.dec>=0?'+':'';
+  document.getElementById('modalCoords').innerHTML=`
+    <span><span>AR</span>${String(raH).padStart(2,'0')}h ${String(raM).padStart(2,'0')}m</span>
+    <span><span>Dec</span>${decSign}${obj.dec.toFixed(1)}°</span>
+    ${extra.dist?`<span><span>Distanza</span>${extra.dist}</span>`:''}
+    ${extra.type_detail?`<span><span>Tipo</span>${extra.type_detail}</span>`:''}
+  `;
 
-  sec.querySelectorAll('[data-f]').forEach(b=>b.addEventListener('click',()=>{
-    sec.querySelectorAll('[data-f]').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-    activeFilt.type=b.dataset.f==='all'?null:b.dataset.f;applyFilters(m.n);
-  }));
-  sec.querySelectorAll('[data-focal]').forEach(b=>b.addEventListener('click',()=>{
-    const was=b.classList.contains('on');
-    sec.querySelectorAll('[data-focal]').forEach(x=>x.classList.remove('on'));
-    activeFilt.focal=was?null:+b.dataset.focal;if(!was)b.classList.add('on');applyFilters(m.n);
-  }));
-  let srtMode='alt';
-  sec.querySelector(`#srt-${m.n}`).addEventListener('click',e=>{
-    srtMode=srtMode==='alt'?'mag':'alt';
-    e.target.textContent=srtMode==='alt'?'↓ Altitudine':'↓ Magnitudine';
-    renderGrid(m.n,srtMode);
-  });
-  sec.querySelector(`#lx-${m.n}`).addEventListener('click',e=>{
-    activeFilt.lx=!activeFilt.lx;
-    e.target.classList.toggle('lx-on',activeFilt.lx);
-    e.target.textContent=activeFilt.lx?'⬡ L-Extreme ON':'⬡ L-Extreme';
-    applyFilters(m.n);
-  });
-});
+  // Stats grid
+  document.getElementById('modalStats').innerHTML=`
+    <div class="modal-stat"><span class="modal-stat-lbl">Magnitudine</span><span class="modal-stat-val big">${obj.mag}</span></div>
+    <div class="modal-stat"><span class="modal-stat-lbl">Dimensione</span><span class="modal-stat-val big">${obj.size||'—'}</span></div>
+    <div class="modal-stat"><span class="modal-stat-lbl">Altitudine max</span><span class="modal-stat-val big" style="color:${ac.c}">${info.alt}°</span></div>
+    <div class="modal-stat"><span class="modal-stat-lbl">Culmina alle</span><span class="modal-stat-val big">${fmtH(info.hour%24)}</span></div>
+  `;
 
-function renderGrid(n,srtMode='alt'){
-  const g=document.getElementById('grid-'+n);if(!g)return;
-  g.innerHTML='';
-  let list=OBJ.filter(o=>o.months.includes(n)).map(o=>({...o,_alt:getAlt(o,n).alt}));
-  if(srtMode==='alt') list.sort((a,b)=>b._alt-a._alt);
-  else list.sort((a,b)=>parseFloat(a.mag)-parseFloat(b.mag));
-  list.forEach(o=>g.appendChild(buildCard(o,n)));
-  applyFilters(n);
-  const vis=list.filter(o=>o._alt>=MIN_ALT).length;
-  document.getElementById(`cnt-${n}`).textContent=`${vis} vis.`;
-  document.getElementById(`scnt-${n}`).textContent=`${vis}/${list.length} VISIBILI`;
-  const ctry=COUNTRIES.find(c=>c.id===activeCountry);
-  document.getElementById(`vbar-${n}`).textContent=`${ctry.label} · φ${activeLat}°N · ${fmtH(timeStart)}–${fmtH(timeEnd%24)} · sotto ${MIN_ALT}°= nascosto`;
+  // Description
+  document.getElementById('modalDesc').textContent=extra.desc||obj.notes||'';
+
+  // Focali
+  document.getElementById('modalFocali').innerHTML=FOCALS.map(f=>`<span class="modal-ftag${camBest.includes(f)?' best':''}">${f}mm</span>`).join('');
+
+  // Difficulty
+  document.getElementById('modalPips').innerHTML=Array.from({length:5},(_,i)=>`<span class="modal-pip${i<(obj.diff||1)?' on':''}"></span>`).join('');
+  document.getElementById('modalDiffTxt').textContent=DIFF_N[obj.diff||1]||'';
+
+  // LX note
+  const lxNotes={3:'Eccellente con L-Extreme — forte emissione Hα+OIII. Funziona anche da cielo urbano.',2:'Buono con L-Extreme — emissione Hα/OIII presente. Meglio da cieli bui.',1:'Parziale — solo debole emissione Hα. Meglio senza filtro da cieli bui.'};
+  document.getElementById('modalLxNote').innerHTML=obj.lx>0?`<div class="lx-note-modal">◈ ${lxNotes[obj.lx]||''}</div>`:'';
+
+  // Open
+  const overlay=document.getElementById('modalOverlay');
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
 }
 
-function applyFilters(n){
-  const g=document.getElementById('grid-'+n);if(!g)return;
-  let shown=0;
+document.getElementById('modalClose').addEventListener('click',closeModal);
+document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER GRID
+// ═══════════════════════════════════════════════════════
+function renderGrid(n,srtMode='alt'){
+  const g=document.getElementById('grid-'+n);
+  if(!g)return;
+  g.innerHTML='';
+
+  let list=OBJ.filter(o=>o.months.includes(n)&&isCameraCompatible(o))
+              .map(o=>({...o,_alt:getAlt(o,n).alt}));
+
+  if(srtMode==='alt') list.sort((a,b)=>b._alt-a._alt);
+  else list.sort((a,b)=>a.mag-b.mag);
+
+  const vis=list.filter(o=>o._alt>=MIN_ALT).length;
+  const tot=list.length;
+
+  document.getElementById(`scnt-${n}`).textContent=`${vis} oggetti visibili · ${tot} in catalogo`;
+  document.getElementById(`nc-${n}`).textContent=vis;
+  document.getElementById(`vbar-${n}`).textContent=`${vis} oggetti sopra ${MIN_ALT}° durante la finestra ${fmtH(timeStart%24)}–${fmtH(timeEnd%24)} · Lat ${activeLat.toFixed(1)}°`;
+
+  if(vis===0){g.innerHTML=`<div class="no-res">NESSUN OGGETTO VISIBILE · Modifica la finestra oraria o la posizione</div>`;return;}
+
+  const frag=document.createDocumentFragment();
+  list.forEach(obj=>frag.appendChild(buildCard(obj,n)));
+  g.appendChild(frag);
+  applyFilters(n,true);
+}
+
+// ═══════════════════════════════════════════════════════
+// FILTERS
+// ═══════════════════════════════════════════════════════
+function applyFilters(n,skipCount=false){
+  const g=document.getElementById('grid-'+n);
+  if(!g)return;
+  let vis=0;
   g.querySelectorAll('.obj-card').forEach(c=>{
     const alt=+c.dataset.alt;
-    const typeBadge=c.querySelector('.type-badge')?.textContent;
-    const typeKey=Object.entries(TYPE_N).find(([k,v])=>v===typeBadge)?.[0];
+    const typeKey=c.dataset.type;
     const bestFocals=JSON.parse(c.dataset.best||'[]');
-    // lx filter: read lx value from card dataset
     const lxVal=+c.dataset.lx||0;
-    const lxOk=!activeFilt.lx||lxVal>0;
-    const ok=(!activeFilt.type||typeKey===activeFilt.type)&&(!activeFilt.focal||bestFocals.includes(activeFilt.focal))&&alt>=MIN_ALT&&lxOk;
-    c.classList.toggle('hidden',!ok);if(ok)shown++;
+    const ok=(
+      alt>=MIN_ALT &&
+      (!activeFilt.type||typeKey===activeFilt.type) &&
+      (!activeFilt.focal||bestFocals.includes(activeFilt.focal)) &&
+      (!activeFilt.lx||lxVal>0)
+    );
+    c.classList.toggle('hidden',!ok);
+    if(ok)vis++;
   });
-  g.querySelectorAll('.no-res').forEach(e=>e.remove());
-  if(!shown){const d=document.createElement('div');d.className='no-res';d.textContent='// Nessun oggetto visibile con questi filtri';g.appendChild(d);}
+  if(!skipCount){
+    const tot=OBJ.filter(o=>o.months.includes(n)&&isCameraCompatible(o)).length;
+    document.getElementById(`scnt-${n}`).textContent=`${vis} oggetti visibili · ${tot} in catalogo`;
+    document.getElementById(`nc-${n}`).textContent=vis;
+  }
 }
 
-function refreshActive(){activeFilt={type:null,focal:null,lx:false};renderGrid(activeMonth);}
+function resetFilters(n){
+  activeFilt={type:null,focal:null,lx:false};
+  const sec=document.getElementById('sec-'+n);
+  if(!sec)return;
+  sec.querySelectorAll('[data-f]').forEach(b=>b.classList.remove('on'));
+  sec.querySelector('[data-f="all"]')?.classList.add('on');
+  sec.querySelectorAll('[data-focal]').forEach(b=>b.classList.remove('on'));
+  const lxb=document.getElementById(`lxbtn-${n}`);
+  if(lxb){lxb.classList.remove('lx-on');lxb.textContent='⬡ L-Extreme';}
+}
 
-function switchMonth(n){
-  activeFilt={type:null,focal:null,lx:false};activeMonth=n;
-  document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.m===n));
-  document.querySelectorAll('.month-sec').forEach(s=>s.classList.toggle('active',s.id==='sec-'+n));
-  document.querySelectorAll(`#sec-${n} [data-f]`).forEach(b=>b.classList.toggle('on',b.dataset.f==='all'));
-  document.querySelectorAll(`#sec-${n} [data-focal]`).forEach(b=>b.classList.remove('on'));
-  const lxBtn=document.querySelector(`#lx-${n}`);
-  if(lxBtn){lxBtn.classList.remove('lx-on');lxBtn.textContent='⬡ L-Extreme';}
+function refreshAll(){
+  const sec=document.querySelector('.month-sec.active');
+  if(!sec)return;
+  const n=+sec.id.replace('sec-','');
   renderGrid(n);
 }
 
-// Initial render
-renderGrid(1);
-setTimeout(()=>MONTHS_DATA.forEach(m=>{if(m.n!==1)renderGrid(m.n);}),500);
+// Update total count
+function updateTotCount(){
+  const unique=new Set(OBJ.filter(isCameraCompatible).map(o=>o.id)).size;
+  document.getElementById('totCount').textContent=`${unique} oggetti`;
+}
+
+// ═══════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════
+initCountrySelect();
+initCameraSelect();
+initSliders();
+initMonthNav();
+updateTotCount();
+renderGrid(activeMonth);
+
+// Lazy render other months on tab click (already handled by click listener)
+// Pre-count for nav badges
+MONTHS.forEach(m=>{
+  const vis=OBJ.filter(o=>o.months.includes(m.n)&&isCameraCompatible(o)&&getAlt(o,m.n).alt>=MIN_ALT).length;
+  const nc=document.getElementById(`nc-${m.n}`);
+  if(nc)nc.textContent=vis;
+});
+updateTotCount();
+
 </script>
 </body>
 </html>
