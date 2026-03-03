@@ -1,0 +1,204 @@
+name: Download Astro Images
+
+on:
+  workflow_dispatch:  # esegui manualmente con un click
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all images
+        run: |
+          mkdir -p img
+          BASE="https://upload.wikimedia.org/wikipedia/commons"
+          UA="Mozilla/5.0 (AstrofotoTool/1.0)"
+
+          download() {
+            local id=$1 url=$2
+            if [ ! -f "img/${id}.jpg" ]; then
+              echo "Downloading ${id}..."
+              curl -s -L --max-time 20 -A "$UA" -o "img/${id}.jpg" "$url" || echo "FAILED: ${id}"
+              sleep 0.3
+            else
+              echo "Skip ${id} (exists)"
+            fi
+          }
+
+          # NEBULOSE
+          download m42      "$BASE/thumb/f/f3/Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg/800px-Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg"
+          download ic434    "$BASE/thumb/4/4f/Barnard_33.jpg/800px-Barnard_33.jpg"
+          download ngc1977  "$BASE/thumb/e/e5/Running_Man_Nebula.jpg/800px-Running_Man_Nebula.jpg"
+          download m78      "$BASE/thumb/0/03/M78_2006_Spitzer.jpg/800px-M78_2006_Spitzer.jpg"
+          download m1       "$BASE/thumb/0/00/Crab_Nebula.jpg/800px-Crab_Nebula.jpg"
+          download ngc2174  "$BASE/thumb/6/68/NGC_2174_Hubble_WikiSky.jpg/800px-NGC_2174_Hubble_WikiSky.jpg"
+          download ngc2244  "$BASE/thumb/3/30/Rosette_Nebula_Narrowband_HDR.jpg/800px-Rosette_Nebula_Narrowband_HDR.jpg"
+          download ngc1499  "$BASE/thumb/1/18/California_Nebula.jpg/800px-California_Nebula.jpg"
+          download ic1805   "$BASE/thumb/2/29/Heart_Nebula_-_IC_1805.jpg/800px-Heart_Nebula_-_IC_1805.jpg"
+          download ic1848   "$BASE/thumb/d/de/Soul_Nebula_-_Hubble_Palette.jpg/800px-Soul_Nebula_-_Hubble_Palette.jpg"
+          download ngc2261  "$BASE/thumb/f/f9/NGC2261.jpg/800px-NGC2261.jpg"
+          download ngc2392  "$BASE/thumb/5/5b/NGC_2392_Hubble.jpg/800px-NGC_2392_Hubble.jpg"
+          download ngc7000  "$BASE/thumb/6/6b/NGC7000.jpg/800px-NGC7000.jpg"
+          download ic5070   "$BASE/thumb/e/e2/IC5070-Pelican-Nebula.jpg/800px-IC5070-Pelican-Nebula.jpg"
+          download ngc6992  "$BASE/thumb/8/87/NGC_6992_-_Eastern_Veil_Nebula.jpg/800px-NGC_6992_-_Eastern_Veil_Nebula.jpg"
+          download ngc6960  "$BASE/thumb/3/32/NGC_6960_Witch_Broom_Nebula.jpg/800px-NGC_6960_Witch_Broom_Nebula.jpg"
+          download ic5146   "$BASE/thumb/9/9a/Cocoon_nebula.jpg/800px-Cocoon_nebula.jpg"
+          download ngc6888  "$BASE/thumb/6/6d/NGC6888_Crescent_Nebula.jpg/800px-NGC6888_Crescent_Nebula.jpg"
+          download m57      "$BASE/thumb/a/a0/Ring_Nebula_in_Lyra_-_Hubble_2013_-_high_quality.jpg/800px-Ring_Nebula_in_Lyra_-_Hubble_2013_-_high_quality.jpg"
+          download m27      "$BASE/thumb/c/c6/Messier27.jpg/800px-Messier27.jpg"
+          download ngc6543  "$BASE/thumb/5/5b/Cat%27s_Eye_Nebula_Hubble.jpg/800px-Cat%27s_Eye_Nebula_Hubble.jpg"
+          download ngc7293  "$BASE/thumb/b/b8/NGC7293_%282004%29.jpg/800px-NGC7293_%282004%29.jpg"
+          download ngc6302  "$BASE/thumb/8/89/NGC_6302.jpg/800px-NGC_6302.jpg"
+          download m8       "$BASE/thumb/3/3d/Lagoon_Nebula_ESO.jpg/800px-Lagoon_Nebula_ESO.jpg"
+          download m20      "$BASE/thumb/9/9c/Trifid.nebula.jpg/800px-Trifid.nebula.jpg"
+          download m16      "$BASE/thumb/6/68/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg/800px-Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg"
+          download m17      "$BASE/thumb/9/9f/ESO-M17.jpg/800px-ESO-M17.jpg"
+          download sh2101   "$BASE/thumb/2/24/Sh2-101_and_Cygnus_X-1.jpg/800px-Sh2-101_and_Cygnus_X-1.jpg"
+          download ngc1333  "$BASE/thumb/e/e1/NGC_1333_Herbig-Haro.jpg/800px-NGC_1333_Herbig-Haro.jpg"
+          download ngc2264  "$BASE/thumb/1/12/NGC_2264_Cone_Nebula.jpg/800px-NGC_2264_Cone_Nebula.jpg"
+          download ngc2359  "$BASE/thumb/5/5f/NGC_2359_Thors_Helmet.jpg/800px-NGC_2359_Thors_Helmet.jpg"
+          download sh2240   "$BASE/thumb/a/a9/Simeis_147_%28Spaghetti_Nebula%29.jpg/800px-Simeis_147_%28Spaghetti_Nebula%29.jpg"
+          download ngc7635  "$BASE/thumb/6/6d/NGC_7635_Hubble.jpg/800px-NGC_7635_Hubble.jpg"
+          download ngc896   "$BASE/thumb/1/11/IC_1795_Fish_Head_nebula.jpg/800px-IC_1795_Fish_Head_nebula.jpg"
+          download ngc281   "$BASE/thumb/6/6f/NGC_281_-_Pacman_Nebula.jpg/800px-NGC_281_-_Pacman_Nebula.jpg"
+          download ngc6334  "$BASE/thumb/4/47/CatsPaw.jpg/800px-CatsPaw.jpg"
+          download ngc6357  "$BASE/thumb/1/10/NGC6357.jpg/800px-NGC6357.jpg"
+          download vdb1     "$BASE/thumb/0/0e/Vdb142.jpg/800px-Vdb142.jpg"
+          download ic1396   "$BASE/thumb/1/1c/IC1396A_Hubble_WikiSky.jpg/800px-IC1396A_Hubble_WikiSky.jpg"
+          download sh2157   "$BASE/thumb/9/93/SH2-157.jpg/800px-SH2-157.jpg"
+          download ngc7822  "$BASE/thumb/a/a6/NGC_7822_in_Cepheus.jpg/800px-NGC_7822_in_Cepheus.jpg"
+          download ngc2068b "$BASE/thumb/8/8c/Barnard%27s_Loop.jpg/800px-Barnard%27s_Loop.jpg"
+          download ngc2023  "$BASE/thumb/5/52/Reflection_nebula_NGC2023.jpg/800px-Reflection_nebula_NGC2023.jpg"
+          download ngc2070  "$BASE/thumb/9/911/Tarantula_Nebula_Hubble_2012.jpg/800px-Tarantula_Nebula_Hubble_2012.jpg"
+          download ic2177   "$BASE/thumb/8/8c/IC2177.jpg/800px-IC2177.jpg"
+          download ngc1893  "$BASE/thumb/3/3c/IC410_Tadpoles.jpg/800px-IC410_Tadpoles.jpg"
+          download ngc6820  "$BASE/thumb/5/5e/NGC6820.jpg/800px-NGC6820.jpg"
+          download sh2132   "$BASE/thumb/a/aa/Sh2-132.jpg/800px-Sh2-132.jpg"
+          download sh2155   "$BASE/thumb/1/11/Cave_Nebula.jpg/800px-Cave_Nebula.jpg"
+          download ngc40    "$BASE/thumb/a/a6/NGC_40.jpg/800px-NGC_40.jpg"
+
+          # GALASSIE
+          download m31      "$BASE/thumb/9/98/Andromeda_Galaxy_%28with_h-alpha%29.jpg/800px-Andromeda_Galaxy_%28with_h-alpha%29.jpg"
+          download m33      "$BASE/thumb/6/64/M33_Triangulum_Galaxy.jpg/800px-M33_Triangulum_Galaxy.jpg"
+          download ngc891   "$BASE/thumb/1/10/NGC891_Hubble.jpg/800px-NGC891_Hubble.jpg"
+          download m74      "$BASE/thumb/c/c5/Messier74_phot-06a-01-fullres.jpg/800px-Messier74_phot-06a-01-fullres.jpg"
+          download m81      "$BASE/thumb/6/63/Messier_81_HST.jpg/800px-Messier_81_HST.jpg"
+          download m82      "$BASE/thumb/9/9c/M82_HST_ACS_2006-14-a-large_web.jpg/800px-M82_HST_ACS_2006-14-a-large_web.jpg"
+          download m51      "$BASE/thumb/d/db/Messier51_sRGB.jpg/800px-Messier51_sRGB.jpg"
+          download m101     "$BASE/thumb/c/c5/M101_hires_STScI-PRC2006-10a.jpg/800px-M101_hires_STScI-PRC2006-10a.jpg"
+          download m63      "$BASE/thumb/0/04/Messier_63_GALEX_WikiSky.jpg/800px-Messier_63_GALEX_WikiSky.jpg"
+          download m64      "$BASE/thumb/1/12/Black_Eye_Galaxy_-_Hubble_2021.jpg/800px-Black_Eye_Galaxy_-_Hubble_2021.jpg"
+          download ngc4565  "$BASE/thumb/a/a6/NGC4565_LGMSky.jpg/800px-NGC4565_LGMSky.jpg"
+          download ngc4631  "$BASE/thumb/a/ae/NGC_4631_Herschel_400.jpg/800px-NGC_4631_Herschel_400.jpg"
+          download ngc4038  "$BASE/thumb/7/7f/Antennae_galaxies_xl.jpg/800px-Antennae_galaxies_xl.jpg"
+          download m65m66   "$BASE/thumb/8/8b/Messier_66_HST_2006-10-07.jpg/800px-Messier_66_HST_2006-10-07.jpg"
+          download ngc3628  "$BASE/thumb/5/55/NGC_3628.jpg/800px-NGC_3628.jpg"
+          download ngc4244  "$BASE/thumb/e/ee/NGC4244.jpg/800px-NGC4244.jpg"
+          download m84virgo "$BASE/thumb/1/14/Virgo_Cluster_cropped.jpg/800px-Virgo_Cluster_cropped.jpg"
+          download m87      "$BASE/thumb/3/33/Messier_87_Hubble_WikiSky.jpg/800px-Messier_87_Hubble_WikiSky.jpg"
+          download m102     "$BASE/thumb/3/3b/Spindle_galaxy_NGC_5866.jpg/800px-Spindle_galaxy_NGC_5866.jpg"
+          download m106     "$BASE/thumb/f/f1/NGC_4258_%28captured_by_the_Hubble_Space_Telescope%29.jpg/800px-NGC_4258_%28captured_by_the_Hubble_Space_Telescope%29.jpg"
+          download ngc5128  "$BASE/thumb/9/9c/Cen_A_full_movie.jpg/800px-Cen_A_full_movie.jpg"
+          download ngc6946  "$BASE/thumb/2/28/NGC_6946.jpg/800px-NGC_6946.jpg"
+          download ngc7331  "$BASE/thumb/b/be/NGC7331e2005.jpg/800px-NGC7331e2005.jpg"
+          download ic342    "$BASE/thumb/2/27/IC_342.jpg/800px-IC_342.jpg"
+          download ngc2903  "$BASE/thumb/2/2d/NGC_2903_%282013%29.jpg/800px-NGC_2903_%282013%29.jpg"
+          download ngc772   "$BASE/thumb/3/37/NGC_772.jpg/800px-NGC_772.jpg"
+          download ngc4594  "$BASE/thumb/5/5c/M104_ngc4594_sombrero_galaxy_hi-res.jpg/800px-M104_ngc4594_sombrero_galaxy_hi-res.jpg"
+          download ngc253   "$BASE/thumb/6/66/NGC_253_Sculptor_Galaxy_-_ESO.jpg/800px-NGC_253_Sculptor_Galaxy_-_ESO.jpg"
+          download ngc1316  "$BASE/thumb/c/c6/NGC_1316_%28Fornax_A%29.jpg/800px-NGC_1316_%28Fornax_A%29.jpg"
+          download ngc2403  "$BASE/thumb/2/21/NGC_2403_%28captured_by_the_Hubble_Space_Telescope%29.jpg/800px-NGC_2403_%28captured_by_the_Hubble_Space_Telescope%29.jpg"
+          download ngc247   "$BASE/thumb/4/45/NGC_247.jpg/800px-NGC_247.jpg"
+          download ngc4725  "$BASE/thumb/3/3b/NGC_4725.jpg/800px-NGC_4725.jpg"
+          download ngc2841  "$BASE/thumb/c/c0/NGC_2841.jpg/800px-NGC_2841.jpg"
+          download ngc7479  "$BASE/thumb/4/42/NGC7479.jpg/800px-NGC7479.jpg"
+          download ngc7814  "$BASE/thumb/1/1f/Little_sombrero_galaxy.jpg/800px-Little_sombrero_galaxy.jpg"
+          download ngc3521  "$BASE/thumb/8/8b/NGC_3521.jpg/800px-NGC_3521.jpg"
+          download ngc5055  "$BASE/thumb/0/04/Messier_63_GALEX_WikiSky.jpg/800px-Messier_63_GALEX_WikiSky.jpg"
+          download ngc4490  "$BASE/thumb/9/92/Ngc4490_and_4485.jpg/800px-Ngc4490_and_4485.jpg"
+          download ngc5139  "$BASE/thumb/1/1f/Omega_Centauri_HST.jpg/800px-Omega_Centauri_HST.jpg"
+          download ngc1232  "$BASE/thumb/0/0c/NGC1232.jpg/800px-NGC1232.jpg"
+          download ngc300   "$BASE/thumb/5/53/NGC_300.jpg/800px-NGC_300.jpg"
+          download ngc55    "$BASE/thumb/9/92/NGC_55.jpg/800px-NGC_55.jpg"
+          download ngc6744  "$BASE/thumb/f/f9/NGC_6744.jpg/800px-NGC_6744.jpg"
+          download ngc2976  "$BASE/thumb/8/8c/NGC_2976.jpg/800px-NGC_2976.jpg"
+          download ngc3077  "$BASE/thumb/0/06/NGC_3077.jpg/800px-NGC_3077.jpg"
+          download ngc4559  "$BASE/thumb/f/f0/NGC_4559.jpg/800px-NGC_4559.jpg"
+          download ngc4649  "$BASE/thumb/0/07/NGC_4649_Hubble.jpg/800px-NGC_4649_Hubble.jpg"
+          download ngc5907  "$BASE/thumb/0/07/NGC_5907.jpg/800px-NGC_5907.jpg"
+          download ngc7217  "$BASE/thumb/c/cd/NGC_7217.jpg/800px-NGC_7217.jpg"
+
+          # AMMASSI GLOBULARI
+          download m13      "$BASE/thumb/4/4c/Messier_13_Hubble_WikiSky.jpg/800px-Messier_13_Hubble_WikiSky.jpg"
+          download m92      "$BASE/thumb/8/8c/Messier92_Hubble.jpg/800px-Messier92_Hubble.jpg"
+          download m3       "$BASE/thumb/3/30/Messier_3_Hubble.jpg/800px-Messier_3_Hubble.jpg"
+          download m5       "$BASE/thumb/9/9b/Messier_5_Hubble_WikiSky.jpg/800px-Messier_5_Hubble_WikiSky.jpg"
+          download m15      "$BASE/thumb/a/a8/Messier_15_HST.jpg/800px-Messier_15_HST.jpg"
+          download m2       "$BASE/thumb/7/7e/Messier_2_Hubble_WikiSky.jpg/800px-Messier_2_Hubble_WikiSky.jpg"
+          download m22      "$BASE/thumb/0/08/Messier_22.jpg/800px-Messier_22.jpg"
+          download m10      "$BASE/thumb/7/7e/Messier_10_Hubble.jpg/800px-Messier_10_Hubble.jpg"
+          download m12      "$BASE/thumb/0/08/Messier_12.jpg/800px-Messier_12.jpg"
+          download m4       "$BASE/thumb/f/fb/Messier_4_Hubble_WikiSky.jpg/800px-Messier_4_Hubble_WikiSky.jpg"
+          download m80      "$BASE/thumb/7/73/Messier_80_Hubble.jpg/800px-Messier_80_Hubble.jpg"
+          download ngc104   "$BASE/thumb/c/c1/47Tuc_HST.jpg/800px-47Tuc_HST.jpg"
+          download ngc6397  "$BASE/thumb/d/df/NGC_6397_Hubble.jpg/800px-NGC_6397_Hubble.jpg"
+          download m56      "$BASE/thumb/5/55/Messier_56_Hubble.jpg/800px-Messier_56_Hubble.jpg"
+          download m107     "$BASE/thumb/5/5a/Messier_107_Hubble.jpg/800px-Messier_107_Hubble.jpg"
+          download m62      "$BASE/thumb/9/9c/Messier_62.jpg/800px-Messier_62.jpg"
+          download m79      "$BASE/thumb/4/4e/Messier_79_Hubble.jpg/800px-Messier_79_Hubble.jpg"
+          download ngc5024  "$BASE/thumb/4/4f/NGC_5024_Hubble.jpg/800px-NGC_5024_Hubble.jpg"
+          download ngc6752  "$BASE/thumb/e/e9/NGC6752.jpg/800px-NGC6752.jpg"
+
+          # AMMASSI APERTI
+          download m45      "$BASE/thumb/4/4e/Pleiades_large.jpg/800px-Pleiades_large.jpg"
+          download ngc869   "$BASE/thumb/9/94/Double_cluster_h_chi_Persei.jpg/800px-Double_cluster_h_chi_Persei.jpg"
+          download ngc884b  "$BASE/thumb/9/94/Double_cluster_h_chi_Persei.jpg/800px-Double_cluster_h_chi_Persei.jpg"
+          download ngc7789  "$BASE/thumb/8/8d/NGC_7789.jpg/800px-NGC_7789.jpg"
+          download ngc457   "$BASE/thumb/a/a2/ET_Cluster_NGC_457.jpg/800px-ET_Cluster_NGC_457.jpg"
+          download m35      "$BASE/thumb/8/8a/Messier35.jpg/800px-Messier35.jpg"
+          download m36      "$BASE/thumb/a/a1/Messier_object_036.jpg/800px-Messier_object_036.jpg"
+          download m37      "$BASE/thumb/0/09/Messier_object_037.jpg/800px-Messier_object_037.jpg"
+          download m38      "$BASE/thumb/6/65/Messier_object_038.jpg/800px-Messier_object_038.jpg"
+          download m34      "$BASE/thumb/d/d4/Messier_34.jpg/800px-Messier_34.jpg"
+          download m11      "$BASE/thumb/3/3e/Wild_duck_cluster.jpg/800px-Wild_duck_cluster.jpg"
+          download m41      "$BASE/thumb/c/cf/Messier_41.jpg/800px-Messier_41.jpg"
+          download m50      "$BASE/thumb/e/e9/Messier_50.jpg/800px-Messier_50.jpg"
+          download m52      "$BASE/thumb/8/8b/Messier52.jpg/800px-Messier52.jpg"
+          download m67      "$BASE/thumb/f/f1/Messier_67.jpg/800px-Messier_67.jpg"
+          download m44      "$BASE/thumb/f/f2/Beehive_Cluster_-_Praesepe_-_M44.jpg/800px-Beehive_Cluster_-_Praesepe_-_M44.jpg"
+          download m47      "$BASE/thumb/1/17/Messier_47.jpg/800px-Messier_47.jpg"
+          download m46      "$BASE/thumb/a/a2/Messier_46.jpg/800px-Messier_46.jpg"
+          download m48      "$BASE/thumb/5/5e/Messier_48.jpg/800px-Messier_48.jpg"
+          download m39      "$BASE/thumb/1/10/Messier_39.jpg/800px-Messier_39.jpg"
+          download m29      "$BASE/thumb/3/3f/Messier_29.jpg/800px-Messier_29.jpg"
+          download m26      "$BASE/thumb/b/b4/Messier_26.jpg/800px-Messier_26.jpg"
+          download ngc752   "$BASE/thumb/6/6b/NGC_752.jpg/800px-NGC_752.jpg"
+          download ngc2362  "$BASE/thumb/5/59/NGC_2362.jpg/800px-NGC_2362.jpg"
+          download ngc6231  "$BASE/thumb/8/8c/NGC6231.jpg/800px-NGC6231.jpg"
+
+          # PIANETI
+          download luna     "$BASE/thumb/e/e1/FullMoon2010.jpg/800px-FullMoon2010.jpg"
+          download giove    "$BASE/thumb/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg/800px-Jupiter_and_its_shrunken_Great_Red_Spot.jpg"
+          download saturno  "$BASE/thumb/c/c7/Saturn_during_Equinox.jpg/800px-Saturn_during_Equinox.jpg"
+          download marte    "$BASE/thumb/0/02/OSIRIS_Mars_true_color.jpg/800px-OSIRIS_Mars_true_color.jpg"
+          download venere   "$BASE/thumb/e/e5/Venus-real_color.jpg/800px-Venus-real_color.jpg"
+          download urano    "$BASE/thumb/3/3d/Uranus2.jpg/800px-Uranus2.jpg"
+          download nettuno  "$BASE/thumb/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg/800px-Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg"
+
+          # STELLE DOPPIE
+          download albireo      "$BASE/thumb/0/09/Albireo_%28beta_Cygni%29.jpg/800px-Albireo_%28beta_Cygni%29.jpg"
+          download mizar        "$BASE/thumb/a/a4/Mizar_%26_Alcor_double_star.jpg/800px-Mizar_%26_Alcor_double_star.jpg"
+          download epsilonlyrae "$BASE/thumb/8/81/EpsilonLyrae.jpg/800px-EpsilonLyrae.jpg"
+          download etacas       "$BASE/thumb/6/6e/Eta_Cassiopeiae.jpg/800px-Eta_Cassiopeiae.jpg"
+          download algedi       "$BASE/thumb/5/57/Beta_capricorni.jpg/800px-Beta_capricorni.jpg"
+
+          echo "Done! $(ls img/*.jpg 2>/dev/null | wc -l) images downloaded."
+
+      - name: Commit images to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add img/
+          git diff --staged --quiet || git commit -m "Add astro images [automated]"
+          git push
