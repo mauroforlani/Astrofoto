@@ -1615,21 +1615,18 @@ function buildCard(obj,month){
     <div class="card-notes">${obj.notes}</div>
   </div>`;
 
-  // Try real image first, fall back to canvas
+  // Load real image or canvas fallback
   const canvas=d.querySelector('canvas');
   const localSrc=LOCAL_IMGS[obj.id];
   if(localSrc){
-    // Use <img> tag overlaid on canvas for reliable display
     const imgEl=document.createElement('img');
-    imgEl.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s';
-    imgEl.onload=()=>{imgEl.style.opacity='1';};
-    imgEl.onerror=()=>{imgEl.remove();requestAnimationFrame(()=>renderCanvas(canvas,obj,false));};
-    imgEl.src=localSrc;
+    imgEl.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s;z-index:1';
+    imgEl.onload=()=>{imgEl.style.opacity='1';canvas.style.opacity='0';};
+    imgEl.onerror=()=>{imgEl.remove();renderCanvas(canvas,obj,false);};
+    imgEl.src=localSrc+'?v=2';
     d.querySelector('.card-canvas-wrap').appendChild(imgEl);
-    requestAnimationFrame(()=>renderCanvas(canvas,obj,false));
-  } else {
-    requestAnimationFrame(()=>renderCanvas(canvas,obj,false));
   }
+  renderCanvas(canvas,obj,false);
 
   // Click → modal
   d.addEventListener('click',()=>openModal(obj,month));
@@ -1649,18 +1646,20 @@ function openModal(obj,month){
   const mc=document.getElementById('modalCanvas');
   renderCanvas(mc,obj,true);
   const mSrc=LOCAL_IMGS[obj.id];
+  const mWrap=document.querySelector('.modal-canvas-wrap');
+  let mImg=mWrap.querySelector('.modal-real-img');
+  if(!mImg){
+    mImg=document.createElement('img');
+    mImg.className='modal-real-img';
+    mImg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s;z-index:1';
+    mWrap.appendChild(mImg);
+  }
+  mImg.style.opacity='0';
   if(mSrc){
-    const mWrap=document.querySelector('.modal-canvas-wrap');
-    let mImg=mWrap.querySelector('.modal-real-img');
-    if(!mImg){mImg=document.createElement('img');mImg.className='modal-real-img';mImg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s';mWrap.appendChild(mImg);}
-    mImg.style.opacity='0';
-    mImg.onload=()=>{mImg.style.opacity='1';};
-    mImg.onerror=()=>{mImg.style.opacity='0';};
-    mImg.src=mSrc;
-  } else {
-    const mWrap=document.querySelector('.modal-canvas-wrap');
-    const mImg=mWrap.querySelector('.modal-real-img');
-    if(mImg) mImg.style.opacity='0';
+    mImg.onload=()=>{mImg.style.opacity='1';mc.style.opacity='0';};
+    mImg.onerror=()=>{mImg.style.opacity='0';mc.style.opacity='1';};
+    mImg.src=mSrc+'?v=2';
+    mc.style.opacity='1';
   }
 
   // Badges
