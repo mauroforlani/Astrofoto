@@ -1,1 +1,31 @@
+name: Download Astro Images
 
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create images folder
+        run: mkdir -p assets/images
+
+      - name: Download M42
+        run: curl -L "https://source.unsplash.com/1600x1200/?orion-nebula" -o assets/images/m42.jpg
+
+      - name: Download Andromeda
+        run: curl -L "https://source.unsplash.com/1600x1200/?andromeda-galaxy" -o assets/images/m31.jpg
+
+      - name: Download Pleiades
+        run: curl -L "https://source.unsplash.com/1600x1200/?pleiades-cluster" -o assets/images/m45.jpg
+
+      - name: Commit images
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add assets/images
+          git commit -m "Auto download astro images" || echo "No changes"
+          git push
