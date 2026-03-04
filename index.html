@@ -181,17 +181,100 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 @media(max-width:900px){header,.ctrl,main{padding-left:20px;padding-right:20px}.mnav-track{padding:0 20px}.obj-grid{grid-template-columns:1fr 1fr}.header-inner{flex-direction:column;align-items:flex-start}}
 @media(max-width:580px){.obj-grid{grid-template-columns:1fr}.sec-hero{grid-template-columns:1fr}.sec-right{text-align:left}.modal-grid{grid-template-columns:1fr 1fr}}
+
+/* ── LANDING PAGE ── */
+#landing{position:fixed;inset:0;z-index:1000;background:var(--ink);display:flex;flex-direction:column;overflow:hidden;transition:opacity .5s,transform .5s}
+#landing.hidden{opacity:0;transform:translateY(-16px);pointer-events:none}
+.landing-grid{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.018) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.018) 40px);pointer-events:none}
+.landing-inner{max-width:1440px;margin:0 auto;padding:0 64px;display:flex;flex-direction:column;height:100%;position:relative;z-index:1}
+.landing-header{padding:32px 0 0;display:flex;justify-content:space-between;align-items:flex-start}
+.landing-eye{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.25)}
+.landing-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:48px;padding:40px 0}
+.landing-title{font-family:'Cormorant Garamond',serif;font-size:clamp(56px,8vw,120px);font-weight:700;line-height:.85;letter-spacing:-4px;color:#fff}
+.landing-title em{font-style:italic;color:rgba(255,255,255,.35)}
+.landing-sub{font-size:13px;color:rgba(255,255,255,.4);max-width:360px;line-height:1.8;font-weight:300}
+.landing-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}
+.land-btn{display:flex;flex-direction:column;gap:4px;padding:18px 24px;border-radius:3px;cursor:pointer;transition:all .2s;text-decoration:none;border:none;font-family:'Jost',sans-serif;text-align:left}
+.land-btn-primary{background:#fff;color:var(--ink)}
+.land-btn-primary:hover{background:rgba(255,255,255,.9);transform:translateY(-2px)}
+.land-btn-secondary{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff}
+.land-btn-secondary:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);transform:translateY(-2px)}
+.land-btn-lbl{font-size:8px;letter-spacing:3px;text-transform:uppercase;opacity:.5;font-family:'DM Mono',monospace}
+.land-btn-val{font-size:15px;font-weight:500}
+
+/* Search panel */
+.landing-search{display:flex;flex-direction:column;gap:0;max-width:680px}
+.search-bar{display:flex;align-items:center;gap:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:3px;overflow:hidden;transition:border-color .2s}
+.search-bar:focus-within{border-color:rgba(255,255,255,.4)}
+.search-icon{padding:0 16px;color:rgba(255,255,255,.3);font-size:16px;flex-shrink:0}
+#landingSearch{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Jost',sans-serif;font-size:15px;font-weight:300;padding:16px 0;caret-color:#fff}
+#landingSearch::placeholder{color:rgba(255,255,255,.2)}
+.search-hint{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:2px;padding:10px 2px}
+.search-results{display:none;background:rgba(20,16,12,.95);border:1px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 3px 3px;max-height:320px;overflow-y:auto}
+.search-results.show{display:block}
+.sr-item{display:flex;align-items:center;gap:14px;padding:12px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05)}
+.sr-item:last-child{border-bottom:none}
+.sr-item:hover{background:rgba(255,255,255,.06)}
+.sr-canvas{width:48px;height:36px;border-radius:2px;overflow:hidden;flex-shrink:0}
+.sr-canvas canvas{width:100%;height:100%;display:block}
+.sr-info{flex:1;min-width:0}
+.sr-name{font-size:13px;color:#fff;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr-cat{font-family:'DM Mono',monospace;font-size:8px;color:rgba(255,255,255,.3);margin-top:1px}
+.sr-type{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;padding:2px 6px;border-radius:2px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.4);flex-shrink:0}
+.sr-empty{padding:24px 16px;text-align:center;font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.2);letter-spacing:2px}
+
+/* Star field canvas */
+#starField{position:absolute;inset:0;opacity:.6}
+
 </style>
 </head>
 <body>
+
+<!-- ══ LANDING PAGE ════════════════════════════════════════════════ -->
+<div id="landing">
+  <canvas id="starField"></canvas>
+  <div class="landing-grid"></div>
+  <div class="landing-inner">
+    <div class="landing-header">
+      <div class="landing-eye">// Tool Astrofoto · Europa</div>
+    </div>
+    <div class="landing-body">
+      <div>
+        <h1 class="landing-title">Tool<br><em>Astro</em>Foto</h1>
+        <p class="landing-sub">Pianificazione osservativa per astrofotografi europei. 155 oggetti, 9 paesi, calcolo altitudine dinamico.</p>
+      </div>
+      <div class="landing-actions">
+        <button class="land-btn land-btn-primary" id="btnCatalog">
+          <span class="land-btn-lbl">Esplora</span>
+          <span class="land-btn-val">Catalogo completo →</span>
+        </button>
+        <button class="land-btn land-btn-secondary" id="btnSearch">
+          <span class="land-btn-lbl">Cerca oggetto</span>
+          <span class="land-btn-val">Ricerca per nome</span>
+        </button>
+      </div>
+      <div class="landing-search" id="searchPanel" style="display:none">
+        <div class="search-bar">
+          <span class="search-icon">⊹</span>
+          <input type="text" id="landingSearch" placeholder="M42, Andromeda, Nebulosa Anello…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="search-hint">Cerca per nome, catalogo o tipo · premi Invio per aprire</div>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ══ HEADER ══════════════════════════════════════════════════════ -->
 <header>
   <div class="header-inner">
     <div class="header-top">
+      <div style="display:flex;align-items:center;gap:20px">
+      <button id="btnBackHome" title="Torna alla home" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:3px;color:rgba(255,255,255,.6);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:8px 14px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">← Home</button>
       <div class="brand">
         <div class="brand-eye">// Tool Astrofoto</div>
         <h1 class="brand-title">Tool<br><em>Astro</em>Foto</h1>
+      </div>
       </div>
     </div>
     <div class="header-chips">
@@ -1801,6 +1884,154 @@ function updateTotCount(){
 // ═══════════════════════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// LANDING PAGE
+// ═══════════════════════════════════════════════════════
+function enterCatalog(){
+  const landing = document.getElementById('landing');
+  landing.style.transition = 'opacity .5s, transform .5s';
+  landing.style.opacity = '0';
+  landing.style.transform = 'translateY(-16px)';
+  setTimeout(()=>{ landing.style.display='none'; }, 500);
+}
+
+function showLanding(){
+  const landing = document.getElementById('landing');
+  landing.style.display = 'flex';
+  landing.style.opacity = '0';
+  landing.style.transform = 'translateY(-16px)';
+  requestAnimationFrame(()=>{
+    landing.style.transition = 'opacity .4s, transform .4s';
+    landing.style.opacity = '1';
+    landing.style.transform = 'translateY(0)';
+  });
+}
+
+function switchMonth(n){
+  activeMonth = n;
+  document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.m===n));
+  document.querySelectorAll('.month-sec').forEach(s=>s.classList.toggle('active',+s.id.replace('sec-','')===n));
+  renderGrid(n);
+}
+
+function initLanding(){
+  // Star field
+  const sc = document.getElementById('starField');
+  const sctx = sc.getContext('2d');
+  function drawStars(){
+    sc.width = window.innerWidth; sc.height = window.innerHeight;
+    sctx.clearRect(0,0,sc.width,sc.height);
+    const rng = ()=>Math.random();
+    for(let i=0;i<220;i++){
+      const x=rng()*sc.width, y=rng()*sc.height;
+      const r=rng()<0.05?rng()*1.5+0.5:rng()*0.5+0.1;
+      const br=rng()*0.45+0.08;
+      sctx.beginPath(); sctx.arc(x,y,r,0,Math.PI*2);
+      const colors=['rgba(200,215,255,','rgba(255,240,210,','rgba(180,200,255,'];
+      sctx.fillStyle=colors[Math.floor(rng()*3)]+br+')';
+      sctx.fill();
+    }
+  }
+  drawStars();
+  window.addEventListener('resize', drawStars);
+
+  // Catalog button
+  document.getElementById('btnCatalog').addEventListener('click', ()=>{
+    enterCatalog();
+  });
+
+  // Search toggle
+  document.getElementById('btnSearch').addEventListener('click', ()=>{
+    const panel = document.getElementById('searchPanel');
+    panel.style.display = 'flex';
+    document.getElementById('landingSearch').focus();
+  });
+
+  // Back to landing button (in main app header)
+  document.getElementById('btnBackHome').addEventListener('click', ()=>{
+    showLanding();
+    // reset search
+    document.getElementById('landingSearch').value = '';
+    document.getElementById('searchResults').classList.remove('show');
+  });
+
+  // Search logic
+  const TYPE_IT = {nebula:'Nebulosa',galaxy:'Galassia',cluster:'Ammasso',planet:'Pianeta',double:'Doppia'};
+
+  function searchObjects(q){
+    if(!q||q.length<1) return [];
+    const ql = q.toLowerCase();
+    return OBJ.filter(o=>
+      o.name.toLowerCase().includes(ql)||
+      (o.cat||'').toLowerCase().includes(ql)||
+      o.id.toLowerCase().includes(ql)||
+      (TYPE_IT[o.type]||'').toLowerCase().includes(ql)
+    ).slice(0,8);
+  }
+
+  function openFromSearch(obj){
+    const month = obj.months[0];
+    enterCatalog();
+    // Wait for catalog to appear, render grid, then open modal
+    setTimeout(()=>{
+      activeMonth = month;
+      document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.m===month));
+      document.querySelectorAll('.month-sec').forEach(s=>s.classList.toggle('active',+s.id.replace('sec-','')===month));
+      renderGrid(month);
+      setTimeout(()=>{
+        openModal(obj, month);
+      }, 350);
+    }, 520);
+  }
+
+  function renderSearchResults(results){
+    const el = document.getElementById('searchResults');
+    el.classList.add('show');
+    if(!results.length){
+      el.innerHTML='<div class="sr-empty">NESSUN RISULTATO</div>';
+      return;
+    }
+    el.innerHTML = results.map(obj=>`
+      <div class="sr-item" data-id="${obj.id}">
+        <div class="sr-canvas"><canvas id="src-${obj.id}" width="48" height="36"></canvas></div>
+        <div class="sr-info">
+          <div class="sr-name">${obj.name}</div>
+          <div class="sr-cat">${obj.cat||''}</div>
+        </div>
+        <div class="sr-type">${TYPE_IT[obj.type]||obj.type}</div>
+      </div>`).join('');
+
+    results.forEach(obj=>{
+      const c = document.getElementById('src-'+obj.id);
+      if(!c) return;
+      renderCanvas(c, obj, false);
+      const img = new Image();
+      img.onload=()=>{ const ctx2=c.getContext('2d'); c.width=48; c.height=36; ctx2.drawImage(img,0,0,48,36); };
+      img.src = 'img/'+obj.id+'.jpg';
+    });
+
+    el.querySelectorAll('.sr-item').forEach(item=>{
+      item.addEventListener('click', ()=>{
+        const obj = OBJ.find(o=>o.id===item.dataset.id);
+        if(obj) openFromSearch(obj);
+      });
+    });
+  }
+
+  const inp = document.getElementById('landingSearch');
+  inp.addEventListener('input', ()=>{
+    const q = inp.value.trim();
+    if(q) renderSearchResults(searchObjects(q));
+    else document.getElementById('searchResults').classList.remove('show');
+  });
+  inp.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){
+      const results = searchObjects(inp.value.trim());
+      if(results.length) openFromSearch(results[0]);
+    }
+    if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show');
+  });
+}
 initCountrySelect();
 initCameraSelect();
 initGlobalFilters();
@@ -1808,6 +2039,7 @@ initSliders();
 initMonthNav();
 updateTotCount();
 renderGrid(activeMonth);
+initLanding();
 
 // Lazy render other months on tab click (already handled by click listener)
 // Pre-count for nav badges
