@@ -447,7 +447,7 @@ const COUNTRIES = [
   {id:'custom',label:'📍 Personalizzato', lat:45.5, lon:10.0},
 ];
 let activeLat=45.5, activeLon=10.0;
-let timeStart=20, timeEnd=24, activeMonth=1;
+let timeStart=20, timeEnd=24, activeMonth=new Date().getMonth()+1;
 let activeFilt={type:null,focal:null,lx:false};
 let activeSortMode='alt';
 
@@ -1800,6 +1800,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 function closeModal(){
   const overlay = document.getElementById('modalOverlay');
   const origin = overlay.dataset.origin||'catalog';
+  overlay.style.zIndex = '';
   overlay.classList.remove('open');
   document.body.style.overflow='';
   if(origin==='landing') showLanding();
@@ -1913,7 +1914,7 @@ function showLanding(){
 
 function switchMonth(n){
   activeMonth = n;
-  document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.m===n));
+  document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.n===n));
   document.querySelectorAll('.month-sec').forEach(s=>s.classList.toggle('active',+s.id.replace('sec-','')===n));
   renderGrid(n);
 }
@@ -1940,9 +1941,7 @@ function initLanding(){
   window.addEventListener('resize', drawStars);
 
   // Catalog button
-  document.getElementById('btnCatalog').addEventListener('click', ()=>{
-    enterCatalog();
-  });
+  document.getElementById('btnCatalog').addEventListener('click', enterCatalog);
 
   // Search toggle
   document.getElementById('btnSearch').addEventListener('click', ()=>{
@@ -1976,9 +1975,12 @@ function initLanding(){
   function openFromSearch(obj){
     const month = obj.months[0];
     activeMonth = month;
-    document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.m===month));
+    document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.n===month));
     document.querySelectorAll('.month-sec').forEach(s=>s.classList.toggle('active',+s.id.replace('sec-','')===month));
     renderGrid(month);
+    // Raise modal above landing page temporarily
+    const overlay = document.getElementById('modalOverlay');
+    overlay.style.zIndex = '1100';
     openModal(obj, month, 'landing');
   }
 
@@ -2036,15 +2038,7 @@ initGlobalFilters();
 initSliders();
 initMonthNav();
 updateTotCount();
-// Set active month to current real month
-(function(){
-  const m = new Date().getMonth()+1; // 1-12
-  if(m>=1 && m<=12){ activeMonth=m; }
-})();
 renderGrid(activeMonth);
-// Activate correct month tab
-document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.m===activeMonth));
-document.querySelectorAll('.month-sec').forEach(s=>s.classList.toggle('active',+s.id.replace('sec-','')===activeMonth));
 initLanding();
 
 // Lazy render other months on tab click (already handled by click listener)
