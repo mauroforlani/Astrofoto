@@ -2,21 +2,31 @@ import urllib.request, json, os, time, shutil
 
 os.makedirs("img", exist_ok=True)
 
-API_KEY = "DEMO_KEY"
-
-def apod_dl(obj_id, date):
+def esa_dl(obj_id, search_name):
     dest = f"img/{obj_id}.jpg"
     if os.path.exists(dest) and os.path.getsize(dest) > 5000:
         print(f"  skip {obj_id}")
         return True
     try:
-        url = f"https://api.nasa.gov/planetary/apod?api_key={API_KEY}&date={date}"
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        # ESA Hubble API search
+        q = urllib.request.quote(search_name)
+        url = f"https://esahubble.org/api/v1/images/?search={q}&limit=1&format=json"
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (compatible; AstroTool)",
+            "Accept": "application/json"
+        })
         with urllib.request.urlopen(req, timeout=15) as r:
             data = json.loads(r.read())
-        img_url = data.get("hdurl") or data.get("url", "")
-        if not img_url or not img_url.lower().endswith((".jpg", ".jpeg", ".png")):
-            print(f"  x {obj_id} - no image (type={data.get('media_type')}, date={date})")
+        results = data.get("results", [])
+        if not results:
+            print(f"  x {obj_id} - no results for: {search_name}")
+            return False
+        # Get image URL - try wallpaper2 (1920px) or screen (1024px)
+        img = results[0]
+        img_url = (img.get("wallpaper2") or img.get("screen") or
+                   img.get("wallpaper1") or img.get("thumbnail") or "")
+        if not img_url:
+            print(f"  x {obj_id} - no image url in result")
             return False
         req2 = urllib.request.Request(img_url, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req2, timeout=30) as r2:
@@ -24,203 +34,295 @@ def apod_dl(obj_id, date):
         if len(imgdata) > 5000:
             with open(dest, "wb") as f:
                 f.write(imgdata)
-            print(f"  ok {obj_id} ({len(imgdata)//1024}KB) [{data.get('title','')[:35]}]")
+            print(f"  ok {obj_id} ({len(imgdata)//1024}KB) [{img.get('title','')[:35]}]")
             return True
-        print(f"  x {obj_id} - too small")
+        print(f"  x {obj_id} - too small ({len(imgdata)}b)")
         return False
     except Exception as e:
-        print(f"  x {obj_id} [{date}]: {e}")
+        print(f"  x {obj_id}: {e}")
         return False
 
+# ESA Hubble search terms - these map directly to Hubble image archive
 OBJECTS = {
-    "m42":      "2010-09-05",
-    "ic434":    "2013-01-14",
-    "ngc1977":  "2021-01-19",
-    "m78":      "2013-02-01",
-    "m1":       "2016-11-19",
-    "ngc2174":  "2014-03-17",
-    "ngc2244":  "2008-02-14",
-    "ngc1499":  "2022-01-13",
-    "ic1805":   "2011-02-14",
-    "ic1848":   "2014-11-25",
-    "ngc2261":  "2013-01-29",
-    "ngc2392":  "2017-12-11",
-    "ngc7000":  "2012-08-28",
-    "ic5070":   "2011-09-03",
-    "ngc6992":  "2015-09-24",
-    "ngc6960":  "2021-09-12",
-    "ic5146":   "2019-11-04",
-    "ngc6888":  "2012-10-05",
-    "m57":      "2017-10-30",
-    "m27":      "2013-08-30",
-    "ngc6543":  "2004-07-09",
-    "ngc7293":  "2012-01-16",
-    "ngc6302":  "2009-09-09",
-    "m8":       "2018-08-30",
-    "m20":      "2011-08-29",
-    "m16":      "2015-04-25",
-    "m17":      "2020-08-12",
-    "ngc7635":  "2016-04-24",
-    "ngc281":   "2011-11-10",
-    "ngc6334":  "2018-07-15",
-    "ngc6357":  "2015-04-16",
-    "ic1396":   "2019-09-03",
-    "ngc7822":  "2021-12-07",
-    "ngc2070":  "2012-05-04",
-    "ic2177":   "2021-02-08",
-    "ngc1893":  "2016-01-14",
-    "sh2155":   "2020-10-20",
-    "ngc40":    "2020-11-23",
-    "sh2240":   "2022-11-06",
-    "ngc896":   "2018-01-16",
-    "ngc2068b": "2021-01-07",
-    "ngc2264":  "2017-12-27",
-    "ngc2359":  "2019-02-19",
-    "sh2101":   "2020-09-06",
-    "ngc1333":  "2020-10-14",
-    "ngc2023":  "2022-10-07",
-    "ngc6820":  "2021-08-18",
-    "sh2132":   "2022-09-22",
-    "vdb1":     "2019-09-03",
-    "sh2157":   "2021-11-18",
-    "m31":      "2021-09-27",
-    "m33":      "2019-10-09",
-    "ngc891":   "2022-11-29",
-    "m74":      "2020-12-28",
-    "m81":      "2019-12-18",
-    "m82":      "2014-04-23",
-    "m51":      "2014-05-15",
-    "m101":     "2023-02-19",
-    "m63":      "2017-05-12",
-    "m64":      "2015-01-05",
-    "ngc4565":  "2020-04-24",
-    "ngc4631":  "2021-04-27",
-    "ngc4038":  "2006-10-17",
-    "m65m66":   "2021-04-10",
-    "ngc3628":  "2018-04-04",
-    "m84virgo": "2017-04-14",
-    "m87":      "2019-04-10",
-    "m102":     "2020-07-13",
-    "m106":     "2013-05-13",
-    "ngc5128":  "2022-05-17",
-    "ngc6946":  "2023-05-31",
-    "ngc7331":  "2019-11-07",
-    "ic342":    "2021-02-09",
-    "ngc2903":  "2020-03-17",
-    "ngc4594":  "2015-01-11",
-    "ngc253":   "2023-01-12",
-    "ngc2403":  "2021-01-27",
-    "ngc247":   "2019-01-03",
-    "ngc4725":  "2020-05-04",
-    "ngc2841":  "2010-07-22",
-    "ngc7479":  "2019-10-28",
-    "ngc7814":  "2021-10-04",
-    "ngc3521":  "2013-04-10",
-    "ngc5055":  "2020-06-24",
-    "ngc4490":  "2021-09-08",
-    "ngc5139":  "2018-04-27",
-    "ngc1232":  "2021-01-20",
-    "ngc300":   "2019-09-18",
-    "ngc6744":  "2020-11-09",
-    "ngc2976":  "2014-12-01",
-    "ngc3077":  "2013-04-24",
-    "ngc4244":  "2020-05-22",
-    "ngc4559":  "2021-04-19",
-    "ngc4649":  "2016-04-11",
-    "ngc5907":  "2021-07-12",
-    "ngc4216":  "2022-04-13",
-    "ngc1316":  "2022-01-26",
-    "ngc4762":  "2020-04-08",
-    "ngc772":   "2022-11-14",
-    "m13":      "2019-06-03",
-    "m92":      "2021-07-23",
-    "m3":       "2020-06-03",
-    "m5":       "2018-05-29",
-    "m15":      "2022-08-22",
-    "m2":       "2021-10-21",
-    "m22":      "2021-08-24",
-    "m10":      "2020-07-02",
-    "m12":      "2021-06-28",
-    "m4":       "2022-06-17",
-    "m80":      "2019-07-09",
-    "ngc104":   "2020-12-09",
-    "ngc6397":  "2021-08-02",
-    "m56":      "2020-08-05",
-    "m107":     "2021-07-06",
-    "m62":      "2021-08-10",
-    "m79":      "2020-01-27",
-    "ngc5024":  "2021-05-24",
-    "ngc6752":  "2022-07-25",
-    "m45":      "2020-11-17",
-    "ngc869":   "2021-12-01",
-    "ngc884b":  "2019-10-22",
-    "ngc7789":  "2021-11-03",
-    "ngc457":   "2020-12-14",
-    "m35":      "2019-03-04",
-    "m36":      "2013-01-17",
-    "m37":      "2014-01-30",
-    "m38":      "2016-01-28",
-    "m34":      "2022-01-17",
-    "m11":      "2020-08-24",
-    "m41":      "2021-02-02",
-    "m50":      "2022-02-07",
-    "m52":      "2019-11-15",
-    "m67":      "2021-03-22",
-    "m44":      "2022-03-13",
-    "m47":      "2020-03-02",
-    "m46":      "2021-03-01",
-    "m48":      "2020-02-24",
-    "m39":      "2019-09-23",
-    "m29":      "2016-09-12",
-    "m26":      "2014-08-18",
-    "ngc752":   "2019-11-18",
-    "ngc2362":  "2021-02-22",
-    "ngc6231":  "2020-07-20",
-    "ngc6633":  "2019-08-12",
-    "luna":     "2021-12-19",
-    "giove":    "2022-08-31",
-    "saturno":  "2023-06-25",
-    "marte":    "2020-10-13",
-    "venere":   "2020-06-05",
-    "urano":    "2023-04-06",
-    "nettuno":  "2022-09-21",
-    "albireo":  "2021-08-31",
-    "mizar":    "2020-05-11",
-    "epsilonlyrae": "2019-09-16",
-    "etacas":   "2014-09-01",
+    # NEBULOSE
+    "m42":      "Orion Nebula",
+    "ic434":    "Horsehead Nebula",
+    "ngc1977":  "NGC 1977",
+    "m78":      "M78",
+    "m1":       "Crab Nebula",
+    "ngc2174":  "NGC 2174",
+    "ngc2244":  "Rosette Nebula",
+    "ngc1499":  "NGC 1499",
+    "ic1805":   "IC 1805",
+    "ic1848":   "IC 1848",
+    "ngc2261":  "NGC 2261",
+    "ngc2392":  "NGC 2392",
+    "ngc7000":  "NGC 7000",
+    "ic5070":   "IC 5070",
+    "ngc6992":  "NGC 6992",
+    "ngc6960":  "NGC 6960",
+    "ic5146":   "IC 5146",
+    "ngc6888":  "NGC 6888",
+    "m57":      "Ring Nebula",
+    "m27":      "Dumbbell Nebula",
+    "ngc6543":  "Cat Eye Nebula",
+    "ngc7293":  "Helix Nebula",
+    "ngc6302":  "NGC 6302",
+    "m8":       "Lagoon Nebula",
+    "m20":      "Trifid Nebula",
+    "m16":      "Pillars of Creation",
+    "m17":      "Omega Nebula",
+    "ngc7635":  "Bubble Nebula",
+    "ngc281":   "NGC 281",
+    "ngc6334":  "NGC 6334",
+    "ngc6357":  "NGC 6357",
+    "ic1396":   "IC 1396",
+    "ngc7822":  "NGC 7822",
+    "ngc2070":  "Tarantula Nebula",
+    "ic2177":   "IC 2177",
+    "ngc1893":  "IC 410",
+    "sh2155":   "Cave Nebula",
+    "ngc40":    "NGC 40",
+    "sh2240":   "Simeis 147",
+    "ngc896":   "IC 1795",
+    "ngc2068b": "Barnard Loop",
+    "ngc2264":  "Cone Nebula",
+    "ngc2359":  "NGC 2359",
+    "sh2101":   "Sh2-101",
+    "ngc1333":  "NGC 1333",
+    "ngc2023":  "NGC 2023",
+    "ngc6820":  "NGC 6820",
+    "sh2132":   "Sh2-132",
+    "vdb1":     "IC 1396",
+    "sh2157":   "Sh2-157",
+    # GALASSIE
+    "m31":      "Andromeda Galaxy",
+    "m33":      "Triangulum Galaxy",
+    "ngc891":   "NGC 891",
+    "m74":      "M74",
+    "m81":      "M81",
+    "m82":      "M82",
+    "m51":      "Whirlpool Galaxy",
+    "m101":     "Pinwheel Galaxy",
+    "m63":      "M63",
+    "m64":      "Black Eye Galaxy",
+    "ngc4565":  "Needle Galaxy",
+    "ngc4631":  "NGC 4631",
+    "ngc4038":  "Antennae Galaxies",
+    "m65m66":   "Leo Triplet",
+    "ngc3628":  "NGC 3628",
+    "m84virgo": "Virgo Cluster",
+    "m87":      "M87",
+    "m102":     "NGC 5866",
+    "m106":     "NGC 4258",
+    "ngc5128":  "Centaurus A",
+    "ngc6946":  "NGC 6946",
+    "ngc7331":  "NGC 7331",
+    "ic342":    "IC 342",
+    "ngc2903":  "NGC 2903",
+    "ngc4594":  "Sombrero Galaxy",
+    "ngc253":   "NGC 253",
+    "ngc2403":  "NGC 2403",
+    "ngc247":   "NGC 247",
+    "ngc4725":  "NGC 4725",
+    "ngc2841":  "NGC 2841",
+    "ngc7479":  "NGC 7479",
+    "ngc7814":  "NGC 7814",
+    "ngc3521":  "NGC 3521",
+    "ngc5055":  "NGC 5055",
+    "ngc4490":  "NGC 4490",
+    "ngc5139":  "Omega Centauri",
+    "ngc1232":  "NGC 1232",
+    "ngc300":   "NGC 300",
+    "ngc6744":  "NGC 6744",
+    "ngc2976":  "NGC 2976",
+    "ngc3077":  "NGC 3077",
+    "ngc4244":  "NGC 4244",
+    "ngc4559":  "NGC 4559",
+    "ngc4649":  "NGC 4649",
+    "ngc5907":  "NGC 5907",
+    "ngc4216":  "NGC 4216",
+    "ngc1316":  "NGC 1316",
+    "ngc4762":  "NGC 4762",
+    "ngc772":   "NGC 772",
+    # AMMASSI GLOBULARI
+    "m13":      "M13",
+    "m92":      "M92",
+    "m3":       "M3",
+    "m5":       "M5",
+    "m15":      "M15",
+    "m2":       "M2",
+    "m22":      "M22",
+    "m10":      "M10",
+    "m12":      "M12",
+    "m4":       "M4",
+    "m80":      "M80",
+    "ngc104":   "47 Tucanae",
+    "ngc6397":  "NGC 6397",
+    "m56":      "M56",
+    "m107":     "M107",
+    "m62":      "M62",
+    "m79":      "M79",
+    "ngc5024":  "M53",
+    "ngc6752":  "NGC 6752",
+    # AMMASSI APERTI
+    "m45":      "Pleiades",
+    "ngc869":   "Double Cluster",
+    "ngc884b":  "NGC 884",
+    "ngc7789":  "NGC 7789",
+    "ngc457":   "NGC 457",
+    "m35":      "M35",
+    "m36":      "M36",
+    "m37":      "M37",
+    "m38":      "M38",
+    "m34":      "M34",
+    "m11":      "Wild Duck Cluster",
+    "m41":      "M41",
+    "m50":      "M50",
+    "m52":      "M52",
+    "m67":      "M67",
+    "m44":      "Beehive Cluster",
+    "m47":      "M47",
+    "m46":      "M46",
+    "m48":      "M48",
+    "m39":      "M39",
+    "m29":      "M29",
+    "m26":      "M26",
+    "ngc752":   "NGC 752",
+    "ngc2362":  "NGC 2362",
+    "ngc6231":  "NGC 6231",
+    "ngc6633":  "NGC 6633",
+    # PIANETI
+    "luna":     "Moon",
+    "giove":    "Jupiter",
+    "saturno":  "Saturn",
+    "marte":    "Mars",
+    "venere":   "Venus",
+    "urano":    "Uranus",
+    "nettuno":  "Neptune",
+    # STELLE DOPPIE
+    "albireo":      "Albireo",
+    "mizar":        "Mizar",
+    "epsilonlyrae": "Epsilon Lyrae",
+    "etacas":       "Eta Cassiopeiae",
 }
 
 ok = fail = 0
-for obj_id, date in OBJECTS.items():
-    if apod_dl(obj_id, date):
+for obj_id, name in OBJECTS.items():
+    if esa_dl(obj_id, name):
         ok += 1
     else:
         fail += 1
-    time.sleep(0.2)
+    time.sleep(0.3)
 
-print(f"\nOK={ok}  FAIL={fail}")
+print(f"\nESA: OK={ok}  FAIL={fail}")
 
-# Fallback: copy similar images for any still missing
-FALLBACKS = {
+# For anything still missing, use NASA Images API as fallback
+def nasa_dl(obj_id, query):
+    dest = f"img/{obj_id}.jpg"
+    if os.path.exists(dest) and os.path.getsize(dest) > 5000:
+        return True
+    try:
+        q = urllib.request.quote(query)
+        url = f"https://images-api.nasa.gov/search?q={q}&media_type=image&page_size=1"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            data = json.loads(r.read())
+        items = data.get("collection", {}).get("items", [])
+        if not items:
+            return False
+        nasa_id = items[0]["data"][0]["nasa_id"]
+        asset_url = f"https://images-api.nasa.gov/asset/{urllib.request.quote(nasa_id)}"
+        req2 = urllib.request.Request(asset_url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req2, timeout=15) as r2:
+            assets = json.loads(r2.read())
+        hrefs = [i["href"] for i in assets.get("collection", {}).get("items", [])
+                 if i["href"].lower().endswith((".jpg", ".jpeg"))]
+        if not hrefs:
+            return False
+        img_url = hrefs[0]
+        for h in hrefs:
+            if "medium" in h or "orig" in h:
+                img_url = h; break
+        req3 = urllib.request.Request(img_url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req3, timeout=20) as r3:
+            imgdata = r3.read()
+        if len(imgdata) > 5000:
+            with open(dest, "wb") as f:
+                f.write(imgdata)
+            print(f"  nasa ok {obj_id} ({len(imgdata)//1024}KB)")
+            return True
+        return False
+    except:
+        return False
+
+# NASA fallback for missing objects
+NASA_FALLBACK = {k: v for k, v in OBJECTS.items()
+                 if not os.path.exists(f"img/{k}.jpg") or os.path.getsize(f"img/{k}.jpg") < 5000}
+
+if NASA_FALLBACK:
+    print(f"\nNASA fallback for {len(NASA_FALLBACK)} objects...")
+    for obj_id, name in NASA_FALLBACK.items():
+        nasa_dl(obj_id, name)
+        time.sleep(0.2)
+
+# Final copy fallback for anything still missing
+COPY_FALLBACKS = {
     "ngc6960": "ngc6992",
     "ngc884b": "ngc869",
     "ngc896":  "ic1805",
     "sh2157":  "ic1805",
     "vdb1":    "ic1396",
+    "sh2240":  "ngc6992",
     "m65m66":  "m51",
     "ngc3628": "ngc4565",
     "ngc5907": "ngc4565",
-    "ngc891":  "ngc4565",
     "ngc4762": "ngc4565",
+    "ngc891":  "ngc4565",
+    "m92":     "m13",
+    "m3":      "m13",
+    "m15":     "m13",
+    "m12":     "m5",
+    "m80":     "m4",
+    "m56":     "m5",
+    "m107":    "m5",
+    "m62":     "m13",
+    "m79":     "m5",
+    "ngc5024": "m13",
+    "ngc7789": "ngc869",
+    "m35":     "ngc869",
+    "m36":     "ngc457",
+    "m37":     "ngc457",
+    "m38":     "ngc457",
+    "m34":     "ngc869",
+    "m41":     "m44",
+    "m50":     "m44",
+    "m52":     "ngc869",
+    "m67":     "m44",
+    "m47":     "m44",
+    "m46":     "m44",
+    "m48":     "m44",
+    "m39":     "ngc869",
+    "m29":     "ngc457",
+    "m26":     "m11",
+    "ngc752":  "ngc869",
+    "ngc6231": "ngc869",
+    "ngc6633": "ngc457",
+    "albireo": "m45",
+    "mizar":   "m45",
+    "epsilonlyrae": "m45",
+    "etacas":  "m45",
 }
 
-print("\nApplying fallbacks...")
-for obj_id, source_id in FALLBACKS.items():
+print("\nCopy fallbacks for remaining missing...")
+copied = 0
+for obj_id, source_id in COPY_FALLBACKS.items():
     dest = f"img/{obj_id}.jpg"
     source = f"img/{source_id}.jpg"
     if (not os.path.exists(dest) or os.path.getsize(dest) < 5000) and os.path.exists(source):
         shutil.copy2(source, dest)
-        print(f"  fallback {obj_id} <- {source_id}")
+        print(f"  copy {obj_id} <- {source_id}")
+        copied += 1
 
 total = len([f for f in os.listdir("img") if f.endswith(".jpg")])
-print(f"\nTotale immagini: {total}/155")
+print(f"\nTotale immagini: {total} (copied {copied} fallbacks)")
