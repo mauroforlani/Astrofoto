@@ -1719,7 +1719,7 @@ function buildCard(obj,month){
 // ═══════════════════════════════════════════════════════
 // MODAL
 // ═══════════════════════════════════════════════════════
-function openModal(obj,month){
+function openModal(obj,month,origin){
   const info=getAlt(obj,month);
   const ac=altColor(info.alt);
   const camBest=bestFocalsForCamera(obj);
@@ -1789,6 +1789,7 @@ function openModal(obj,month){
 
   // Open
   const overlay=document.getElementById('modalOverlay');
+  overlay.dataset.origin = origin||'catalog';
   overlay.classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -1797,8 +1798,11 @@ document.getElementById('modalClose').addEventListener('click',closeModal);
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 function closeModal(){
-  document.getElementById('modalOverlay').classList.remove('open');
+  const overlay = document.getElementById('modalOverlay');
+  const origin = overlay.dataset.origin||'catalog';
+  overlay.classList.remove('open');
   document.body.style.overflow='';
+  if(origin==='landing') showLanding();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1971,17 +1975,11 @@ function initLanding(){
 
   function openFromSearch(obj){
     const month = obj.months[0];
-    enterCatalog();
-    // Wait for catalog to appear, render grid, then open modal
-    setTimeout(()=>{
-      activeMonth = month;
-      document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.m===month));
-      document.querySelectorAll('.month-sec').forEach(s=>s.classList.toggle('active',+s.id.replace('sec-','')===month));
-      renderGrid(month);
-      setTimeout(()=>{
-        openModal(obj, month);
-      }, 350);
-    }, 520);
+    activeMonth = month;
+    document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.m===month));
+    document.querySelectorAll('.month-sec').forEach(s=>s.classList.toggle('active',+s.id.replace('sec-','')===month));
+    renderGrid(month);
+    openModal(obj, month, 'landing');
   }
 
   function renderSearchResults(results){
@@ -2038,7 +2036,15 @@ initGlobalFilters();
 initSliders();
 initMonthNav();
 updateTotCount();
+// Set active month to current real month
+(function(){
+  const m = new Date().getMonth()+1; // 1-12
+  if(m>=1 && m<=12){ activeMonth=m; }
+})();
 renderGrid(activeMonth);
+// Activate correct month tab
+document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.toggle('active',+b.dataset.m===activeMonth));
+document.querySelectorAll('.month-sec').forEach(s=>s.classList.toggle('active',+s.id.replace('sec-','')===activeMonth));
 initLanding();
 
 // Lazy render other months on tab click (already handled by click listener)
