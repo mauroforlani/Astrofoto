@@ -200,6 +200,13 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 .at-month-btn.on{background:var(--blue2);border-color:var(--blue2);color:#fff}
 .at-photo-area{border:1px dashed var(--border2);border-radius:3px;padding:20px;cursor:pointer;transition:border-color .15s;display:flex;align-items:center;justify-content:center;min-height:80px;gap:12px}
 .at-photo-area:hover{border-color:var(--ink3)}
+.admin-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:3px;border:1px solid var(--border);background:var(--bg);gap:12px;transition:border-color .15s}
+.admin-item:hover{border-color:var(--red)}
+.admin-item-info{flex:1;min-width:0}
+.admin-item-name{font-size:13px;color:var(--ink);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-item-cat{font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-top:1px}
+.admin-item-del{background:none;border:1px solid var(--border);border-radius:2px;color:var(--ink4);font-size:10px;padding:3px 8px;cursor:pointer;font-family:'DM Mono',monospace;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.admin-item-del:hover{background:var(--red);border-color:var(--red);color:#fff}
 .at-hms{width:58px!important;text-align:center}
 .at-hms-sep{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);flex-shrink:0}
 
@@ -278,6 +285,10 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
           <span class="land-btn-val">+ Aggiungi target</span>
         </button>
       </div>
+      <div style="margin-top:8px">
+        <button id="btnAdmin" style="background:none;border:none;color:rgba(255,255,255,.15);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;cursor:pointer;padding:4px 0;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.35)'" onmouseout="this.style.color='rgba(255,255,255,.15)'">⚙ gestione catalogo</button>
+      </div>
+
       <div class="landing-search" id="searchPanel" style="display:none">
         <div class="search-bar">
           <span class="search-icon">⊹</span>
@@ -424,6 +435,34 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
         <div class="modal-diff-row"><div class="modal-pips" id="modalPips"></div><span id="modalDiffTxt" style="font-size:12px;color:var(--ink3);margin-left:8px"></span></div>
       </div>
       <div id="modalLxNote"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN MODAL ══════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="adminOverlay">
+  <div class="modal" id="adminModal" style="max-width:480px">
+    <button class="modal-close" id="adminClose">✕</button>
+    <div style="padding:28px 32px 28px">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:6px">Accesso riservato</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;letter-spacing:-1px;margin-bottom:20px">Gestione catalogo</div>
+
+      <!-- Password screen -->
+      <div id="adminAuth">
+        <div style="font-size:12px;color:var(--ink3);margin-bottom:12px">Inserisci la password per accedere</div>
+        <div style="display:flex;gap:8px">
+          <input type="password" id="adminPwd" class="at-inp" placeholder="Password" style="flex:1" onkeydown="if(event.key==='Enter')document.getElementById('adminAuthBtn').click()">
+          <button id="adminAuthBtn" style="background:var(--ink);border:none;border-radius:3px;padding:10px 18px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;white-space:nowrap">Accedi</button>
+        </div>
+        <div id="adminAuthErr" style="display:none;font-size:10px;color:var(--red);margin-top:8px;font-family:'DM Mono',monospace">Password errata</div>
+      </div>
+
+      <!-- Admin panel -->
+      <div id="adminPanel" style="display:none">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:12px">OGGETTI NEL CATALOGO — clicca per rimuovere</div>
+        <div id="adminList" style="max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
+        <div id="adminEmpty" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;padding:24px">Nessun oggetto nel catalogo</div>
+      </div>
     </div>
   </div>
 </div>
@@ -2407,6 +2446,91 @@ function initAddTarget(){
   });
 }
 
+// ═══════════════════════════════════════════════════════
+// ADMIN
+// ═══════════════════════════════════════════════════════
+function initAdmin(){
+  const ADMIN_PWD = 'mr030317';
+  const overlay = document.getElementById('adminOverlay');
+
+  function openAdmin(){
+    document.getElementById('adminAuth').style.display = 'block';
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('adminPwd').value = '';
+    document.getElementById('adminAuthErr').style.display = 'none';
+    overlay.style.zIndex = '1100';
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(()=>document.getElementById('adminPwd').focus(), 100);
+  }
+
+  function closeAdmin(){
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function renderAdminList(){
+    const list = document.getElementById('adminList');
+    const empty = document.getElementById('adminEmpty');
+    // Show ALL objects sorted: custom first, then standard
+    const sorted = [...OBJ].sort((a,b)=>{
+      if(a._custom && !b._custom) return -1;
+      if(!a._custom && b._custom) return 1;
+      return a.name.localeCompare(b.name);
+    });
+    if(!sorted.length){ list.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display = 'none';
+    const TYPE_IT = {nebula:'Nebulosa',galaxy:'Galassia',cluster:'Ammasso',planet:'Pianeta',double:'Doppia'};
+    list.innerHTML = sorted.map(obj=>`
+      <div class="admin-item" data-id="${obj.id}">
+        <div class="admin-item-info">
+          <div class="admin-item-name">${obj._custom?'✦ ':''}${obj.name}</div>
+          <div class="admin-item-cat">${obj.cat||''} · ${TYPE_IT[obj.type]||obj.type} · mesi: ${obj.months.join(',')}</div>
+        </div>
+        <button class="admin-item-del" data-id="${obj.id}">✕ rimuovi</button>
+      </div>`).join('');
+
+    list.querySelectorAll('.admin-item-del').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.dataset.id;
+        const obj = OBJ.find(o=>o.id===id);
+        if(!obj) return;
+        const confirm = window.confirm(`Rimuovere "${obj.name}" dal catalogo?`);
+        if(!confirm) return;
+        // Remove from OBJ array
+        const idx = OBJ.findIndex(o=>o.id===id);
+        if(idx>-1) OBJ.splice(idx,1);
+        // If custom, remove from localStorage too
+        if(obj._custom){
+          const saved = loadCustomTargets().filter(t=>t.id!==id);
+          saveCustomTargets(saved);
+        }
+        // Re-render current grid
+        renderGrid(activeMonth);
+        // Re-render admin list
+        renderAdminList();
+      });
+    });
+  }
+
+  document.getElementById('btnAdmin').addEventListener('click', openAdmin);
+  document.getElementById('adminClose').addEventListener('click', closeAdmin);
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) closeAdmin(); });
+
+  document.getElementById('adminAuthBtn').addEventListener('click', ()=>{
+    const pwd = document.getElementById('adminPwd').value;
+    if(pwd === ADMIN_PWD){
+      document.getElementById('adminAuth').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      renderAdminList();
+    } else {
+      document.getElementById('adminAuthErr').style.display = 'block';
+      document.getElementById('adminPwd').value = '';
+      document.getElementById('adminPwd').focus();
+    }
+  });
+}
+
 initCountrySelect();
 initCameraSelect();
 initGlobalFilters();
@@ -2417,6 +2541,7 @@ injectCustomTargets();
 renderGrid(activeMonth);
 initLanding();
 initAddTarget();
+initAdmin();
 
 // Lazy render other months on tab click (already handled by click listener)
 // Pre-count for nav badges
