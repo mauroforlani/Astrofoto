@@ -2062,6 +2062,38 @@ function switchMonth(n){
   renderGrid(n);
 }
 
+function hmsToRaDeg(h, m, s){
+  return ((+h||0) + (+m||0)/60 + (+s||0)/3600) * 15;
+}
+function dmsToDecDeg(d, m, s){
+  const sign = (+d < 0) ? -1 : 1;
+  return sign * (Math.abs(+d||0) + (+m||0)/60 + (+s||0)/3600);
+}
+function getRaDec(){
+  return {
+    ra: hmsToRaDeg(
+      document.getElementById('atRAh').value,
+      document.getElementById('atRAm').value,
+      document.getElementById('atRAs').value
+    ),
+    dec: dmsToDecDeg(
+      document.getElementById('atDecd').value,
+      document.getElementById('atDecm').value,
+      document.getElementById('atDecs').value
+    )
+  };
+}
+
+// Global: calculate visible months using full night window
+function calcVisibleMonths(ra, dec){
+  const months = [];
+  for(let m = 1; m <= 12; m++){
+    const alt = maxAlt(ra, dec, m, activeLat, activeLon, 17, 30).alt;
+    if(alt >= MIN_ALT) months.push(m);
+  }
+  return months;
+}
+
 function initLanding(){
   // Star field
   const sc = document.getElementById('starField');
@@ -2265,40 +2297,7 @@ function initAddTarget(){
   });
 
   // Convert h/m/s → decimal degrees
-  function hmsToRaDeg(h, m, s){
-    // RA: 1h = 15°
-    return ((+h || 0) + (+m || 0)/60 + (+s || 0)/3600) * 15;
-  }
-  function dmsToDecDeg(d, m, s){
-    // Dec: sign from degrees field
-    const sign = (+d < 0) ? -1 : 1;
-    return sign * (Math.abs(+d || 0) + (+m || 0)/60 + (+s || 0)/3600);
-  }
 
-  function getRaDec(){
-    const ra = hmsToRaDeg(
-      document.getElementById('atRAh').value,
-      document.getElementById('atRAm').value,
-      document.getElementById('atRAs').value
-    );
-    const dec = dmsToDecDeg(
-      document.getElementById('atDecd').value,
-      document.getElementById('atDecm').value,
-      document.getElementById('atDecs').value
-    );
-    return {ra, dec};
-  }
-
-  function calcVisibleMonths(ra, dec){
-    // Use full night window (17:00-06:00 next day = 30h) regardless of user setting
-    // so visibility is not affected by the currently selected time window
-    const months = [];
-    for(let m = 1; m <= 12; m++){
-      const alt = maxAlt(ra, dec, m, activeLat, activeLon, 17, 30).alt;
-      if(alt >= MIN_ALT) months.push(m);
-    }
-    return months;
-  }
 
   function updateMonthPreview(){
     const RAh = document.getElementById('atRAh').value;
