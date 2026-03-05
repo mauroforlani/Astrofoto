@@ -200,6 +200,8 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 .at-month-btn.on{background:var(--blue2);border-color:var(--blue2);color:#fff}
 .at-photo-area{border:1px dashed var(--border2);border-radius:3px;padding:20px;cursor:pointer;transition:border-color .15s;display:flex;align-items:center;justify-content:center;min-height:80px;gap:12px}
 .at-photo-area:hover{border-color:var(--ink3)}
+.at-hms{width:58px!important;text-align:center}
+.at-hms-sep{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);flex-shrink:0}
 
 /* ── LANDING PAGE ── */
 #landing{position:fixed;inset:0;z-index:1000;background:var(--ink);display:flex;flex-direction:column;overflow:hidden;transition:opacity .5s,transform .5s}
@@ -469,16 +471,24 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 
       <div class="at-field">
         <label class="at-lbl">Coordinate celesti</label>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-          <div style="display:flex;align-items:center;gap:6px">
-            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:24px">RA</span>
-            <input type="number" id="atRA" class="at-inp" placeholder="es. 83.82" min="0" max="360" step="0.01" style="width:110px">
-            <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4)">gradi (0–360)</span>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:28px">RA</span>
+            <input type="number" id="atRAh" class="at-inp at-hms" placeholder="h" min="0" max="23" step="1">
+            <span class="at-hms-sep">h</span>
+            <input type="number" id="atRAm" class="at-inp at-hms" placeholder="m" min="0" max="59" step="1">
+            <span class="at-hms-sep">m</span>
+            <input type="number" id="atRAs" class="at-inp at-hms" placeholder="s" min="0" max="59" step="0.1">
+            <span class="at-hms-sep">s</span>
           </div>
-          <div style="display:flex;align-items:center;gap:6px">
-            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:24px">Dec</span>
-            <input type="number" id="atDec" class="at-inp" placeholder="es. -5.39" min="-90" max="90" step="0.01" style="width:110px">
-            <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4)">gradi (−90/+90)</span>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:28px">Dec</span>
+            <input type="number" id="atDecd" class="at-inp at-hms" placeholder="°" min="-90" max="90" step="1">
+            <span class="at-hms-sep">°</span>
+            <input type="number" id="atDecm" class="at-inp at-hms" placeholder="′" min="0" max="59" step="1">
+            <span class="at-hms-sep">′</span>
+            <input type="number" id="atDecs" class="at-inp at-hms" placeholder="″" min="0" max="59" step="0.1">
+            <span class="at-hms-sep">″</span>
           </div>
         </div>
         <div id="atMonthsPreview" style="margin-top:10px;min-height:20px;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);letter-spacing:1px"></div>
@@ -2199,8 +2209,7 @@ function initAddTarget(){
     selectedFocals = [];
     selectedMonths = [];
     document.getElementById('atCat').value = '';
-    document.getElementById('atRA').value = '';
-    document.getElementById('atDec').value = '';
+    ['atRAh','atRAm','atRAs','atDecd','atDecm','atDecs'].forEach(id=>{ document.getElementById(id).value=''; });
     document.getElementById('atMonthsPreview').textContent = '';
     document.querySelectorAll('#atFocals .at-focal-btn').forEach(b=>b.classList.remove('on'));
     document.querySelectorAll('.at-type-btn').forEach(b=>b.classList.toggle('on', b.dataset.type==='nebula'));
@@ -2233,7 +2242,31 @@ function initAddTarget(){
     });
   });
 
-  // RA/Dec → auto calculate visible months
+  // Convert h/m/s → decimal degrees
+  function hmsToRaDeg(h, m, s){
+    // RA: 1h = 15°
+    return ((+h || 0) + (+m || 0)/60 + (+s || 0)/3600) * 15;
+  }
+  function dmsToDecDeg(d, m, s){
+    // Dec: sign from degrees field
+    const sign = (+d < 0) ? -1 : 1;
+    return sign * (Math.abs(+d || 0) + (+m || 0)/60 + (+s || 0)/3600);
+  }
+
+  function getRaDec(){
+    const ra = hmsToRaDeg(
+      document.getElementById('atRAh').value,
+      document.getElementById('atRAm').value,
+      document.getElementById('atRAs').value
+    );
+    const dec = dmsToDecDeg(
+      document.getElementById('atDecd').value,
+      document.getElementById('atDecm').value,
+      document.getElementById('atDecs').value
+    );
+    return {ra, dec};
+  }
+
   function calcVisibleMonths(ra, dec){
     const months = [];
     for(let m = 1; m <= 12; m++){
@@ -2244,14 +2277,16 @@ function initAddTarget(){
   }
 
   function updateMonthPreview(){
-    const ra = parseFloat(document.getElementById('atRA').value);
-    const dec = parseFloat(document.getElementById('atDec').value);
+    const RAh = document.getElementById('atRAh').value;
+    const Decd = document.getElementById('atDecd').value;
     const preview = document.getElementById('atMonthsPreview');
-    if(isNaN(ra) || isNaN(dec)){
+    // Need at least RA hours and Dec degrees to compute
+    if(RAh === '' || Decd === ''){
       preview.textContent = '';
       selectedMonths = [];
       return;
     }
+    const {ra, dec} = getRaDec();
     selectedMonths = calcVisibleMonths(ra, dec);
     const MNAMES = ['','Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
     if(selectedMonths.length === 0){
@@ -2262,8 +2297,9 @@ function initAddTarget(){
     }
   }
 
-  document.getElementById('atRA').addEventListener('input', updateMonthPreview);
-  document.getElementById('atDec').addEventListener('input', updateMonthPreview);
+  ['atRAh','atRAm','atRAs','atDecd','atDecm','atDecs'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', updateMonthPreview);
+  });
 
   // Focal selector
   document.querySelectorAll('#atFocals .at-focal-btn').forEach(btn=>{
@@ -2321,8 +2357,7 @@ function initAddTarget(){
     const id = 'custom_' + name.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'') + '_' + Date.now();
 
     const bestFocals = selectedFocals.length > 0 ? selectedFocals : [336, 750];
-    const raVal = parseFloat(document.getElementById('atRA').value) || 0;
-    const decVal = parseFloat(document.getElementById('atDec').value) || 0;
+    const {ra: raVal, dec: decVal} = getRaDec();
     // Recalculate months at save time (in case location changed)
     if(raVal || decVal) selectedMonths = calcVisibleMonths(raVal, decVal);
 
