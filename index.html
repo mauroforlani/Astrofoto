@@ -200,6 +200,9 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 .at-month-btn.on{background:var(--blue2);border-color:var(--blue2);color:#fff}
 .at-photo-area{border:1px dashed var(--border2);border-radius:3px;padding:20px;cursor:pointer;transition:border-color .15s;display:flex;align-items:center;justify-content:center;min-height:80px;gap:12px}
 .at-photo-area:hover{border-color:var(--ink3)}
+.card-img-footer{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:5px 9px;background:linear-gradient(transparent,rgba(0,0,0,.55));z-index:2}
+.card-type-lbl{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.card-alt-lbl{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;font-weight:500}
 .admin-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:3px;border:1px solid var(--border);background:var(--bg);gap:12px;transition:border-color .15s}
 .admin-item:hover{border-color:var(--red)}
 .admin-item-info{flex:1;min-width:0}
@@ -462,6 +465,80 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
         <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:12px">OGGETTI NEL CATALOGO — clicca per rimuovere</div>
         <div id="adminList" style="max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
         <div id="adminEmpty" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;padding:24px">Nessun oggetto nel catalogo</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EDIT OBJECT MODAL ════════════════════════════════════════════ -->
+<div class="modal-overlay" id="editOverlay">
+  <div class="modal" id="editModal" style="max-width:520px">
+    <button class="modal-close" id="editClose">✕</button>
+    <div style="padding:28px 32px 24px">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:6px">Modifica oggetto</div>
+      <div id="editTitle" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:-1px;margin-bottom:20px"></div>
+
+      <div class="at-field"><label class="at-lbl">Nome</label><input type="text" id="editName" class="at-inp"></div>
+      <div class="at-field"><label class="at-lbl">Catalogo / Sigle</label><input type="text" id="editCat" class="at-inp"></div>
+
+      <div class="at-field" style="display:flex;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:120px"><label class="at-lbl">Magnitudine</label><input type="number" id="editMag" class="at-inp" step="0.01"></div>
+        <div style="flex:1;min-width:120px"><label class="at-lbl">Dimensione</label><div style="display:flex;align-items:center;gap:6px"><input type="number" id="editSizeVal" class="at-inp" step="0.1"><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3)">'</span></div></div>
+      </div>
+
+      <div class="at-field">
+        <label class="at-lbl">Tipo</label>
+        <div class="at-type-row" id="editTypeRow">
+          <button class="at-type-btn" data-type="nebula">Nebulosa</button>
+          <button class="at-type-btn" data-type="galaxy">Galassia</button>
+          <button class="at-type-btn" data-type="cluster">Ammasso</button>
+          <button class="at-type-btn" data-type="planet">Pianeta</button>
+          <button class="at-type-btn" data-type="double">Doppia</button>
+        </div>
+      </div>
+
+      <div class="at-field">
+        <label class="at-lbl">Coordinate celesti</label>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:28px">RA</span>
+            <input type="number" id="editRAh" class="at-inp at-hms" placeholder="h" min="0" max="23" step="1">
+            <span class="at-hms-sep">h</span>
+            <input type="number" id="editRAm" class="at-inp at-hms" placeholder="m" min="0" max="59" step="1">
+            <span class="at-hms-sep">m</span>
+            <input type="number" id="editRAs" class="at-inp at-hms" placeholder="s" min="0" max="59" step="0.1">
+            <span class="at-hms-sep">s</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:28px">Dec</span>
+            <input type="number" id="editDecd" class="at-inp at-hms" placeholder="°" min="-90" max="90" step="1">
+            <span class="at-hms-sep">°</span>
+            <input type="number" id="editDecm" class="at-inp at-hms" placeholder="′" min="0" max="59" step="1">
+            <span class="at-hms-sep">′</span>
+            <input type="number" id="editDecs" class="at-inp at-hms" placeholder="″" min="0" max="59" step="0.1">
+            <span class="at-hms-sep">″</span>
+          </div>
+        </div>
+        <div id="editMonthsPreview" style="margin-top:8px;min-height:18px;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);letter-spacing:1px"></div>
+      </div>
+
+      <div class="at-field">
+        <label class="at-lbl">Focali consigliate</label>
+        <div class="at-type-row" id="editFocals">
+          <button class="at-focal-btn" data-focal="135">135mm</button>
+          <button class="at-focal-btn" data-focal="336">336mm</button>
+          <button class="at-focal-btn" data-focal="750">750mm</button>
+          <button class="at-focal-btn" data-focal="1085">1085mm</button>
+          <button class="at-focal-btn" data-focal="1625">1625mm</button>
+        </div>
+      </div>
+
+      <div class="at-field"><label class="at-lbl">Descrizione</label><textarea id="editNotes" class="at-inp" rows="3" style="resize:vertical;line-height:1.6"></textarea></div>
+
+      <div id="editError" style="display:none;font-size:11px;color:var(--red);margin-bottom:12px;font-family:'DM Mono',monospace"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+        <button id="editCancel" style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:10px 20px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:var(--ink3)">Annulla</button>
+        <button id="editSave" style="background:var(--ink);border:none;border-radius:3px;padding:10px 24px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;font-weight:500">Salva modifiche</button>
       </div>
     </div>
   </div>
@@ -1844,6 +1921,10 @@ function buildCard(obj,month){
       </div>
     </div>
     <div class="alt-meter"><div class="alt-meter-fill" style="width:${Math.min(100,Math.max(0,info.alt))}%;background:${ac.c}44"></div></div>
+    <div class="card-img-footer">
+      <span class="card-type-lbl">${TYPE_N[obj.type]||obj.type}</span>
+      <span class="card-alt-lbl" style="color:${ac.c}">${info.alt}° · ${fmtH(info.hour)}</span>
+    </div>
   </div>
   <div class="card-body">
     <div class="card-name">${obj.name}</div>
@@ -2447,6 +2528,172 @@ function initAddTarget(){
 }
 
 // ═══════════════════════════════════════════════════════
+// EDIT OBJECT
+// ═══════════════════════════════════════════════════════
+function degToHms(deg){
+  const total = deg / 15;
+  const h = Math.floor(total);
+  const mTotal = (total - h) * 60;
+  const m = Math.floor(mTotal);
+  const s = Math.round((mTotal - m) * 60 * 10) / 10;
+  return {h, m, s};
+}
+function degToDms(deg){
+  const sign = deg < 0 ? -1 : 1;
+  const abs = Math.abs(deg);
+  const d = Math.floor(abs) * sign;
+  const mTotal = (abs - Math.floor(abs)) * 60;
+  const m = Math.floor(mTotal);
+  const s = Math.round((mTotal - m) * 60 * 10) / 10;
+  return {d, m, s};
+}
+
+let editingObj = null;
+
+function openEditModal(obj){
+  editingObj = obj;
+  document.getElementById('editTitle').textContent = obj.name;
+  document.getElementById('editName').value = obj.name;
+  document.getElementById('editCat').value = obj.cat||'';
+  document.getElementById('editMag').value = obj.mag===99 ? '' : obj.mag;
+  const sizeNum = parseFloat((obj.size||'').replace(/[^0-9.]/g,''));
+  document.getElementById('editSizeVal').value = isNaN(sizeNum) ? '' : sizeNum;
+  document.getElementById('editNotes').value = obj.notes||'';
+
+  // Type
+  document.querySelectorAll('#editTypeRow .at-type-btn').forEach(b=>
+    b.classList.toggle('on', b.dataset.type===obj.type));
+
+  // RA/Dec → h/m/s
+  if(obj.ra){
+    const hms = degToHms(obj.ra);
+    document.getElementById('editRAh').value = hms.h;
+    document.getElementById('editRAm').value = hms.m;
+    document.getElementById('editRAs').value = hms.s;
+  } else {
+    ['editRAh','editRAm','editRAs'].forEach(id=>document.getElementById(id).value='');
+  }
+  if(obj.dec!==undefined){
+    const dms = degToDms(obj.dec);
+    document.getElementById('editDecd').value = dms.d;
+    document.getElementById('editDecm').value = dms.m;
+    document.getElementById('editDecs').value = dms.s;
+  } else {
+    ['editDecd','editDecm','editDecs'].forEach(id=>document.getElementById(id).value='');
+  }
+
+  // Focals
+  const best = obj.best||[];
+  document.querySelectorAll('#editFocals .at-focal-btn').forEach(b=>
+    b.classList.toggle('on', best.includes(+b.dataset.focal)));
+
+  // Month preview
+  updateEditMonthPreview();
+
+  document.getElementById('editError').style.display='none';
+  document.getElementById('editMonthsPreview').textContent='';
+  const overlay = document.getElementById('editOverlay');
+  overlay.style.zIndex='1200';
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function updateEditMonthPreview(){
+  const RAh = document.getElementById('editRAh').value;
+  const Decd = document.getElementById('editDecd').value;
+  const preview = document.getElementById('editMonthsPreview');
+  if(RAh===''||Decd===''){preview.textContent=''; return;}
+  const ra = hmsToRaDeg(document.getElementById('editRAh').value, document.getElementById('editRAm').value, document.getElementById('editRAs').value);
+  const dec = dmsToDecDeg(document.getElementById('editDecd').value, document.getElementById('editDecm').value, document.getElementById('editDecs').value);
+  const months = calcVisibleMonths(ra, dec);
+  const MNAMES=['','Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+  if(!months.length){
+    preview.innerHTML='<span style="color:var(--red)">⚠ Non visibile dalla posizione attuale</span>';
+  } else {
+    preview.innerHTML='◉ Visibile in: <strong style="color:var(--ink)">'+months.map(m=>MNAMES[m]).join(' · ')+'</strong>';
+  }
+}
+
+function initEdit(){
+  const overlay = document.getElementById('editOverlay');
+  function closeEdit(){ overlay.classList.remove('open'); document.body.style.overflow=''; }
+
+  document.getElementById('editClose').addEventListener('click', closeEdit);
+  document.getElementById('editCancel').addEventListener('click', closeEdit);
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) closeEdit(); });
+
+  // Type buttons
+  document.querySelectorAll('#editTypeRow .at-type-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#editTypeRow .at-type-btn').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+    });
+  });
+
+  // Focal buttons
+  document.querySelectorAll('#editFocals .at-focal-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>btn.classList.toggle('on'));
+  });
+
+  // Live month preview
+  ['editRAh','editRAm','editRAs','editDecd','editDecm','editDecs'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', updateEditMonthPreview);
+  });
+
+  // Save
+  document.getElementById('editSave').addEventListener('click', ()=>{
+    if(!editingObj) return;
+    const name = document.getElementById('editName').value.trim();
+    if(!name){ document.getElementById('editError').textContent='Il nome è obbligatorio'; document.getElementById('editError').style.display='block'; return; }
+
+    const RAh = document.getElementById('editRAh').value;
+    const Decd = document.getElementById('editDecd').value;
+    let newRA = editingObj.ra;
+    let newDec = editingObj.dec;
+    let newMonths = editingObj.months;
+
+    if(RAh!==''&&Decd!==''){
+      newRA = hmsToRaDeg(document.getElementById('editRAh').value, document.getElementById('editRAm').value, document.getElementById('editRAs').value);
+      newDec = dmsToDecDeg(document.getElementById('editDecd').value, document.getElementById('editDecm').value, document.getElementById('editDecs').value);
+      newMonths = calcVisibleMonths(newRA, newDec);
+    }
+
+    const selectedType = document.querySelector('#editTypeRow .at-type-btn.on')?.dataset.type || editingObj.type;
+    const selectedFocals = [...document.querySelectorAll('#editFocals .at-focal-btn.on')].map(b=>+b.dataset.focal);
+    const magVal = parseFloat(document.getElementById('editMag').value);
+    const sizeVal = parseFloat(document.getElementById('editSizeVal').value);
+
+    // Update the object in place
+    editingObj.name = name;
+    editingObj.cat = document.getElementById('editCat').value.trim() || name;
+    editingObj.type = selectedType;
+    editingObj.ra = newRA;
+    editingObj.dec = newDec;
+    editingObj.months = newMonths;
+    editingObj.best = selectedFocals.length ? selectedFocals : editingObj.best;
+    editingObj.mag = isNaN(magVal) ? 99 : magVal;
+    editingObj.size = isNaN(sizeVal) ? '—' : sizeVal+"'";
+    editingObj.notes = document.getElementById('editNotes').value.trim();
+
+    // If custom, persist to localStorage
+    if(editingObj._custom){
+      const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
+      saveCustomTargets(saved);
+    }
+
+    // Re-render grid and admin list
+    renderGrid(activeMonth);
+    document.getElementById('editTitle').textContent = name;
+    closeEdit();
+    // Reopen admin panel to show updated list
+    document.getElementById('adminPanel').style.display='block';
+    document.getElementById('adminList') && document.getElementById('adminPanel').dispatchEvent(new Event('render'));
+    // Trigger admin list refresh via renderAdminList if accessible
+    if(typeof renderAdminList==='function') renderAdminList();
+  });
+}
+
+// ═══════════════════════════════════════════════════════
 // ADMIN
 // ═══════════════════════════════════════════════════════
 function initAdmin(){
@@ -2469,7 +2716,7 @@ function initAdmin(){
     document.body.style.overflow = '';
   }
 
-  function renderAdminList(){
+  window.renderAdminList = function renderAdminList(){
     const list = document.getElementById('adminList');
     const empty = document.getElementById('adminEmpty');
     // Show ALL objects sorted: custom first, then standard
@@ -2487,7 +2734,10 @@ function initAdmin(){
           <div class="admin-item-name">${obj._custom?'✦ ':''}${obj.name}</div>
           <div class="admin-item-cat">${obj.cat||''} · ${TYPE_IT[obj.type]||obj.type} · mesi: ${obj.months.join(',')}</div>
         </div>
-        <button class="admin-item-del" data-id="${obj.id}">✕ rimuovi</button>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button class="admin-item-edit" data-id="${obj.id}" style="background:none;border:1px solid var(--border);border-radius:2px;color:var(--ink4);font-size:10px;padding:3px 8px;cursor:pointer;font-family:'DM Mono',monospace;transition:all .15s" onmouseover="this.style.borderColor='var(--blue2)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink4)'">✎ modifica</button>
+          <button class="admin-item-del" data-id="${obj.id}">✕ rimuovi</button>
+        </div>
       </div>`).join('');
 
     list.querySelectorAll('.admin-item-del').forEach(btn=>{
@@ -2497,18 +2747,22 @@ function initAdmin(){
         if(!obj) return;
         const confirm = window.confirm(`Rimuovere "${obj.name}" dal catalogo?`);
         if(!confirm) return;
-        // Remove from OBJ array
         const idx = OBJ.findIndex(o=>o.id===id);
         if(idx>-1) OBJ.splice(idx,1);
-        // If custom, remove from localStorage too
         if(obj._custom){
           const saved = loadCustomTargets().filter(t=>t.id!==id);
           saveCustomTargets(saved);
         }
-        // Re-render current grid
         renderGrid(activeMonth);
-        // Re-render admin list
         renderAdminList();
+      });
+    });
+
+    list.querySelectorAll('.admin-item-edit').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.dataset.id;
+        const obj = OBJ.find(o=>o.id===id);
+        if(obj) openEditModal(obj);
       });
     });
   }
@@ -2542,6 +2796,7 @@ renderGrid(activeMonth);
 initLanding();
 initAddTarget();
 initAdmin();
+initEdit();
 
 // Lazy render other months on tab click (already handled by click listener)
 // Pre-count for nav badges
