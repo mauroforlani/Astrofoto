@@ -191,6 +191,9 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 .at-type-btn{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:6px 14px;font-family:'Jost',sans-serif;font-size:11px;color:var(--ink3);cursor:pointer;transition:all .15s}
 .at-type-btn:hover{border-color:var(--ink2);color:var(--ink)}
 .at-type-btn.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.at-focal-btn{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:6px 14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);cursor:pointer;transition:all .15s}
+.at-focal-btn:hover{border-color:var(--blue2);color:var(--blue)}
+.at-focal-btn.on{background:var(--blue2);border-color:var(--blue2);color:#fff}
 .at-month-row{display:flex;gap:5px;flex-wrap:wrap}
 .at-month-btn{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:5px 10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--ink3);cursor:pointer;transition:all .15s}
 .at-month-btn:hover{border-color:var(--ink2);color:var(--ink)}
@@ -437,6 +440,11 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
       </div>
 
       <div class="at-field">
+        <label class="at-lbl">Catalogo / Sigle <span style="font-weight:300;opacity:.5">(opzionale)</span></label>
+        <input type="text" id="atCat" class="at-inp" placeholder="es. NGC 2841 · Ursa Major · M82">
+      </div>
+
+      <div class="at-field">
         <label class="at-lbl">Tipo</label>
         <div class="at-type-row">
           <button class="at-type-btn on" data-type="nebula">Nebulosa</button>
@@ -450,11 +458,11 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
       <div class="at-field">
         <label class="at-lbl">Focali consigliate</label>
         <div class="at-type-row" id="atFocals">
-          <button class="at-type-btn" data-focal="135">135mm</button>
-          <button class="at-type-btn" data-focal="336">336mm</button>
-          <button class="at-type-btn" data-focal="750">750mm</button>
-          <button class="at-type-btn" data-focal="1085">1085mm</button>
-          <button class="at-type-btn" data-focal="1625">1625mm</button>
+          <button class="at-focal-btn" data-focal="135">135mm</button>
+          <button class="at-focal-btn" data-focal="336">336mm</button>
+          <button class="at-focal-btn" data-focal="750">750mm</button>
+          <button class="at-focal-btn" data-focal="1085">1085mm</button>
+          <button class="at-focal-btn" data-focal="1625">1625mm</button>
         </div>
         <div style="font-size:9px;color:var(--ink3);font-family:'DM Mono',monospace;margin-top:6px;letter-spacing:1px">Seleziona le focali con cui intendi fotografare questo oggetto</div>
       </div>
@@ -2190,10 +2198,11 @@ function initAddTarget(){
     photoDataUrl = null;
     selectedFocals = [];
     selectedMonths = [];
+    document.getElementById('atCat').value = '';
     document.getElementById('atRA').value = '';
     document.getElementById('atDec').value = '';
     document.getElementById('atMonthsPreview').textContent = '';
-    document.querySelectorAll('#atFocals .at-type-btn').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('#atFocals .at-focal-btn').forEach(b=>b.classList.remove('on'));
     document.querySelectorAll('.at-type-btn').forEach(b=>b.classList.toggle('on', b.dataset.type==='nebula'));
     document.querySelectorAll('.at-month-btn').forEach(b=>b.classList.remove('on'));
     document.getElementById('atPhotoPreview').style.display = 'none';
@@ -2257,7 +2266,7 @@ function initAddTarget(){
   document.getElementById('atDec').addEventListener('input', updateMonthPreview);
 
   // Focal selector
-  document.querySelectorAll('#atFocals .at-type-btn').forEach(btn=>{
+  document.querySelectorAll('#atFocals .at-focal-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const f = +btn.dataset.focal;
       if(selectedFocals.includes(f)){
@@ -2319,7 +2328,7 @@ function initAddTarget(){
 
     const newObj = {
       id, name,
-      cat: name,
+      cat: document.getElementById('atCat').value.trim() || name,
       type: selectedType,
       months: selectedMonths.sort((a,b)=>a-b),
       ra: raVal, dec: decVal,
