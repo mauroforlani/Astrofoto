@@ -1758,7 +1758,7 @@ function buildCard(obj,month){
       <div style="display:flex;gap:4px;flex-wrap:wrap">
         <span class="type-badge">${TYPE_N[obj.type]||obj.type}</span>
         ${lxBadge}
-        ${obj._custom?'<span style="font-family:DM Mono,monospace;font-size:7px;padding:2px 6px;border-radius:2px;background:rgba(45,91,227,.15);border:1px solid rgba(45,91,227,.3);color:var(--blue)">&#9670; custom</span>':''
+        ${obj._custom?'<span style="font-family:DM Mono,monospace;font-size:7px;padding:2px 6px;border-radius:2px;background:rgba(45,91,227,.15);border:1px solid rgba(45,91,227,.3);color:var(--blue)">&#9670; custom</span>':''}
       </div>
       <div class="alt-badge" style="color:${ac.c};background:rgba(250,249,246,.92);border-color:${ac.c}22">
         <span class="alt-dot" style="background:${ac.c}"></span>
@@ -2264,7 +2264,7 @@ function initAddTarget(){
     const name = document.getElementById('atName').value.trim();
     const errEl = document.getElementById('atError');
 
-    if(!name){ errEl.textContent='Inserisci il nome dell'oggetto'; errEl.style.display='block'; return; }
+    if(!name){ errEl.textContent="Inserisci il nome dell'oggetto"; errEl.style.display='block'; return; }
     if(!selectedMonths.length){ errEl.textContent='Seleziona almeno un mese di visibilità'; errEl.style.display='block'; return; }
     errEl.style.display = 'none';
 
@@ -2278,7 +2278,7 @@ function initAddTarget(){
       ra: 0, dec: 0,
       fixedAlt: 45,  // default altitude for custom objects
       mag: 99, size: "—", diff: 1, lx: 0, best: [336,750],
-      notes: 'Oggetto personalizzato aggiunto dall'utente.',
+      notes: "Oggetto personalizzato aggiunto dall'utente.",
       _custom: true,
       _photo: photoDataUrl || null,
     };
