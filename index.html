@@ -446,6 +446,20 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
         <input type="text" id="atCat" class="at-inp" placeholder="es. NGC 2841 · Ursa Major · M82">
       </div>
 
+      <div class="at-field" style="display:flex;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:120px">
+          <label class="at-lbl">Magnitudine <span style="font-weight:300;opacity:.5">(opzionale)</span></label>
+          <input type="number" id="atMag" class="at-inp" placeholder="es. 8.5" min="-5" max="25" step="0.1">
+        </div>
+        <div style="flex:1;min-width:120px">
+          <label class="at-lbl">Dimensione <span style="font-weight:300;opacity:.5">(opzionale)</span></label>
+          <div style="display:flex;align-items:center;gap:6px">
+            <input type="number" id="atSizeVal" class="at-inp" placeholder="es. 15" min="0.1" max="1000" step="0.1">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3)">'</span>
+          </div>
+        </div>
+      </div>
+
       <div class="at-field">
         <label class="at-lbl">Tipo</label>
         <div class="at-type-row">
@@ -2214,6 +2228,8 @@ function initAddTarget(){
     selectedFocals = [];
     selectedMonths = [];
     document.getElementById('atCat').value = '';
+    document.getElementById('atMag').value = '';
+    document.getElementById('atSizeVal').value = '';
     document.getElementById('atNotes').value = '';
     ['atRAh','atRAm','atRAs','atDecd','atDecm','atDecs'].forEach(id=>{ document.getElementById(id).value=''; });
     document.getElementById('atMonthsPreview').textContent = '';
@@ -2375,7 +2391,9 @@ function initAddTarget(){
       type: selectedType,
       months: selectedMonths.sort((a,b)=>a-b),
       ra: raVal, dec: decVal,
-      mag: 99, size: '—', diff: 1, lx: 0, best: bestFocals,
+      mag: parseFloat(document.getElementById('atMag').value)||99,
+      size: document.getElementById('atSizeVal').value ? document.getElementById('atSizeVal').value+"'" : '—',
+      diff: 1, lx: 0, best: bestFocals,
       notes: document.getElementById('atNotes').value.trim() || "Oggetto personalizzato.",
       _custom: true,
       _photo: photoDataUrl || null,
