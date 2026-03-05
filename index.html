@@ -495,6 +495,11 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
       </div>
 
       <div class="at-field">
+        <label class="at-lbl">Descrizione <span style="font-weight:300;opacity:.5">(opzionale)</span></label>
+        <textarea id="atNotes" class="at-inp" placeholder="es. Spirale floccosa con prominente bulge giallastro. Bracci delicati e tante stelle di sfondo." rows="3" style="resize:vertical;line-height:1.6"></textarea>
+      </div>
+
+      <div class="at-field">
         <label class="at-lbl">Foto (opzionale)</label>
         <div class="at-photo-area" id="atPhotoArea">
           <input type="file" id="atPhotoFile" accept="image/*" style="display:none">
@@ -1791,7 +1796,7 @@ function buildCard(obj,month){
     <div class="card-name">${obj.name}</div>
     <div class="card-cat">${obj.cat||''} · ${TYPE_N[obj.type]}</div>
     <div class="card-row2">
-      <div class="cstat"><span class="cs-lbl">Magnitudine</span><span class="cs-val">${obj.mag}</span></div>
+      <div class="cstat"><span class="cs-lbl">Magnitudine</span><span class="cs-val">${obj.mag===99?'—':obj.mag}</span></div>
       <div class="cstat"><span class="cs-lbl">Dimensione</span><span class="cs-val">${obj.size||'—'}</span></div>
     </div>
     <div class="diff-row">
@@ -1891,7 +1896,7 @@ function openModal(obj,month,origin){
 
   // Stats grid
   document.getElementById('modalStats').innerHTML=`
-    <div class="modal-stat"><span class="modal-stat-lbl">Magnitudine</span><span class="modal-stat-val big">${obj.mag}</span></div>
+    <div class="modal-stat"><span class="modal-stat-lbl">Magnitudine</span><span class="modal-stat-val big">${obj.mag===99?'—':obj.mag}</span></div>
     <div class="modal-stat"><span class="modal-stat-lbl">Dimensione</span><span class="modal-stat-val big">${obj.size||'—'}</span></div>
     <div class="modal-stat"><span class="modal-stat-lbl">Altitudine max</span><span class="modal-stat-val big" style="color:${ac.c}">${info.alt}°</span></div>
     <div class="modal-stat"><span class="modal-stat-lbl">Culmina alle</span><span class="modal-stat-val big">${fmtH(info.hour%24)}</span></div>
@@ -2209,6 +2214,7 @@ function initAddTarget(){
     selectedFocals = [];
     selectedMonths = [];
     document.getElementById('atCat').value = '';
+    document.getElementById('atNotes').value = '';
     ['atRAh','atRAm','atRAs','atDecd','atDecm','atDecs'].forEach(id=>{ document.getElementById(id).value=''; });
     document.getElementById('atMonthsPreview').textContent = '';
     document.querySelectorAll('#atFocals .at-focal-btn').forEach(b=>b.classList.remove('on'));
@@ -2268,9 +2274,11 @@ function initAddTarget(){
   }
 
   function calcVisibleMonths(ra, dec){
+    // Use full night window (17:00-06:00 next day = 30h) regardless of user setting
+    // so visibility is not affected by the currently selected time window
     const months = [];
     for(let m = 1; m <= 12; m++){
-      const alt = maxAlt(ra, dec, m, activeLat, activeLon, timeStart, timeEnd).alt;
+      const alt = maxAlt(ra, dec, m, activeLat, activeLon, 17, 30).alt;
       if(alt >= MIN_ALT) months.push(m);
     }
     return months;
@@ -2368,7 +2376,7 @@ function initAddTarget(){
       months: selectedMonths.sort((a,b)=>a-b),
       ra: raVal, dec: decVal,
       mag: 99, size: '—', diff: 1, lx: 0, best: bestFocals,
-      notes: "Oggetto personalizzato aggiunto dall'utente.",
+      notes: document.getElementById('atNotes').value.trim() || "Oggetto personalizzato.",
       _custom: true,
       _photo: photoDataUrl || null,
     };
