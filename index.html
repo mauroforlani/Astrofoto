@@ -182,6 +182,22 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 @media(max-width:900px){header,.ctrl,main{padding-left:20px;padding-right:20px}.mnav-track{padding:0 20px}.obj-grid{grid-template-columns:1fr 1fr}.header-inner{flex-direction:column;align-items:flex-start}}
 @media(max-width:580px){.obj-grid{grid-template-columns:1fr}.sec-hero{grid-template-columns:1fr}.sec-right{text-align:left}.modal-grid{grid-template-columns:1fr 1fr}}
 
+/* ── ADD TARGET MODAL ── */
+.at-field{margin-bottom:18px}
+.at-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);display:block;margin-bottom:8px}
+.at-inp{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-family:'Jost',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border-color .15s}
+.at-inp:focus{border-color:var(--blue2)}
+.at-type-row{display:flex;gap:6px;flex-wrap:wrap}
+.at-type-btn{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:6px 14px;font-family:'Jost',sans-serif;font-size:11px;color:var(--ink3);cursor:pointer;transition:all .15s}
+.at-type-btn:hover{border-color:var(--ink2);color:var(--ink)}
+.at-type-btn.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.at-month-row{display:flex;gap:5px;flex-wrap:wrap}
+.at-month-btn{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:5px 10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--ink3);cursor:pointer;transition:all .15s}
+.at-month-btn:hover{border-color:var(--ink2);color:var(--ink)}
+.at-month-btn.on{background:var(--blue2);border-color:var(--blue2);color:#fff}
+.at-photo-area{border:1px dashed var(--border2);border-radius:3px;padding:20px;cursor:pointer;transition:border-color .15s;display:flex;align-items:center;justify-content:center;min-height:80px;gap:12px}
+.at-photo-area:hover{border-color:var(--ink3)}
+
 /* ── LANDING PAGE ── */
 #landing{position:fixed;inset:0;z-index:1000;background:var(--ink);display:flex;flex-direction:column;overflow:hidden;transition:opacity .5s,transform .5s}
 #landing.hidden{opacity:0;transform:translateY(-16px);pointer-events:none}
@@ -251,6 +267,10 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
         <button class="land-btn land-btn-secondary" id="btnSearch">
           <span class="land-btn-lbl">Cerca oggetto</span>
           <span class="land-btn-val">Ricerca per nome</span>
+        </button>
+        <button class="land-btn land-btn-secondary" id="btnAddTarget">
+          <span class="land-btn-lbl">Personalizza</span>
+          <span class="land-btn-val">+ Aggiungi target</span>
         </button>
       </div>
       <div class="landing-search" id="searchPanel" style="display:none">
@@ -399,6 +419,70 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
         <div class="modal-diff-row"><div class="modal-pips" id="modalPips"></div><span id="modalDiffTxt" style="font-size:12px;color:var(--ink3);margin-left:8px"></span></div>
       </div>
       <div id="modalLxNote"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD TARGET MODAL ════════════════════════════════════════════ -->
+<div class="modal-overlay" id="addTargetOverlay">
+  <div class="modal" id="addTargetModal" style="max-width:520px">
+    <button class="modal-close" id="addTargetClose">✕</button>
+    <div style="padding:32px 32px 28px">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:6px">Nuovo target</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;letter-spacing:-1px;margin-bottom:24px">Aggiungi oggetto</div>
+
+      <div class="at-field">
+        <label class="at-lbl">Nome oggetto</label>
+        <input type="text" id="atName" class="at-inp" placeholder="es. NGC 2244, Nebulosa Rosetta…">
+      </div>
+
+      <div class="at-field">
+        <label class="at-lbl">Tipo</label>
+        <div class="at-type-row">
+          <button class="at-type-btn on" data-type="nebula">Nebulosa</button>
+          <button class="at-type-btn" data-type="galaxy">Galassia</button>
+          <button class="at-type-btn" data-type="cluster">Ammasso</button>
+          <button class="at-type-btn" data-type="planet">Pianeta</button>
+          <button class="at-type-btn" data-type="double">Doppia</button>
+        </div>
+      </div>
+
+      <div class="at-field">
+        <label class="at-lbl">Mesi di visibilità</label>
+        <div class="at-month-row" id="atMonths">
+          <button class="at-month-btn" data-m="1">Gen</button>
+          <button class="at-month-btn" data-m="2">Feb</button>
+          <button class="at-month-btn" data-m="3">Mar</button>
+          <button class="at-month-btn" data-m="4">Apr</button>
+          <button class="at-month-btn" data-m="5">Mag</button>
+          <button class="at-month-btn" data-m="6">Giu</button>
+          <button class="at-month-btn" data-m="7">Lug</button>
+          <button class="at-month-btn" data-m="8">Ago</button>
+          <button class="at-month-btn" data-m="9">Set</button>
+          <button class="at-month-btn" data-m="10">Ott</button>
+          <button class="at-month-btn" data-m="11">Nov</button>
+          <button class="at-month-btn" data-m="12">Dic</button>
+        </div>
+      </div>
+
+      <div class="at-field">
+        <label class="at-lbl">Foto (opzionale)</label>
+        <div class="at-photo-area" id="atPhotoArea">
+          <input type="file" id="atPhotoFile" accept="image/*" style="display:none">
+          <canvas id="atPhotoPreview" width="120" height="80" style="display:none;border-radius:2px;object-fit:cover"></canvas>
+          <div id="atPhotoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none">
+            <span style="font-size:20px;opacity:.3">⊹</span>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4)">CLICCA PER CARICARE</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="atError" style="display:none;font-size:11px;color:var(--red);margin-bottom:12px;font-family:'DM Mono',monospace"></div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+        <button id="atCancel" style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:10px 20px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:var(--ink3)">Annulla</button>
+        <button id="atSave" style="background:var(--ink);border:none;border-radius:3px;padding:10px 24px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;font-weight:500">Salva nel catalogo</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1674,6 +1758,7 @@ function buildCard(obj,month){
       <div style="display:flex;gap:4px;flex-wrap:wrap">
         <span class="type-badge">${TYPE_N[obj.type]||obj.type}</span>
         ${lxBadge}
+        ${obj._custom?'<span style="font-family:DM Mono,monospace;font-size:7px;padding:2px 6px;border-radius:2px;background:rgba(45,91,227,.15);border:1px solid rgba(45,91,227,.3);color:var(--blue)">✦ custom</span>':''}
       </div>
       <div class="alt-badge" style="color:${ac.c};background:rgba(250,249,246,.92);border-color:${ac.c}22">
         <span class="alt-dot" style="background:${ac.c}"></span>
@@ -1700,16 +1785,35 @@ function buildCard(obj,month){
 
   // Load real image or canvas fallback
   const canvas=d.querySelector('canvas');
-  const localSrc=LOCAL_IMGS[obj.id];
+  const localSrc=obj._photo||LOCAL_IMGS[obj.id];
   if(localSrc){
     const imgEl=document.createElement('img');
     imgEl.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s;z-index:1';
     imgEl.onload=()=>{imgEl.style.opacity='1';canvas.style.opacity='0';};
     imgEl.onerror=()=>{imgEl.remove();renderCanvas(canvas,obj,false);};
-    imgEl.src=localSrc+'?v=2';
+    imgEl.src=obj._photo?obj._photo:localSrc+'?v=2';
     d.querySelector('.card-canvas-wrap').appendChild(imgEl);
   }
   renderCanvas(canvas,obj,false);
+
+  // Delete button for custom objects
+  if(obj._custom){
+    const delBtn=document.createElement('button');
+    delBtn.style.cssText='position:absolute;top:9px;right:9px;z-index:10;background:rgba(192,57,43,.85);border:none;border-radius:2px;color:#fff;font-size:9px;font-family:DM Mono,monospace;padding:3px 7px;cursor:pointer;letter-spacing:1px;display:none';
+    delBtn.textContent='✕ rimuovi';
+    delBtn.addEventListener('click', e=>{
+      e.stopPropagation();
+      if(!confirm('Rimuovere "'+obj.name+'" dal catalogo?')) return;
+      const targets=loadCustomTargets().filter(t=>t.id!==obj.id);
+      saveCustomTargets(targets);
+      const i=OBJ.findIndex(o=>o.id===obj.id);
+      if(i>-1) OBJ.splice(i,1);
+      renderGrid(activeMonth);
+    });
+    d.appendChild(delBtn);
+    d.addEventListener('mouseenter',()=>delBtn.style.display='block');
+    d.addEventListener('mouseleave',()=>delBtn.style.display='none');
+  }
 
   // Click → modal
   d.addEventListener('click',()=>openModal(obj,month));
@@ -1728,7 +1832,7 @@ function openModal(obj,month,origin){
   // Canvas + real image overlay for modal
   const mc=document.getElementById('modalCanvas');
   renderCanvas(mc,obj,true);
-  const mSrc=LOCAL_IMGS[obj.id];
+  const mSrc=obj._photo||LOCAL_IMGS[obj.id];
   const mWrap=document.querySelector('.modal-canvas-wrap');
   let mImg=mWrap.querySelector('.modal-real-img');
   if(!mImg){
@@ -1741,7 +1845,7 @@ function openModal(obj,month,origin){
   if(mSrc){
     mImg.onload=()=>{mImg.style.opacity='1';mc.style.opacity='0';};
     mImg.onerror=()=>{mImg.style.opacity='0';mc.style.opacity='1';};
-    mImg.src=mSrc+'?v=2';
+    mImg.src=obj._photo?obj._photo:mSrc+'?v=2';
     mc.style.opacity='1';
   }
 
@@ -2032,14 +2136,172 @@ function initLanding(){
     if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show');
   });
 }
+// ═══════════════════════════════════════════════════════
+// CUSTOM TARGETS
+// ═══════════════════════════════════════════════════════
+const CUSTOM_KEY = 'astrofoto_custom_targets';
+
+function loadCustomTargets(){
+  try {
+    const raw = localStorage.getItem(CUSTOM_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e){ return []; }
+}
+
+function saveCustomTargets(targets){
+  try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(targets)); } catch(e){}
+}
+
+function addCustomTarget(obj){
+  const targets = loadCustomTargets();
+  // Avoid duplicates by id
+  if(!targets.find(t=>t.id===obj.id)){
+    targets.push(obj);
+    saveCustomTargets(targets);
+  }
+  // Add to live OBJ array if not already there
+  if(!OBJ.find(o=>o.id===obj.id)){
+    OBJ.push(obj);
+  }
+}
+
+function injectCustomTargets(){
+  const targets = loadCustomTargets();
+  targets.forEach(t=>{
+    if(!OBJ.find(o=>o.id===t.id)) OBJ.push(t);
+  });
+}
+
+function initAddTarget(){
+  let selectedType = 'nebula';
+  let selectedMonths = [];
+  let photoDataUrl = null;
+
+  const overlay = document.getElementById('addTargetOverlay');
+
+  function openAddTarget(){
+    // reset form
+    document.getElementById('atName').value = '';
+    selectedType = 'nebula';
+    selectedMonths = [];
+    photoDataUrl = null;
+    document.querySelectorAll('.at-type-btn').forEach(b=>b.classList.toggle('on', b.dataset.type==='nebula'));
+    document.querySelectorAll('.at-month-btn').forEach(b=>b.classList.remove('on'));
+    document.getElementById('atPhotoPreview').style.display = 'none';
+    document.getElementById('atPhotoPlaceholder').style.display = 'flex';
+    document.getElementById('atError').style.display = 'none';
+    overlay.style.zIndex = '1100';
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('atName').focus();
+  }
+
+  function closeAddTarget(){
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Open from landing button
+  document.getElementById('btnAddTarget').addEventListener('click', openAddTarget);
+  document.getElementById('addTargetClose').addEventListener('click', closeAddTarget);
+  document.getElementById('atCancel').addEventListener('click', closeAddTarget);
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) closeAddTarget(); });
+
+  // Type selector
+  document.querySelectorAll('.at-type-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      selectedType = btn.dataset.type;
+      document.querySelectorAll('.at-type-btn').forEach(b=>b.classList.toggle('on', b===btn));
+    });
+  });
+
+  // Month selector
+  document.querySelectorAll('.at-month-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const m = +btn.dataset.m;
+      if(selectedMonths.includes(m)){
+        selectedMonths = selectedMonths.filter(x=>x!==m);
+        btn.classList.remove('on');
+      } else {
+        selectedMonths.push(m);
+        btn.classList.add('on');
+      }
+    });
+  });
+
+  // Photo upload
+  const photoArea = document.getElementById('atPhotoArea');
+  const photoFile = document.getElementById('atPhotoFile');
+  const photoPreview = document.getElementById('atPhotoPreview');
+  const photoPlaceholder = document.getElementById('atPhotoPlaceholder');
+
+  photoArea.addEventListener('click', ()=> photoFile.click());
+  photoFile.addEventListener('change', ()=>{
+    const file = photoFile.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = e=>{
+      photoDataUrl = e.target.result;
+      // Show preview in canvas
+      const img = new Image();
+      img.onload = ()=>{
+        photoPreview.style.display = 'block';
+        photoPlaceholder.style.display = 'none';
+        const ctx = photoPreview.getContext('2d');
+        photoPreview.width = 200; photoPreview.height = 120;
+        // cover crop
+        const scale = Math.max(200/img.width, 120/img.height);
+        const w = img.width*scale, h = img.height*scale;
+        ctx.drawImage(img, (200-w)/2, (120-h)/2, w, h);
+      };
+      img.src = photoDataUrl;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Save
+  document.getElementById('atSave').addEventListener('click', ()=>{
+    const name = document.getElementById('atName').value.trim();
+    const errEl = document.getElementById('atError');
+
+    if(!name){ errEl.textContent='Inserisci il nome dell'oggetto'; errEl.style.display='block'; return; }
+    if(!selectedMonths.length){ errEl.textContent='Seleziona almeno un mese di visibilità'; errEl.style.display='block'; return; }
+    errEl.style.display = 'none';
+
+    const id = 'custom_' + name.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'') + '_' + Date.now();
+
+    const newObj = {
+      id, name,
+      cat: name,
+      type: selectedType,
+      months: selectedMonths.sort((a,b)=>a-b),
+      ra: 0, dec: 0,
+      fixedAlt: 45,  // default altitude for custom objects
+      mag: 99, size: "—", diff: 1, lx: 0, best: [336,750],
+      notes: 'Oggetto personalizzato aggiunto dall'utente.',
+      _custom: true,
+      _photo: photoDataUrl || null,
+    };
+
+    addCustomTarget(newObj);
+    closeAddTarget();
+    // Go to catalog at first visible month
+    const targetMonth = newObj.months[0];
+    enterCatalog();
+    setTimeout(()=>switchMonth(targetMonth), 520);
+  });
+}
+
 initCountrySelect();
 initCameraSelect();
 initGlobalFilters();
 initSliders();
 initMonthNav();
 updateTotCount();
+injectCustomTargets();
 renderGrid(activeMonth);
 initLanding();
+initAddTarget();
 
 // Lazy render other months on tab click (already handled by click listener)
 // Pre-count for nav badges
