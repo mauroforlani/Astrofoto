@@ -175,6 +175,34 @@
       "_modified": true
     },
     {
+      "id": "ngc5746",
+      "lx": 0,
+      "name": "NGC 5746",
+      "cat": "NGC 5746 · Virgo",
+      "type": "galaxy",
+      "ra": 221.22999999999996,
+      "dec": 1.95,
+      "months": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "nasaQ": "NGC 5746 edge-on barred spiral Virgo",
+      "mag": 10.3,
+      "size": "8×2'",
+      "diff": 3,
+      "best": [
+        750,
+        1085
+      ],
+      "notes": "Edge-on con evidente rigonfiamento centrale. Vicina al confine Vergine/Bilancia.",
+      "_origSize": "8×2'",
+      "_origRA": 221.23,
+      "_origDec": 1.95,
+      "_modified": true
+    },
+    {
       "id": "ngc2362",
       "lx": 0,
       "name": "τ Canis Majoris Cluster",
@@ -204,6 +232,7 @@
     }
   ],
   "imgs": {
-    "ngc6633": "img/ngc6633.jpg"
+    "ngc6633": "img/ngc6633.jpg",
+    "ngc5746": "img/ngc5746.jpg"
   }
 }
