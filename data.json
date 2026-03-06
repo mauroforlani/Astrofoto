@@ -1,5 +1,37 @@
 {
-  "customs": [],
+  "customs": [
+    {
+      "id": "custom_ngc_4535_1772821562319",
+      "name": "NGC 4535",
+      "cat": "NGC 4535",
+      "type": "galaxy",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "ra": 188.92083333333332,
+      "dec": 8.05,
+      "mag": 12.94,
+      "size": "8.15'",
+      "diff": 1,
+      "lx": 0,
+      "best": [
+        1625
+      ],
+      "notes": "The Lost Galaxy of Copeland",
+      "_custom": true
+    }
+  ],
   "modified": [
     {
       "id": "ngc4631b",
@@ -233,6 +265,7 @@
   ],
   "imgs": {
     "ngc6633": "img/ngc6633.jpg",
-    "ngc5746": "img/ngc5746.jpg"
+    "ngc5746": "img/ngc5746.jpg",
+    "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg"
   }
 }
