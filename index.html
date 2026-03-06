@@ -1713,7 +1713,7 @@ const OBJ=[
 {id:'ngc5139',lx:0,name:'Omega Centauri',cat:'NGC 5139 · ω Centauri',type:'cluster',ra:201.70,dec:-47.48,months:[4,5,6],
  nasaQ:'Omega Centauri NGC 5139 largest globular Hubble',mag:3.9,size:"36'",diff:1,best:[135,336],
  notes:'Il più grande globulare della Via Lattea (~10 milioni di stelle). Solo da Sud Europa.'},
-];
+/* __OBJ_END__ */];
 
 
 // ═══════════════════════════════════════════════════════
@@ -2981,15 +2981,15 @@ function initAdmin(){
         const modified = OBJ.filter(o=>o._modified && !o._custom);
         modified.forEach(o=>{
           // Find the object entry in source by id and replace it
+          // Find object entry by id token and replace up to matching }
           const idToken = "{id:'" + o.id + "'";
           const startIdx = src.indexOf(idToken);
           if(startIdx === -1) return;
-          // Find end of this entry (next entry starts with {id: or array closes)
-          let depth=0, i=startIdx, entryEnd=-1;
-          while(i<src.length){
-            if(src[i]==='{') depth++;
-            else if(src[i]==='}'){depth--; if(depth===0){entryEnd=i+1;break;}}
-            i++;
+          let dep=0, j=startIdx, entryEnd=-1;
+          while(j<src.length){
+            if(src[j]==='{') dep++;
+            else if(src[j]==='}'){ dep--; if(dep===0){entryEnd=j+1;break;} }
+            j++;
           }
           if(entryEnd===-1) return;
           src = src.slice(0,startIdx) + serializeEntry(o) + src.slice(entryEnd);
@@ -2999,18 +2999,10 @@ function initAdmin(){
         const newCustoms = customs;
         if(newCustoms.length > 0){
           const entries = newCustoms.map(o=>serializeEntry(o)).join(',\n');
-          const objStart = src.indexOf('const OBJ=[');
-          let depth=0, inStr=false, strChar='', i=objStart+10, objClose=-1;
-          while(i<src.length){
-            const c=src[i];
-            if(inStr){ if(c===strChar&&src[i-1]!=='\\') inStr=false; }
-            else if(c==='"'||c==="'"||c==='`'){ inStr=true; strChar=c; }
-            else if(c==='['||c==='{'){ depth++; }
-            else if(c===']'||c==='}'){ if(depth===0){objClose=i;break;} depth--; }
-            i++;
-          }
+          const objEndMarker = '/* __OBJ_END__ */]';
+          const objClose = src.indexOf(objEndMarker);
           if(objClose===-1){ alert('Errore: non trovo la fine del catalogo.'); return; }
-          src = src.slice(0,objClose) + ',\n' + entries + '\n' + src.slice(objClose);
+          src = src.slice(0, objClose) + ',\n' + entries + '\n' + src.slice(objClose);
         }
 
         if(modified.length===0 && newCustoms.length===0){
