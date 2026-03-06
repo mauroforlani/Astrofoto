@@ -463,9 +463,26 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
       <!-- Admin panel -->
       <div id="adminPanel" style="display:none">
         <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:12px">OGGETTI NEL CATALOGO — clicca per rimuovere</div>
-        <div id="adminList" style="max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
+        <div id="adminList" style="max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
         <div id="adminEmpty" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;padding:24px">Nessun oggetto nel catalogo</div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;line-height:1.5">I target custom vengono incorporati<br>nel file index.html per tutti i device</div>
+          <button id="btnExportIndex" style="background:var(--ink);border:none;border-radius:3px;padding:10px 18px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;white-space:nowrap;display:flex;align-items:center;gap:6px">⬇ Esporta index.html</button>
+        </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM DIALOG ═══════════════════════════════════════════════ -->
+<div id="confirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center">
+  <div style="background:var(--bg);border-radius:4px;padding:28px 32px;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <div id="confirmIcon" style="font-size:22px;margin-bottom:10px"></div>
+    <div id="confirmTitle" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:8px"></div>
+    <div id="confirmMsg" style="font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:24px"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button id="confirmCancel" style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:9px 20px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:var(--ink3)">Annulla</button>
+      <button id="confirmOk" style="border:none;border-radius:3px;padding:9px 22px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;font-weight:500">Conferma</button>
     </div>
   </div>
 </div>
@@ -534,6 +551,19 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
       </div>
 
       <div class="at-field"><label class="at-lbl">Descrizione</label><textarea id="editNotes" class="at-inp" rows="3" style="resize:vertical;line-height:1.6"></textarea></div>
+
+      <div class="at-field">
+        <label class="at-lbl">Foto <span style="font-weight:300;opacity:.5">(opzionale — sostituisce l'attuale)</span></label>
+        <div class="at-photo-area" id="editPhotoArea">
+          <input type="file" id="editPhotoFile" accept="image/*" style="display:none">
+          <canvas id="editPhotoPreview" width="200" height="120" style="display:none;border-radius:2px"></canvas>
+          <div id="editPhotoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none">
+            <span style="font-size:20px;opacity:.3">⊹</span>
+            <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4)">CLICCA PER CARICARE</span>
+          </div>
+        </div>
+        <div id="editPhotoName" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-top:5px;letter-spacing:1px"></div>
+      </div>
 
       <div id="editError" style="display:none;font-size:11px;color:var(--red);margin-bottom:12px;font-family:'DM Mono',monospace"></div>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
@@ -2528,6 +2558,39 @@ function initAddTarget(){
 }
 
 // ═══════════════════════════════════════════════════════
+// CONFIRM DIALOG
+// ═══════════════════════════════════════════════════════
+function showConfirm({title, msg, icon='⚠', okLabel='Conferma', okColor='#c0392b', onOk}){
+  const overlay = document.getElementById('confirmOverlay');
+  document.getElementById('confirmIcon').textContent = icon;
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMsg').textContent = msg;
+  document.getElementById('confirmOk').textContent = okLabel;
+  document.getElementById('confirmOk').style.background = okColor;
+
+  overlay.style.display = 'flex';
+
+  function close(){ overlay.style.display='none'; }
+
+  const okBtn = document.getElementById('confirmOk');
+  const cancelBtn = document.getElementById('confirmCancel');
+
+  const onOkClick = ()=>{ close(); onOk(); cleanup(); };
+  const onCancelClick = ()=>{ close(); cleanup(); };
+  const onOverlayClick = (e)=>{ if(e.target===overlay){ close(); cleanup(); } };
+
+  function cleanup(){
+    okBtn.removeEventListener('click', onOkClick);
+    cancelBtn.removeEventListener('click', onCancelClick);
+    overlay.removeEventListener('click', onOverlayClick);
+  }
+
+  okBtn.addEventListener('click', onOkClick);
+  cancelBtn.addEventListener('click', onCancelClick);
+  overlay.addEventListener('click', onOverlayClick);
+}
+
+// ═══════════════════════════════════════════════════════
 // EDIT OBJECT
 // ═══════════════════════════════════════════════════════
 function degToHms(deg){
@@ -2592,6 +2655,27 @@ function openEditModal(obj){
 
   document.getElementById('editError').style.display='none';
   document.getElementById('editMonthsPreview').textContent='';
+  editPhotoDataUrl = null;
+  document.getElementById('editPhotoPreview').style.display='none';
+  document.getElementById('editPhotoPlaceholder').style.display='flex';
+  document.getElementById('editPhotoName').textContent = '';
+  document.getElementById('editPhotoFile').value = '';
+  // Show current photo if exists
+  const currentSrc = obj._photo || (typeof LOCAL_IMGS !== 'undefined' && LOCAL_IMGS[obj.id]);
+  if(currentSrc){
+    const prevImg = new Image();
+    prevImg.onload = ()=>{
+      const c = document.getElementById('editPhotoPreview');
+      c.style.display='block';
+      document.getElementById('editPhotoPlaceholder').style.display='none';
+      const ctx=c.getContext('2d'); c.width=200; c.height=120;
+      const scale=Math.max(200/prevImg.width,120/prevImg.height);
+      const w=prevImg.width*scale, h=prevImg.height*scale;
+      ctx.drawImage(prevImg,(200-w)/2,(120-h)/2,w,h);
+      document.getElementById('editPhotoName').textContent='Foto attuale (carica per sostituire)';
+    };
+    prevImg.src = currentSrc;
+  }
   const overlay = document.getElementById('editOverlay');
   overlay.style.zIndex='1200';
   overlay.classList.add('open');
@@ -2616,7 +2700,36 @@ function updateEditMonthPreview(){
 
 function initEdit(){
   const overlay = document.getElementById('editOverlay');
-  function closeEdit(){ overlay.classList.remove('open'); document.body.style.overflow=''; }
+  let editPhotoDataUrl = null;
+  function closeEdit(){ overlay.classList.remove('open'); document.body.style.overflow=''; editPhotoDataUrl=null; }
+
+  // Photo upload handler
+  const editPhotoArea = document.getElementById('editPhotoArea');
+  const editPhotoFile = document.getElementById('editPhotoFile');
+  const editPhotoPreview = document.getElementById('editPhotoPreview');
+  const editPhotoPlaceholder = document.getElementById('editPhotoPlaceholder');
+  editPhotoArea.addEventListener('click', ()=>editPhotoFile.click());
+  editPhotoFile.addEventListener('change', ()=>{
+    const file = editPhotoFile.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = e=>{
+      editPhotoDataUrl = e.target.result;
+      const img = new Image();
+      img.onload = ()=>{
+        editPhotoPreview.style.display = 'block';
+        editPhotoPlaceholder.style.display = 'none';
+        const ctx = editPhotoPreview.getContext('2d');
+        editPhotoPreview.width=200; editPhotoPreview.height=120;
+        const scale=Math.max(200/img.width,120/img.height);
+        const w=img.width*scale, h=img.height*scale;
+        ctx.drawImage(img,(200-w)/2,(120-h)/2,w,h);
+        document.getElementById('editPhotoName').textContent = '✓ ' + file.name;
+      };
+      img.src = editPhotoDataUrl;
+    };
+    reader.readAsDataURL(file);
+  });
 
   document.getElementById('editClose').addEventListener('click', closeEdit);
   document.getElementById('editCancel').addEventListener('click', closeEdit);
@@ -2641,7 +2754,8 @@ function initEdit(){
   });
 
   // Save
-  document.getElementById('editSave').addEventListener('click', ()=>{
+  document.getElementById('editSave').addEventListener('click', ()=>{ handleEditSave(); });
+  function handleEditSave(){
     if(!editingObj) return;
     const name = document.getElementById('editName').value.trim();
     if(!name){ document.getElementById('editError').textContent='Il nome è obbligatorio'; document.getElementById('editError').style.display='block'; return; }
@@ -2675,22 +2789,77 @@ function initEdit(){
     editingObj.size = isNaN(sizeVal) ? '—' : sizeVal+"'";
     editingObj.notes = document.getElementById('editNotes').value.trim();
 
-    // If custom, persist to localStorage
+    // Apply new photo if uploaded
+    if(editPhotoDataUrl){
+      editingObj._photo = editPhotoDataUrl;
+      const imgA = document.createElement('a');
+      imgA.href = editPhotoDataUrl;
+      imgA.download = editingObj.id + '.jpg';
+      imgA.click();
+    }
+
+    // Persist to localStorage
     if(editingObj._custom){
       const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
       saveCustomTargets(saved);
+    } else {
+      // Mark as modified so export can pick it up
+      editingObj._modified = true;
+      // Save modified standard objects to localStorage too
+      const modKey = 'astrofoto_modified_objs';
+      try {
+        const mods = JSON.parse(localStorage.getItem(modKey)||'{}');
+        mods[editingObj.id] = editingObj;
+        localStorage.setItem(modKey, JSON.stringify(mods));
+      } catch(e){}
     }
 
-    // Re-render grid and admin list
-    renderGrid(activeMonth);
-    document.getElementById('editTitle').textContent = name;
-    closeEdit();
-    // Reopen admin panel to show updated list
-    document.getElementById('adminPanel').style.display='block';
-    document.getElementById('adminList') && document.getElementById('adminPanel').dispatchEvent(new Event('render'));
-    // Trigger admin list refresh via renderAdminList if accessible
-    if(typeof renderAdminList==='function') renderAdminList();
-  });
+    // Ask for confirmation before applying
+    const coordChanged = (RAh!==''&&Decd!=='');
+    const monthsInfo = coordChanged ? ' I mesi di visibilità verranno ricalcolati.' : '';
+    showConfirm({
+      title: 'Salva modifiche',
+      msg: 'Applicare le modifiche a "' + name + '"?' + monthsInfo,
+      icon: '✎',
+      okLabel: 'Salva',
+      okColor: 'var(--ink)',
+      onOk: ()=>{
+        // Apply all changes
+        editingObj.name = name;
+        editingObj.cat = document.getElementById('editCat').value.trim() || name;
+        editingObj.type = selectedType;
+        editingObj.ra = newRA;
+        editingObj.dec = newDec;
+        editingObj.months = newMonths;
+        editingObj.best = selectedFocals.length ? selectedFocals : editingObj.best;
+        editingObj.mag = isNaN(magVal) ? 99 : magVal;
+        editingObj.size = isNaN(sizeVal) ? '—' : sizeVal+"'";
+        editingObj.notes = document.getElementById('editNotes').value.trim();
+        if(editPhotoDataUrl){
+          editingObj._photo = editPhotoDataUrl;
+          const imgA = document.createElement('a');
+          imgA.href = editPhotoDataUrl;
+          imgA.download = editingObj.id + '.jpg';
+          imgA.click();
+        }
+        if(editingObj._custom){
+          const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
+          saveCustomTargets(saved);
+        } else {
+          editingObj._modified = true;
+          const modKey = 'astrofoto_modified_objs';
+          try {
+            const mods = JSON.parse(localStorage.getItem(modKey)||'{}');
+            mods[editingObj.id] = editingObj;
+            localStorage.setItem(modKey, JSON.stringify(mods));
+          } catch(e){}
+        }
+        renderGrid(activeMonth);
+        closeEdit();
+        if(typeof renderAdminList==='function') renderAdminList();
+      }
+    });
+  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2745,16 +2914,23 @@ function initAdmin(){
         const id = btn.dataset.id;
         const obj = OBJ.find(o=>o.id===id);
         if(!obj) return;
-        const confirm = window.confirm(`Rimuovere "${obj.name}" dal catalogo?`);
-        if(!confirm) return;
-        const idx = OBJ.findIndex(o=>o.id===id);
-        if(idx>-1) OBJ.splice(idx,1);
-        if(obj._custom){
-          const saved = loadCustomTargets().filter(t=>t.id!==id);
-          saveCustomTargets(saved);
-        }
-        renderGrid(activeMonth);
-        renderAdminList();
+        showConfirm({
+          title: 'Rimuovi oggetto',
+          msg: 'Rimuovere "' + obj.name + '" dal catalogo? L\'operazione non può essere annullata.',
+          icon: '✕',
+          okLabel: 'Rimuovi',
+          okColor: '#c0392b',
+          onOk: ()=>{
+            const i = OBJ.findIndex(o=>o.id===id);
+            if(i>-1) OBJ.splice(i,1);
+            if(obj._custom){
+              const saved = loadCustomTargets().filter(t=>t.id!==id);
+              saveCustomTargets(saved);
+            }
+            renderGrid(activeMonth);
+            renderAdminList();
+          }
+        });
       });
     });
 
@@ -2767,9 +2943,95 @@ function initAdmin(){
     });
   }
 
+  // Export function
+  function exportIndex(){
+    const customs = OBJ.filter(o=>o._custom);
+    const modified = OBJ.filter(o=>o._modified && !o._custom);
+    if(!customs.length && !modified.length){
+      alert('Nessuna modifica da esportare. Aggiungi target o modifica oggetti esistenti.');
+      return;
+    }
+    fetch(window.location.href)
+      .then(r=>r.text())
+      .then(src=>{
+        function esc(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+        function serializeEntry(o){
+          const photo = o._photo ? (",_photo:'" + o._photo + "'") : '';
+          const custom = o._custom ? ',_custom:true' : '';
+          return "{id:'" + esc(o.id) + "',lx:" + (o.lx||0) +
+            ",name:'" + esc(o.name) + "',cat:'" + esc(o.cat||o.name) +
+            "',type:'" + o.type + "',ra:" + (o.ra||0) + ",dec:" + (o.dec||0) +
+            ",months:[" + o.months.join(',') + "]" +
+            ",mag:" + (o.mag||99) + ',size:"' + (o.size||'--') + '"' +
+            ",diff:" + (o.diff||1) + ",best:[" + (o.best||[336,750]).join(',') + "]" +
+            ",notes:'" + esc(o.notes||'') + "'" + custom + photo + "}";
+        }
+
+        // Step 1: patch modified standard objects directly in source
+        const modified = OBJ.filter(o=>o._modified && !o._custom);
+        modified.forEach(o=>{
+          // Find the object entry in source by id and replace it
+          const idToken = "{id:'" + o.id + "'";
+          const startIdx = src.indexOf(idToken);
+          if(startIdx === -1) return;
+          // Find end of this entry (next entry starts with {id: or array closes)
+          let depth=0, i=startIdx, entryEnd=-1;
+          while(i<src.length){
+            if(src[i]==='{') depth++;
+            else if(src[i]==='}'){depth--; if(depth===0){entryEnd=i+1;break;}}
+            i++;
+          }
+          if(entryEnd===-1) return;
+          src = src.slice(0,startIdx) + serializeEntry(o) + src.slice(entryEnd);
+        });
+
+        // Step 2: append new custom objects before end of OBJ array
+        const newCustoms = customs;
+        if(newCustoms.length > 0){
+          const entries = newCustoms.map(o=>serializeEntry(o)).join(',\n');
+          const objStart = src.indexOf('const OBJ=[');
+          let depth=0, inStr=false, strChar='', i=objStart+10, objClose=-1;
+          while(i<src.length){
+            const c=src[i];
+            if(inStr){ if(c===strChar&&src[i-1]!=='\\') inStr=false; }
+            else if(c==='"'||c==="'"||c==='`'){ inStr=true; strChar=c; }
+            else if(c==='['||c==='{'){ depth++; }
+            else if(c===']'||c==='}'){ if(depth===0){objClose=i;break;} depth--; }
+            i++;
+          }
+          if(objClose===-1){ alert('Errore: non trovo la fine del catalogo.'); return; }
+          src = src.slice(0,objClose) + ',\n' + entries + '\n' + src.slice(objClose);
+        }
+
+        if(modified.length===0 && newCustoms.length===0){
+          alert('Nessuna modifica da esportare.');
+          return;
+        }
+
+        // Download jpg files for objects with new photos
+        const withPhotos = [...customs, ...modified].filter(o=>o._photo);
+        withPhotos.forEach(o=>{
+          const imgA = document.createElement('a');
+          imgA.href = o._photo;
+          imgA.download = o.id + '.jpg';
+          setTimeout(()=>imgA.click(), 300);
+        });
+
+        // Download index.html
+        const blob = new Blob([src],{type:'text/html'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'index.html';
+        setTimeout(()=>{ a.click(); URL.revokeObjectURL(a.href); }, 600);
+      })
+      .catch(err=>alert('Errore: '+err.message));
+  }
+
   document.getElementById('btnAdmin').addEventListener('click', openAdmin);
   document.getElementById('adminClose').addEventListener('click', closeAdmin);
   overlay.addEventListener('click', e=>{ if(e.target===overlay) closeAdmin(); });
+
+  document.getElementById('btnExportIndex').addEventListener('click', exportIndex);
 
   document.getElementById('adminAuthBtn').addEventListener('click', ()=>{
     const pwd = document.getElementById('adminPwd').value;
@@ -2792,6 +3054,16 @@ initSliders();
 initMonthNav();
 updateTotCount();
 injectCustomTargets();
+// Apply saved modifications to existing objects
+(function(){
+  try {
+    const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
+    Object.values(mods).forEach(mod=>{
+      const obj = OBJ.find(o=>o.id===mod.id);
+      if(obj) Object.assign(obj, mod);
+    });
+  } catch(e){}
+})();
 renderGrid(activeMonth);
 initLanding();
 initAddTarget();
