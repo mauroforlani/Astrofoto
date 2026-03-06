@@ -29,7 +29,10 @@
         1625
       ],
       "notes": "The Lost Galaxy of Copeland",
-      "_custom": true
+      "_custom": true,
+      "_origSize": "8.15'",
+      "_origRA": 188.92083333333332,
+      "_origDec": 8.05
     }
   ],
   "modified": [
@@ -265,7 +268,6 @@
   ],
   "imgs": {
     "ngc6633": "img/ngc6633.jpg",
-    "ngc5746": "img/ngc5746.jpg",
-    "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg"
+    "ngc5746": "img/ngc5746.jpg"
   }
 }
