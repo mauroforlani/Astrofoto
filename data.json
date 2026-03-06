@@ -33,40 +33,6 @@
       "_origSize": "8.15'",
       "_origRA": 188.92083333333332,
       "_origDec": 8.05
-    },
-    {
-      "id": "custom_ngc_4526_1772822739072",
-      "name": "NGC 4526",
-      "cat": "Hairy Eyebrow Galaxy",
-      "type": "galaxy",
-      "months": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12
-      ],
-      "ra": 188.85,
-      "dec": 7.551222222222222,
-      "mag": 10.13,
-      "size": "2'",
-      "diff": 1,
-      "lx": 0,
-      "best": [
-        1625
-      ],
-      "notes": "Galassia lenticolare nella costellazione della Vergine",
-      "_custom": true,
-      "_origSize": "2'",
-      "_origRA": 188.85,
-      "_origDec": 7.551222222222222
     }
   ],
   "modified": [
@@ -303,7 +269,6 @@
   "imgs": {
     "ngc6633": "img/ngc6633.jpg",
     "ngc5746": "img/ngc5746.jpg",
-    "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg",
-    "custom_ngc_4526_1772822739072": "img/custom_ngc_4526_1772822739072.jpg"
+    "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg"
   }
 }
