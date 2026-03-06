@@ -2837,10 +2837,6 @@ function initEdit(){
         editingObj.notes = document.getElementById('editNotes').value.trim();
         if(editPhotoDataUrl){
           editingObj._photo = editPhotoDataUrl;
-          const imgA = document.createElement('a');
-          imgA.href = editPhotoDataUrl;
-          imgA.download = editingObj.id + '.jpg';
-          imgA.click();
         }
         if(editingObj._custom){
           const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
