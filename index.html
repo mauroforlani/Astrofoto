@@ -239,7 +239,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 #landingSearch{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Jost',sans-serif;font-size:15px;font-weight:300;padding:16px 0;caret-color:#fff}
 #landingSearch::placeholder{color:rgba(255,255,255,.2)}
 .search-hint{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:2px;padding:10px 2px}
-.search-results{display:none;background:rgba(20,16,12,.95);border:1px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 3px 3px;max-height:320px;overflow-y:auto}
+.search-results{display:none;background:rgba(20,16,12,.95);border:1px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 3px 3px;max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .search-results.show{display:block}
 .sr-item{display:flex;align-items:center;gap:14px;padding:12px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05)}
 .sr-item:last-child{border-bottom:none}
@@ -465,9 +465,21 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
         <input type="text" id="adminSearch" class="at-inp" placeholder="Cerca per nome o catalogo..." style="margin-bottom:10px;width:100%;box-sizing:border-box" oninput="filterAdminList(this.value)">
         <div id="adminList" style="max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
         <div id="adminEmpty" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;padding:24px">Nessun oggetto nel catalogo</div>
-        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px">
-          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;line-height:1.5">I target custom vengono incorporati<br>nel file index.html per tutti i device</div>
-          <button id="btnExportIndex" style="background:var(--ink);border:none;border-radius:3px;padding:10px 18px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;white-space:nowrap;display:flex;align-items:center;gap:6px">⬇ Esporta index.html</button>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+          <div id="ghTokenSection" style="display:none">
+            <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;margin-bottom:6px">GITHUB TOKEN (salvato solo su questo device)</div>
+            <div style="display:flex;gap:8px">
+              <input type="password" id="ghTokenInput" class="at-inp" placeholder="ghp_..." style="flex:1;font-family:'DM Mono',monospace;font-size:10px">
+              <button id="btnSaveToken" style="background:var(--ink);border:none;border-radius:3px;padding:8px 14px;font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;color:#fff;white-space:nowrap">Salva</button>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;line-height:1.5">Pubblica su GitHub Pages<br>automaticamente</div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+              <button id="btnExportIndex" style="background:var(--ink);border:none;border-radius:3px;padding:10px 18px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;white-space:nowrap" onclick="publishToGitHub()">⬆ Pubblica su GitHub</button>
+              <div id="publishStatus" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;min-height:14px"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1433,7 +1445,9 @@ const OBJ=[
 {id:'ngc2683',lx:0,name:'NGC 2683',cat:'NGC 2683 · UFO Galaxy',type:'galaxy',ra:133.17,dec:33.42,months:[1,2,3,4],
  nasaQ:'NGC 2683 UFO Galaxy edge-on spiral',mag:9.7,size:"9×2.4'",diff:3,best:[750,1085],
  notes:'Edge-on quasi perfetta. La forma allungata le vale il soprannome UFO.'},
-{id:'ngc4631b',lx:0,name:'NGC 4656',cat:'NGC 4656 · Hockey Stick',type:'galaxy',ra:190.99,dec:32.169999999999995,months:[3,4,5,6],mag:10.5,size:"14×3'",diff:3,best:[336,750],notes:'Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.'},
+{id:'ngc4631b',lx:0,name:'NGC 4656',cat:'NGC 4656 · Hockey Stick',type:'galaxy',ra:190.99,dec:32.17,months:[3,4,5,6],
+ nasaQ:'NGC 4656 Hockey Stick Galaxy peculiar',mag:10.5,size:"14×3'",diff:3,best:[336,750],
+ notes:'Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.'},
 {id:'m87',lx:0,name:'M87',cat:'M87 · NGC 4486 · Virgo A',type:'galaxy',ra:187.71,dec:12.39,months:[3,4,5,6],
  nasaQ:'M87 Virgo A elliptical galaxy jet black hole',mag:8.6,size:"7×7'",diff:3,best:[750,1085,1625],
  notes:'Galassia ellittica con il famoso jet. Il jet è visibile a 1625mm in esposizione profonda.'},
@@ -1711,7 +1725,6 @@ const OBJ=[
 // Falls back to canvas if image not found
 // ═══════════════════════════════════════════════════════
 const LOCAL_IMGS = {
-  'ngc4631b':'img/ngc4631b.jpg',
   'ngc2362':'img/ngc2362.jpg',
   'ngc2976':'img/ngc2976.jpg','ngc3077':'img/ngc3077.jpg',
   'm42':'img/m42.jpg','ic434':'img/ic434.jpg','ngc1977':'img/ngc1977.jpg',
@@ -2274,7 +2287,7 @@ function initLanding(){
     showLanding();
     // reset search
     document.getElementById('landingSearch').value = '';
-    document.getElementById('searchResults').classList.remove('show');
+    document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
   });
 
   // Search logic
@@ -2306,6 +2319,8 @@ function initLanding(){
   function renderSearchResults(results){
     const el = document.getElementById('searchResults');
     el.classList.add('show');
+    // Prevent background scroll on mobile
+    if(window.innerWidth <= 768) document.body.style.overflow = 'hidden';
     if(!results.length){
       el.innerHTML='<div class="sr-empty">NESSUN RISULTATO</div>';
       return;
@@ -2341,14 +2356,14 @@ function initLanding(){
   inp.addEventListener('input', ()=>{
     const q = inp.value.trim();
     if(q) renderSearchResults(searchObjects(q));
-    else document.getElementById('searchResults').classList.remove('show');
+    else document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
   });
   inp.addEventListener('keydown', e=>{
     if(e.key==='Enter'){
       const results = searchObjects(inp.value.trim());
       if(results.length) openFromSearch(results[0]);
     }
-    if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show');
+    if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
   });
 }
 // ═══════════════════════════════════════════════════════
@@ -2870,6 +2885,169 @@ function initEdit(){
 }
 
 // ═══════════════════════════════════════════════════════
+// GITHUB PUBLISH
+// ═══════════════════════════════════════════════════════
+async function publishToGitHub(){
+  const GH_USER = 'mauroforlani';
+  const GH_REPO = 'Astrofoto';
+  const GH_TOKEN = localStorage.getItem('astrofoto_gh_token')||'';
+  if(!GH_TOKEN){
+    setStatus('✗ Token non configurato — inseriscilo nelle impostazioni', '#c0392b');
+    document.getElementById('ghTokenSection').style.display='block';
+    btn.disabled=false; btn.style.opacity='1';
+    return;
+  }
+  const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
+
+  const status = document.getElementById('publishStatus');
+  const btn = document.getElementById('btnExportIndex');
+
+  function setStatus(msg, color){
+    status.textContent = msg;
+    status.style.color = color || 'var(--ink4)';
+  }
+
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+  setStatus('⏳ Preparazione...');
+
+  try {
+    // Build updated index.html source
+    const src = await fetch(window.location.href).then(r=>r.text());
+    const newSrc = buildExportSrc(src);
+    if(!newSrc) { btn.disabled=false; btn.style.opacity='1'; return; }
+
+    // Collect photos to upload
+    const allWithPhotos = OBJ.filter(o=>o._photo);
+
+    // Helper: get current SHA of a file (needed to update)
+    async function getSHA(path){
+      try {
+        const r = await fetch(API + path, {
+          headers: {'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json'}
+        });
+        if(r.ok) { const d = await r.json(); return d.sha; }
+      } catch(e) {}
+      return null;
+    }
+
+    // Helper: upload a file
+    async function uploadFile(path, content, isBase64){
+      const sha = await getSHA(path);
+      const body = {
+        message: 'Astrofoto: aggiornamento ' + path,
+        content: isBase64 ? content : btoa(unescape(encodeURIComponent(content))),
+        ...(sha ? {sha} : {})
+      };
+      const r = await fetch(API + path, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'token ' + GH_TOKEN,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+      if(!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
+    // Upload photos first
+    if(allWithPhotos.length){
+      setStatus('⏳ Caricamento foto (' + allWithPhotos.length + ')...');
+      for(let i=0; i<allWithPhotos.length; i++){
+        const o = allWithPhotos[i];
+        setStatus('⏳ Foto ' + (i+1) + '/' + allWithPhotos.length + ': ' + o.id + '.jpg');
+        // Convert dataURL to base64
+        const base64 = o._photo.split(',')[1];
+        await uploadFile('img/' + o.id + '.jpg', base64, true);
+      }
+    }
+
+    // Upload index.html
+    setStatus('⏳ Caricamento index.html...');
+    await uploadFile('index.html', newSrc, false);
+
+    setStatus('✓ Pubblicato! Deploy in corso (~2 min)', '#1a7a4a');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+
+    // Clear _photo from objects (now served from img/)
+    allWithPhotos.forEach(o => delete o._photo);
+    // Clear localStorage modified with photos
+    try {
+      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
+      Object.values(mods).forEach(m => delete m._photo);
+      localStorage.setItem('astrofoto_modified_objs', JSON.stringify(mods));
+    } catch(e) {}
+
+  } catch(err) {
+    setStatus('✗ Errore: ' + err.message, '#c0392b');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+}
+
+function buildExportSrc(src){
+  const customs = OBJ.filter(o=>o._custom);
+  const modified = OBJ.filter(o=>o._modified && !o._custom);
+
+  if(!customs.length && !modified.length){
+    // Nothing to export but still upload current src
+    return src;
+  }
+
+  function esc(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+  function serializeEntry(o){
+    const custom = o._custom ? ',_custom:true' : '';
+    return "{id:'" + esc(o.id) + "',lx:" + (o.lx||0) +
+      ",name:'" + esc(o.name) + "',cat:'" + esc(o.cat||o.name) +
+      "',type:'" + o.type + "',ra:" + (o.ra||0) + ",dec:" + (o.dec||0) +
+      ",months:[" + o.months.join(',') + "]" +
+      ",mag:" + (o.mag||99) + ',size:"' + (o.size||'--') + '"' +
+      ",diff:" + (o.diff||1) + ",best:[" + (o.best||[336,750]).join(',') + "]" +
+      ",notes:'" + esc(o.notes||'') + "'" + custom + "}";
+  }
+
+  // Patch modified objects
+  modified.forEach(o=>{
+    const idToken = "{id:'" + o.id + "'";
+    const startIdx = src.indexOf(idToken);
+    if(startIdx === -1) return;
+    let dep=0, j=startIdx, entryEnd=-1;
+    while(j<src.length){
+      if(src[j]==='{') dep++;
+      else if(src[j]==='}'){ dep--; if(dep===0){entryEnd=j+1;break;} }
+      j++;
+    }
+    if(entryEnd===-1) return;
+    src = src.slice(0,startIdx) + serializeEntry(o) + src.slice(entryEnd);
+  });
+
+  // Append custom objects
+  if(customs.length){
+    const entries = customs.map(o=>serializeEntry(o)).join(',\n');
+    const objEndMarker = '/* __OBJ_END__ */]';
+    const objClose = src.indexOf(objEndMarker);
+    if(objClose===-1){ alert('Errore: marker OBJ non trovato.'); return null; }
+    src = src.slice(0, objClose) + ',\n' + entries + '\n' + src.slice(objClose);
+  }
+
+  // Inject LOCAL_IMGS for new photos
+  const photoObjs = OBJ.filter(o=>o._photo);
+  if(photoObjs.length){
+    const liIdx = src.indexOf('LOCAL_IMGS = {');
+    if(liIdx !== -1){
+      const insertAfter = liIdx + 'LOCAL_IMGS = {'.length;
+      const newEntries = photoObjs.map(o=>"'"+o.id+"':'img/"+o.id+".jpg'").join(',');
+      src = src.slice(0, insertAfter) + '\n  ' + newEntries + ',' + src.slice(insertAfter);
+    }
+  }
+
+  return src;
+}
+
+// ═══════════════════════════════════════════════════════
 // ADMIN
 // ═══════════════════════════════════════════════════════
 function initAdmin(){
@@ -3045,11 +3223,22 @@ function initAdmin(){
       .catch(err=>alert('Errore: '+err.message));
   }
 
+  // Token management
+  document.getElementById('btnSaveToken').addEventListener('click', ()=>{
+    const t = document.getElementById('ghTokenInput').value.trim();
+    if(t){ localStorage.setItem('astrofoto_gh_token', t); document.getElementById('ghTokenSection').style.display='none'; document.getElementById('publishStatus').textContent='✓ Token salvato'; document.getElementById('ghTokenInput').value=''; }
+  });
+
+  // Show token section if not configured
+  if(!localStorage.getItem('astrofoto_gh_token')){
+    document.getElementById('ghTokenSection').style.display='block';
+  }
+
   document.getElementById('btnAdmin').addEventListener('click', openAdmin);
   document.getElementById('adminClose').addEventListener('click', closeAdmin);
   overlay.addEventListener('click', e=>{ if(e.target===overlay) closeAdmin(); });
 
-  document.getElementById('btnExportIndex').addEventListener('click', exportIndex);
+  // btnExportIndex now uses onclick=publishToGitHub() directly
 
   document.getElementById('adminAuthBtn').addEventListener('click', ()=>{
     const pwd = document.getElementById('adminPwd').value;
