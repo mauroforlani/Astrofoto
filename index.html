@@ -441,12 +441,13 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
   </div>
 </div>
 
-<!-- ══ ADMIN MODAL ══════════════════════════════════════════════════ -<div class="modal-overlay" id="adminOverlay" style="align-items:flex-start;overflow-y:auto;padding:0">
-  <div id="adminModal" style="background:var(--bg);width:100%;min-height:100vh;max-width:640px;margin:0 auto;padding:40px 32px 60px;box-sizing:border-box;position:relative">
+<!-- ══ ADMIN MODAL ══════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="adminOverlay" style="align-items:flex-start;overflow-y:auto;padding:0">
+  <div id="adminModal" style="background:var(--bg);width:100%;min-height:100vh;max-width:640px;margin:0 auto;padding:40px 32px 60px;box-sizing:border-box">
     <button class="modal-close" id="adminClose" style="position:fixed;top:16px;right:16px;z-index:10">✕</button>
     <div>
       <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:6px">Accesso riservato</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;letter-spacing:-1px;margin-bottom:24px">Gestione catalogo</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;letter-spacing:-1px;margin-bottom:20px">Gestione catalogo</div>
 
       <!-- Password screen -->
       <div id="adminAuth">
@@ -460,9 +461,8 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 
       <!-- Admin panel -->
       <div id="adminPanel" style="display:none">
-
-        <!-- CAMERE -->
-        <div style="margin-bottom:24px">
+        <!-- Camera management -->
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
           <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:10px">CAMERE</div>
           <div id="adminCameraList" style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px"></div>
           <div id="adminCameraForm" style="display:none;background:var(--bg2);border-radius:4px;padding:12px;margin-bottom:8px">
@@ -470,8 +470,8 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
             <div style="display:flex;flex-direction:column;gap:6px">
               <input type="text" id="camName" class="at-inp" placeholder="Nome (es. Canon EOS R50)">
               <div style="display:flex;gap:6px">
-                <input type="number" id="camW" class="at-inp" placeholder="Largh. sensore mm" step="0.1" style="flex:1">
-                <input type="number" id="camH" class="at-inp" placeholder="Alt. sensore mm" step="0.1" style="flex:1">
+                <input type="number" id="camW" class="at-inp" placeholder="Largh. sensore mm (es. 22.3)" step="0.1" style="flex:1">
+                <input type="number" id="camH" class="at-inp" placeholder="Alt. sensore mm (es. 14.9)" step="0.1" style="flex:1">
               </div>
               <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4)">I FOV vengono calcolati automaticamente per tutte le focali disponibili</div>
               <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:4px">
@@ -480,31 +480,10 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
               </div>
             </div>
           </div>
-          <div style="display:flex;gap:6px">
-            <button onclick="document.getElementById('adminCameraForm').style.display='block'" style="flex:1;background:none;border:1px dashed var(--border);border-radius:3px;padding:7px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--ink4);cursor:pointer;text-align:center">+ AGGIUNGI CAMERA</button>
-            <button onclick="recalcAllBest()" style="flex:1;background:var(--ink);border:none;border-radius:3px;padding:7px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:#fff;cursor:pointer;text-align:center">⟳ VERIFICA VISIBILITÀ</button>
-          </div>
-          <div id="recalcLog" style="display:none;margin-top:8px;background:var(--bg2);border-radius:3px;padding:10px;font-family:'DM Mono',monospace;font-size:8px;line-height:1.7;color:var(--ink3)"></div>
+          <button onclick="document.getElementById('adminCameraForm').style.display='block'" style="background:none;border:1px dashed var(--border);border-radius:3px;padding:7px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--ink4);cursor:pointer;width:100%;text-align:center">+ AGGIUNGI CAMERA</button>
         </div>
 
-        <!-- FOCALI -->
-        <div style="padding-top:16px;border-top:1px solid var(--border);margin-bottom:24px">
-          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:10px">FOCALI DISPONIBILI</div>
-          <div id="adminFocalList" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
-          <div id="adminFocalForm" style="display:none;background:var(--bg2);border-radius:4px;padding:12px;margin-bottom:8px">
-            <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;margin-bottom:8px">NUOVA FOCALE</div>
-            <div style="display:flex;gap:6px;align-items:center">
-              <input type="number" id="focalMm" class="at-inp" placeholder="mm (es. 2000)" min="50" max="10000" style="width:140px">
-              <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4)">mm</span>
-              <button onclick="document.getElementById('adminFocalForm').style.display='none'" style="margin-left:auto;background:none;border:1px solid var(--border);border-radius:3px;padding:6px 12px;font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;color:var(--ink3)">Annulla</button>
-              <button onclick="saveNewFocal()" style="background:var(--ink);border:none;border-radius:3px;padding:6px 14px;font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;color:#fff">Aggiungi</button>
-            </div>
-          </div>
-          <button onclick="document.getElementById('adminFocalForm').style.display='block'" style="background:none;border:1px dashed var(--border);border-radius:3px;padding:7px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--ink4);cursor:pointer;width:100%;text-align:center">+ AGGIUNGI FOCALE</button>
-        </div>
-
-        <!-- GITHUB -->
-        <div style="padding-top:16px;border-top:1px solid var(--border);margin-bottom:24px;display:flex;flex-direction:column;gap:10px">
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
           <div id="ghTokenSection" style="display:none">
             <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;margin-bottom:6px">GITHUB TOKEN (salvato solo su questo device)</div>
             <div style="display:flex;gap:8px">
@@ -519,21 +498,34 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
               <div id="publishStatus" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;min-height:14px"></div>
             </div>
           </div>
-        </div>
 
         <!-- OGGETTI (in fondo) -->
-        <div style="padding-top:16px;border-top:1px solid var(--border)">
-          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:10px">OGGETTI NEL CATALOGO — clicca per rimuovere</div>
-          <input type="text" id="adminSearch" class="at-inp" placeholder="Cerca per nome o catalogo..." style="margin-bottom:10px;width:100%;box-sizing:border-box" oninput="filterAdminList(this.value)">
-          <div id="adminList" style="display:flex;flex-direction:column;gap:2px"></div>
-          <div id="adminEmpty" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;padding:24px">Nessun oggetto nel catalogo</div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:10px">OGGETTI NEL CATALOGO — clicca per rimuovere</div>
+        <input type="text" id="adminSearch" class="at-inp" placeholder="Cerca per nome o catalogo..." style="margin-bottom:10px;width:100%;box-sizing:border-box" oninput="filterAdminList(this.value)">
+        <div id="adminList" style="max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
+        <div id="adminEmpty" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;padding:24px">Nessun oggetto nel catalogo</div>
         </div>
-
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ══ CONFIRM DIALOG ═══════════════════════════════════════════════ -->
+<div id="confirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center">
+  <div style="background:var(--bg);border-radius:4px;padding:28px 32px;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <div id="confirmIcon" style="font-size:22px;margin-bottom:10px"></div>
+    <div id="confirmTitle" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:8px"></div>
+    <div id="confirmMsg" style="font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:24px"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button id="confirmCancel" style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:9px 20px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:var(--ink3)">Annulla</button>
+      <button id="confirmOk" style="border:none;border-radius:3px;padding:9px 22px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;font-weight:500">Conferma</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EDIT OBJECT MODAL ════════════════════════════════════════════ -->
 <div class="modal-overlay" id="editOverlay">
   <div class="modal" id="editModal" style="max-width:520px">
     <button class="modal-close" id="editClose">✕</button>
@@ -2939,105 +2931,6 @@ function initEdit(){
 // ═══════════════════════════════════════════════════════
 // GITHUB PUBLISH
 // ═══════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════
-// FOCAL MANAGEMENT
-// ═══════════════════════════════════════════════════════
-function loadCustomFocals(){ try{ return JSON.parse(localStorage.getItem('astrofoto_focals')||'[]'); }catch(e){ return []; } }
-function saveCustomFocals(f){ localStorage.setItem('astrofoto_focals', JSON.stringify(f)); }
-
-function injectCustomFocals(){
-  loadCustomFocals().forEach(mm => { if(!FOCALS.includes(mm)) FOCALS.push(mm); });
-  FOCALS.sort((a,b)=>a-b);
-  Object.values(CAMERAS).forEach(cam => {
-    cam.fovs = FOCALS.map(fl => [fl, Math.round(cam.w/fl*(180/Math.PI)*60), Math.round(cam.h/fl*(180/Math.PI)*60)]);
-  });
-}
-
-function renderAdminFocalList(){
-  const el = document.getElementById('adminFocalList');
-  if(!el) return;
-  el.innerHTML = '';
-  const customFocals = loadCustomFocals();
-  FOCALS.forEach(mm => {
-    const isCustom = customFocals.includes(mm);
-    const chip = document.createElement('div');
-    chip.style.cssText = "display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:3px;background:var(--bg2);font-family:DM Mono,monospace;font-size:10px";
-    const lbl = document.createElement('span');
-    lbl.textContent = mm + 'mm';
-    lbl.style.color = 'var(--ink)';
-    chip.appendChild(lbl);
-    if(isCustom){
-      const btn = document.createElement('button');
-      btn.textContent = '×';
-      btn.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--ink4);font-size:13px;line-height:1;padding:0 0 0 4px';
-      btn.onclick = () => deleteCustomFocal(mm);
-      chip.appendChild(btn);
-    }
-    el.appendChild(chip);
-  });
-}
-
-window.saveNewFocal = function(){
-  const mm = parseInt(document.getElementById('focalMm').value);
-  if(!mm || mm < 50 || mm > 10000){ alert('Focale non valida (50–10000mm)'); return; }
-  if(FOCALS.includes(mm)){ alert('Focale già presente'); return; }
-  const cust = loadCustomFocals(); cust.push(mm); saveCustomFocals(cust);
-  FOCALS.push(mm); FOCALS.sort((a,b)=>a-b);
-  Object.values(CAMERAS).forEach(cam => {
-    cam.fovs = FOCALS.map(fl => [fl, Math.round(cam.w/fl*(180/Math.PI)*60), Math.round(cam.h/fl*(180/Math.PI)*60)]);
-  });
-  document.getElementById('focalMm').value = '';
-  document.getElementById('adminFocalForm').style.display = 'none';
-  renderAdminFocalList(); refreshAll();
-};
-
-window.deleteCustomFocal = function(mm){
-  const cust = loadCustomFocals().filter(f => f !== mm);
-  saveCustomFocals(cust);
-  const idx = FOCALS.indexOf(mm); if(idx !== -1) FOCALS.splice(idx,1);
-  Object.values(CAMERAS).forEach(cam => { cam.fovs = cam.fovs.filter(([fl]) => fl !== mm); });
-  renderAdminFocalList(); refreshAll();
-};
-
-// ═══════════════════════════════════════════════════════
-// RECALC VISIBILITY
-// ═══════════════════════════════════════════════════════
-window.recalcAllBest = function(){
-  const log = [], errors = [];
-  let updated = 0;
-  OBJ.forEach(obj => {
-    if(obj.type === 'planet' || obj.type === 'double'){
-      log.push('⊙ ' + obj.name + ': saltato (pianeta/doppia)'); return;
-    }
-    const sizeStr = obj.size || '';
-    const m = sizeStr.match(/([\d.]+)/);
-    if(!m){ errors.push('✗ ' + obj.name + ': dimensione non leggibile'); return; }
-    let sz = parseFloat(m[1]);
-    if(sizeStr.includes('°')) sz *= 60;
-    if(!sz){ errors.push('✗ ' + obj.name + ': dimensione zero'); return; }
-    const goodFocals = new Set();
-    const camDetails = [];
-    Object.values(CAMERAS).forEach(cam => {
-      const cf = [];
-      cam.fovs.forEach(([fl,fw]) => { if(sz/fw > 0.15 && sz/fw < 0.9){ goodFocals.add(fl); cf.push(fl+'mm'); } });
-      camDetails.push(cam.name + ': ' + (cf.length ? cf.join(', ') : 'nessuna'));
-    });
-    const newBest = [...goodFocals].sort((a,b)=>a-b);
-    if(!newBest.length){ errors.push('✗ ' + obj.name + ' (dim=' + sz + ' arcmin): ' + camDetails.join(' | ')); return; }
-    const oldBest = JSON.stringify(obj.best||[]);
-    obj.best = newBest;
-    if(JSON.stringify(newBest) !== oldBest){ updated++; log.push('✓ ' + obj.name + ' → ' + camDetails.join(' | ')); }
-  });
-  const logEl = document.getElementById('recalcLog');
-  logEl.style.display = 'block';
-  const lines = ['<strong>═ RICALCOLO: ' + updated + ' aggiornati su ' + OBJ.length + ' ═</strong>', '', ...errors, ...(errors.length?['']:[]), ...log];
-  logEl.innerHTML = lines.map(l =>
-    l.startsWith('✗') ? '<span style="color:#c0392b">'+l+'</span>' :
-    l.startsWith('✓') ? '<span style="color:#1a7a4a">'+l+'</span>' : l
-  ).join('<br>');
-  refreshAll();
-};
-
 async function publishToGitHub(){
   const GH_USER = 'mauroforlani';
   const GH_REPO = 'Astrofoto';
@@ -3164,18 +3057,34 @@ function renderAdminCameraList(){
   const list = document.getElementById('adminCameraList');
   if(!list) return;
   list.innerHTML = '';
-  Object.values(CAMERAS).forEach(cam => {
+
+  // Built-in cameras
+  const builtins = [
+    {id:'sony_a6000', name:'Sony A6000', builtin:true},
+    {id:'zwo_asi224mc', name:'ZWO ASI 224 MC Color', builtin:true}
+  ];
+  const customs = loadCustomCameras();
+  const all = [...builtins, ...customs];
+
+  [...builtins, ...customs].forEach(cam => {
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:3px;gap:8px';
     const nameEl = document.createElement('span');
     nameEl.style.cssText = "font-family:'Jost',sans-serif;font-size:11px;color:var(--ink)";
-    nameEl.textContent = cam.name + (cam.desc ? ' — ' + cam.desc : '');
+    nameEl.textContent = cam.name;
     row.appendChild(nameEl);
-    const btn = document.createElement('button');
-    btn.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--ink4);font-size:16px;line-height:1;padding:0 4px;flex-shrink:0';
-    btn.textContent = '×';
-    btn.onclick = () => deleteCamera(cam.id);
-    row.appendChild(btn);
+    if(cam.builtin){
+      const lbl = document.createElement('span');
+      lbl.style.cssText = "font-family:'DM Mono',monospace;font-size:7px;color:var(--ink4)";
+      lbl.textContent = 'BUILT-IN';
+      row.appendChild(lbl);
+    } else {
+      const btn = document.createElement('button');
+      btn.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--ink4);font-size:14px;line-height:1;padding:0 2px';
+      btn.textContent = '×';
+      btn.onclick = () => deleteCustomCamera(cam.id);
+      row.appendChild(btn);
+    }
     list.appendChild(row);
   });
 }
@@ -3207,7 +3116,6 @@ window.saveNewCamera = function(){
   CAMERAS[id] = newCam;
   rebuildCameraSelect();
   renderAdminCameraList();
-  renderAdminFocalList();
   refreshAll();
 
   // Reset form
@@ -3449,7 +3357,6 @@ initCountrySelect();
 initCameraSelect();
 initGlobalFilters();
 // Inject custom cameras before boot
-injectCustomFocals();
 injectCustomCameras();
 
 // Load remote data.json then boot
