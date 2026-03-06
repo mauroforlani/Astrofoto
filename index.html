@@ -1338,9 +1338,7 @@ const OBJ=[
 {id:'ngc7822',lx:3,name:'NGC 7822',cat:'NGC 7822 · Ced 214',type:'nebula',ra:0.72,dec:68.17,months:[9,10,11,12],
  nasaQ:'NGC 7822 Cedric 214 Cepheus star forming',mag:7.0,size:"60'",diff:3,best:[135,336],
  notes:'Pilastri di formazione stellare in Cefeo. Alta e quasi circumpolare. In SHO molto bella.'},
-{id:'ngc2068b',lx:3,name:'Barnard\'s Loop',cat:'Barnard\'s Loop · Sh2-276',type:'nebula',ra:85.00,dec:-4.00,months:[11,12,1,2],
- nasaQ:'Barnard\'s Loop Orion supernova remnant',mag:5.0,size:"600'",diff:5,best:[135],
- notes:'Arco di emissione attorno ad Orione. Richiede 135mm, cielo buio e molte ore. Sfida estrema.'},
+{id:'ngc2068b',lx:3,name:'Barnard\'s Loop',cat:'Barnard\'s Loop · Sh2-276',type:'nebula',ra:85,dec:-4,months:[11,12,1,2],mag:5,size:"600'",diff:5,best:[135],notes:'Arco di emissione attorno ad Orione. Richiede 135mm, cielo buio e molte ore. Sfida estrema.'},
 {id:'ngc2023',lx:2,name:'NGC 2023',cat:'NGC 2023 · Flame Nebula',type:'nebula',ra:85.42,dec:-2.26,months:[11,12,1,2],
  nasaQ:'NGC 2023 reflection nebula Horsehead Orion',mag:10.0,size:"10'",diff:3,best:[336,750],
  notes:'Nebulosa a riflessione vicino alla Testa di Cavallo. Stessa inquadratura con un campo adatto.'},
@@ -1445,9 +1443,7 @@ const OBJ=[
 {id:'ngc2683',lx:0,name:'NGC 2683',cat:'NGC 2683 · UFO Galaxy',type:'galaxy',ra:133.17,dec:33.42,months:[1,2,3,4],
  nasaQ:'NGC 2683 UFO Galaxy edge-on spiral',mag:9.7,size:"9×2.4'",diff:3,best:[750,1085],
  notes:'Edge-on quasi perfetta. La forma allungata le vale il soprannome UFO.'},
-{id:'ngc4631b',lx:0,name:'NGC 4656',cat:'NGC 4656 · Hockey Stick',type:'galaxy',ra:190.99,dec:32.17,months:[3,4,5,6],
- nasaQ:'NGC 4656 Hockey Stick Galaxy peculiar',mag:10.5,size:"14×3'",diff:3,best:[336,750],
- notes:'Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.'},
+{id:'ngc4631b',lx:0,name:'NGC 4656',cat:'NGC 4656 · Hockey Stick',type:'galaxy',ra:190.99,dec:32.169999999999995,months:[3,4,5,6],mag:10.5,size:"14×3'",diff:3,best:[336,750],notes:'Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.'},
 {id:'m87',lx:0,name:'M87',cat:'M87 · NGC 4486 · Virgo A',type:'galaxy',ra:187.71,dec:12.39,months:[3,4,5,6],
  nasaQ:'M87 Virgo A elliptical galaxy jet black hole',mag:8.6,size:"7×7'",diff:3,best:[750,1085,1625],
  notes:'Galassia ellittica con il famoso jet. Il jet è visibile a 1625mm in esposizione profonda.'},
@@ -1626,9 +1622,7 @@ const OBJ=[
 {id:'marte',lx:0,name:'Marte',cat:'Marte · Pianeta',type:'planet',fixedAlt:36,months:[1,2,3,10,11,12],
  nasaQ:'Mars surface detail Hubble opposition',mag:-2.9,size:'4-25"',diff:3,best:[1085,1625],
  notes:'Dettagli superficiali solo vicino all\'opposizione (diametro >15"). Lucky imaging obbligatorio.'},
-{id:'venere',lx:0,name:'Venere',cat:'Venere · Pianeta',type:'planet',fixedAlt:18,months:[1,2,3,4,10,11,12],
- nasaQ:'Venus phases telescope crescent ultraviolet',mag:-4.5,size:'10-64"',diff:2,best:[750,1085],
- notes:'Le fasi in UV mostrano le nuvole di acido solforico. Visibile in ore crepuscolari.'},
+{id:'venere',lx:0,name:'Venere',cat:'Venere · Pianeta',type:'planet',ra:0,dec:0,months:[1,2,3,4,10,11,12],mag:-4.5,size:"10-64"",diff:2,best:[750,1085],notes:'Le fasi in UV mostrano le nuvole di acido solforico. Visibile in ore crepuscolari.'},
 {id:'urano',lx:0,name:'Urano',cat:'Urano · Pianeta',type:'planet',fixedAlt:35,months:[9,10,11,12,1],
  nasaQ:'Uranus rings moons Hubble blue-green',mag:5.7,size:'3-4"',diff:4,best:[1085,1625],
  notes:'Disco blu-verde rilevabile a 1085mm. Gli anelli sono visibili con HST ma sfidanti da Terra.'},
@@ -1725,6 +1719,7 @@ const OBJ=[
 // Falls back to canvas if image not found
 // ═══════════════════════════════════════════════════════
 const LOCAL_IMGS = {
+  'ngc2068b':'img/ngc2068b.jpg',
   'ngc2362':'img/ngc2362.jpg',
   'ngc2976':'img/ngc2976.jpg','ngc3077':'img/ngc3077.jpg',
   'm42':'img/m42.jpg','ic434':'img/ic434.jpg','ngc1977':'img/ngc1977.jpg',
@@ -2812,6 +2807,10 @@ function initEdit(){
     // Apply new photo if uploaded
     if(editPhotoDataUrl){
       editingObj._photo = editPhotoDataUrl;
+      const imgA = document.createElement('a');
+      imgA.href = editPhotoDataUrl;
+      imgA.download = editingObj.id + '.jpg';
+      imgA.click();
     }
 
     // Persist to localStorage
