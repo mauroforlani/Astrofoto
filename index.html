@@ -1445,7 +1445,9 @@ const OBJ=[
 {id:'ngc2683',lx:0,name:'NGC 2683',cat:'NGC 2683 · UFO Galaxy',type:'galaxy',ra:133.17,dec:33.42,months:[1,2,3,4],
  nasaQ:'NGC 2683 UFO Galaxy edge-on spiral',mag:9.7,size:"9×2.4'",diff:3,best:[750,1085],
  notes:'Edge-on quasi perfetta. La forma allungata le vale il soprannome UFO.'},
-{id:'ngc4631b',lx:0,name:'NGC 4656',cat:'NGC 4656 · Hockey Stick',type:'galaxy',ra:190.99,dec:32.169999999999995,months:[3,4,5,6],mag:10.5,size:"14×3'",diff:3,best:[336,750],notes:'Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.'},
+{id:'ngc4631b',lx:0,name:'NGC 4656',cat:'NGC 4656 · Hockey Stick',type:'galaxy',ra:190.99,dec:32.17,months:[3,4,5,6],
+ nasaQ:'NGC 4656 Hockey Stick Galaxy peculiar',mag:10.5,size:"14×3'",diff:3,best:[336,750],
+ notes:'Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.'},
 {id:'m87',lx:0,name:'M87',cat:'M87 · NGC 4486 · Virgo A',type:'galaxy',ra:187.71,dec:12.39,months:[3,4,5,6],
  nasaQ:'M87 Virgo A elliptical galaxy jet black hole',mag:8.6,size:"7×7'",diff:3,best:[750,1085,1625],
  notes:'Galassia ellittica con il famoso jet. Il jet è visibile a 1625mm in esposizione profonda.'},
@@ -1598,7 +1600,9 @@ const OBJ=[
 {id:'ic4665',lx:0,name:'IC 4665',cat:'IC 4665 · Summer Beehive',type:'cluster',ra:266.55,dec:5.70,months:[6,7,8],
  nasaQ:'IC 4665 open cluster Ophiuchus summer wide',mag:4.2,size:"70'",diff:1,best:[135],
  notes:'Grande ammasso sparso in Ofiuco. Solo a 135mm o meno. Stelle giovani (~40 Ma).'},
-{id:'ngc6633',lx:0,name:'NGC 6633',cat:'NGC 6633 · Ophiuchus',type:'cluster',ra:276.85,dec:6.609999999999999,months:[6,7,8,9],mag:4.6,size:"27'",diff:1,best:[135,336],notes:'Campo a 135mm con IC 4756 vicino. Stelle brillanti con molte binarie.'},
+{id:'ngc6633',lx:0,name:'NGC 6633',cat:'NGC 6633 · Ophiuchus',type:'cluster',ra:276.85,dec:6.61,months:[6,7,8,9],
+ nasaQ:'NGC 6633 open cluster Ophiuchus',mag:4.6,size:"27'",diff:1,best:[135,336],
+ notes:'Campo a 135mm con IC 4756 vicino. Stelle brillanti con molte binarie.'},
 {id:'m39',lx:0,name:'M39',cat:'M39 · NGC 7092',type:'cluster',ra:323.92,dec:48.44,months:[8,9,10,11],
  nasaQ:'M39 NGC 7092 Cygnus open cluster',mag:4.6,size:"32'",diff:1,best:[135,336],
  notes:'Grande ammasso in Cigno. Stelle molto giovani e sparse. Campo largo.'},
@@ -1622,7 +1626,9 @@ const OBJ=[
 {id:'marte',lx:0,name:'Marte',cat:'Marte · Pianeta',type:'planet',fixedAlt:36,months:[1,2,3,10,11,12],
  nasaQ:'Mars surface detail Hubble opposition',mag:-2.9,size:'4-25"',diff:3,best:[1085,1625],
  notes:'Dettagli superficiali solo vicino all\'opposizione (diametro >15"). Lucky imaging obbligatorio.'},
-{id:'venere',lx:0,name:'Venere',cat:'Venere · Pianeta',type:'planet',ra:0,dec:0,months:[1,2,3,4,10,11,12],mag:-4.5,size:"10-64"",diff:2,best:[750,1085],notes:'Le fasi in UV mostrano le nuvole di acido solforico. Visibile in ore crepuscolari.'},
+{id:'venere',lx:0,name:'Venere',cat:'Venere · Pianeta',type:'planet',fixedAlt:18,months:[1,2,3,4,10,11,12],
+ nasaQ:'Venus phases telescope crescent ultraviolet',mag:-4.5,size:'10-64"',diff:2,best:[750,1085],
+ notes:'Le fasi in UV mostrano le nuvole di acido solforico. Visibile in ore crepuscolari.'},
 {id:'urano',lx:0,name:'Urano',cat:'Urano · Pianeta',type:'planet',fixedAlt:35,months:[9,10,11,12,1],
  nasaQ:'Uranus rings moons Hubble blue-green',mag:5.7,size:'3-4"',diff:4,best:[1085,1625],
  notes:'Disco blu-verde rilevabile a 1085mm. Gli anelli sono visibili con HST ma sfidanti da Terra.'},
@@ -1719,7 +1725,6 @@ const OBJ=[
 // Falls back to canvas if image not found
 // ═══════════════════════════════════════════════════════
 const LOCAL_IMGS = {
-  'ngc6633':'img/ngc6633.jpg',
   'ngc2362':'img/ngc2362.jpg',
   'ngc2976':'img/ngc2976.jpg','ngc3077':'img/ngc3077.jpg',
   'm42':'img/m42.jpg','ic434':'img/ic434.jpg','ngc1977':'img/ngc1977.jpg',
@@ -2882,164 +2887,79 @@ async function publishToGitHub(){
   const GH_USER = 'mauroforlani';
   const GH_REPO = 'Astrofoto';
   const GH_TOKEN = localStorage.getItem('astrofoto_gh_token')||'';
-  if(!GH_TOKEN){
-    setStatus('✗ Token non configurato — inseriscilo nelle impostazioni', '#c0392b');
-    document.getElementById('ghTokenSection').style.display='block';
-    btn.disabled=false; btn.style.opacity='1';
-    return;
-  }
   const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
 
-  const status = document.getElementById('publishStatus');
+  const statusEl = document.getElementById('publishStatus');
   const btn = document.getElementById('btnExportIndex');
 
-  function setStatus(msg, color){
-    status.textContent = msg;
-    status.style.color = color || 'var(--ink4)';
-  }
+  function setStatus(msg, color){ statusEl.textContent=msg; statusEl.style.color=color||'var(--ink4)'; }
 
-  btn.disabled = true;
-  btn.style.opacity = '0.6';
+  btn.disabled=true; btn.style.opacity='0.6';
   setStatus('⏳ Preparazione...');
 
   try {
-    // Build updated index.html source
-    const src = await fetch(window.location.href).then(r=>r.text());
-    const newSrc = buildExportSrc(src);
-    if(!newSrc) { btn.disabled=false; btn.style.opacity='1'; return; }
-
-    // Collect photos to upload
-    const allWithPhotos = OBJ.filter(o=>o._photo);
-
-    // Helper: get current SHA of a file (needed to update)
     async function getSHA(path){
       try {
-        const r = await fetch(API + path, {
-          headers: {'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json'}
-        });
-        if(r.ok) { const d = await r.json(); return d.sha; }
-      } catch(e) {}
+        const r = await fetch(API+path,{headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
+        if(r.ok){ const d=await r.json(); return d.sha; }
+      } catch(e){}
       return null;
     }
 
-    // Helper: upload a file
-    async function uploadFile(path, content, isBase64){
+    async function uploadFile(path, base64content){
       const sha = await getSHA(path);
-      const body = {
-        message: 'Astrofoto: aggiornamento ' + path,
-        content: isBase64 ? content : btoa(unescape(encodeURIComponent(content))),
-        ...(sha ? {sha} : {})
-      };
-      const r = await fetch(API + path, {
-        method: 'PUT',
-        headers: {
-          'Authorization': 'token ' + GH_TOKEN,
-          'Accept': 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
+      const r = await fetch(API+path,{
+        method:'PUT',
+        headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+        body: JSON.stringify({message:'Astrofoto: aggiornamento '+path, content:base64content, ...(sha?{sha}:{})})
       });
-      if(!r.ok) throw new Error(await r.text());
-      return r.json();
+      if(!r.ok) throw new Error((await r.json()).message||'Upload failed');
     }
+
+    function toBase64(str){
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    // Build data.json
+    const customs = OBJ.filter(o=>o._custom).map(o=>{
+      const obj = {...o};
+      delete obj._photo; // photos stored separately as img/ files
+      delete obj._alt;
+      return obj;
+    });
+    const modified = OBJ.filter(o=>o._modified && !o._custom).map(o=>{
+      const obj = {...o};
+      delete obj._photo;
+      delete obj._alt;
+      return obj;
+    });
+    // Local imgs added by user (not in original LOCAL_IMGS)
+    const newImgs = {};
+    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
+
+    const dataJson = JSON.stringify({customs, modified, imgs:newImgs}, null, 2);
 
     // Upload photos first
-    if(allWithPhotos.length){
-      setStatus('⏳ Caricamento foto (' + allWithPhotos.length + ')...');
-      for(let i=0; i<allWithPhotos.length; i++){
-        const o = allWithPhotos[i];
-        setStatus('⏳ Foto ' + (i+1) + '/' + allWithPhotos.length + ': ' + o.id + '.jpg');
-        // Convert dataURL to base64
-        const base64 = o._photo.split(',')[1];
-        await uploadFile('img/' + o.id + '.jpg', base64, true);
-      }
+    const withPhotos = OBJ.filter(o=>o._photo && o._photo.startsWith('data:'));
+    for(let i=0; i<withPhotos.length; i++){
+      const o = withPhotos[i];
+      setStatus(`⏳ Foto ${i+1}/${withPhotos.length}: ${o.id}.jpg`);
+      await uploadFile('img/'+o.id+'.jpg', o._photo.split(',')[1]);
     }
 
-    // Upload index.html
-    setStatus('⏳ Caricamento index.html...');
-    await uploadFile('index.html', newSrc, false);
+    // Upload data.json
+    setStatus('⏳ Caricamento data.json...');
+    await uploadFile('data.json', toBase64(dataJson));
 
-    setStatus('✓ Pubblicato! Deploy in corso (~2 min)', '#1a7a4a');
-    btn.disabled = false;
-    btn.style.opacity = '1';
+    setStatus('✓ Pubblicato! Visibile dopo ~2 min', '#1a7a4a');
 
-    // Clear _photo from objects (now served from img/)
-    allWithPhotos.forEach(o => delete o._photo);
-    // Clear localStorage modified with photos
-    try {
-      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
-      Object.values(mods).forEach(m => delete m._photo);
-      localStorage.setItem('astrofoto_modified_objs', JSON.stringify(mods));
-    } catch(e) {}
-
-  } catch(err) {
-    setStatus('✗ Errore: ' + err.message, '#c0392b');
-    btn.disabled = false;
-    btn.style.opacity = '1';
+  } catch(err){
+    setStatus('✗ Errore: '+err.message, '#c0392b');
   }
+
+  btn.disabled=false; btn.style.opacity='1';
 }
 
-function buildExportSrc(src){
-  const customs = OBJ.filter(o=>o._custom);
-  const modified = OBJ.filter(o=>o._modified && !o._custom);
-
-  if(!customs.length && !modified.length){
-    // Nothing to export but still upload current src
-    return src;
-  }
-
-  function esc(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
-  function serializeEntry(o){
-    const custom = o._custom ? ',_custom:true' : '';
-    return "{id:'" + esc(o.id) + "',lx:" + (o.lx||0) +
-      ",name:'" + esc(o.name) + "',cat:'" + esc(o.cat||o.name) +
-      "',type:'" + o.type + "',ra:" + (o.ra||0) + ",dec:" + (o.dec||0) +
-      ",months:[" + o.months.join(',') + "]" +
-      ",mag:" + (o.mag||99) + ',size:"' + (o.size||'--') + '"' +
-      ",diff:" + (o.diff||1) + ",best:[" + (o.best||[336,750]).join(',') + "]" +
-      ",notes:'" + esc(o.notes||'') + "'" + custom + "}";
-  }
-
-  // Patch modified objects
-  modified.forEach(o=>{
-    const idToken = "{id:'" + o.id + "'";
-    const startIdx = src.indexOf(idToken);
-    if(startIdx === -1) return;
-    let dep=0, j=startIdx, entryEnd=-1;
-    while(j<src.length){
-      if(src[j]==='{') dep++;
-      else if(src[j]==='}'){ dep--; if(dep===0){entryEnd=j+1;break;} }
-      j++;
-    }
-    if(entryEnd===-1) return;
-    src = src.slice(0,startIdx) + serializeEntry(o) + src.slice(entryEnd);
-  });
-
-  // Append custom objects
-  if(customs.length){
-    const entries = customs.map(o=>serializeEntry(o)).join(',\n');
-    const objEndMarker = '/* __OBJ_END__ */]';
-    const objClose = src.indexOf(objEndMarker);
-    if(objClose===-1){ alert('Errore: marker OBJ non trovato.'); return null; }
-    src = src.slice(0, objClose) + ',\n' + entries + '\n' + src.slice(objClose);
-  }
-
-  // Inject LOCAL_IMGS for new photos — only if not already present
-  const photoObjs = OBJ.filter(o=>o._photo);
-  if(photoObjs.length){
-    const liIdx = src.indexOf('LOCAL_IMGS = {');
-    if(liIdx !== -1){
-      const insertAfter = liIdx + 'LOCAL_IMGS = {'.length;
-      const toAdd = photoObjs.filter(o=>src.indexOf("'"+o.id+"':'img/") === -1);
-      if(toAdd.length){
-        const newEntries = toAdd.map(o=>"'"+o.id+"':'img/"+o.id+".jpg'").join(',');
-        src = src.slice(0, insertAfter) + '\n  ' + newEntries + ',' + src.slice(insertAfter);
-      }
-    }
-  }
-
-  return src;
-}
 
 // ═══════════════════════════════════════════════════════
 // ADMIN
@@ -3252,10 +3172,37 @@ function initAdmin(){
 initCountrySelect();
 initCameraSelect();
 initGlobalFilters();
-initSliders();
-initMonthNav();
-updateTotCount();
-injectCustomTargets();
+// Load remote data.json then boot
+(async function bootWithData(){
+  try {
+    const r = await fetch('data.json?v=' + Date.now());
+    if(r.ok){
+      const data = await r.json();
+      // Apply remote custom targets
+      if(Array.isArray(data.customs)){
+        data.customs.forEach(t=>{
+          if(!t||!t.id||!t.name) return;
+          if(!OBJ.find(o=>o.id===t.id)) OBJ.push(t);
+        });
+      }
+      // Apply remote modifications
+      if(Array.isArray(data.modified)){
+        data.modified.forEach(mod=>{
+          const obj = OBJ.find(o=>o.id===mod.id);
+          if(obj) Object.assign(obj, mod);
+        });
+      }
+      // Apply remote img paths
+      if(data.imgs){
+        Object.entries(data.imgs).forEach(([id,path])=>{ LOCAL_IMGS[id]=path; });
+      }
+    }
+  } catch(e){ /* no data.json yet — ok */ }
+
+  initSliders();
+  initMonthNav();
+  updateTotCount();
+  injectCustomTargets();
 // Apply saved modifications to existing objects (including _photo)
 (function(){
   try {
@@ -3275,15 +3222,14 @@ initLanding();
 initAddTarget();
 initAdmin();
 initEdit();
-
-// Lazy render other months on tab click (already handled by click listener)
-// Pre-count for nav badges
-MONTHS.forEach(m=>{
-  const vis=OBJ.filter(o=>o.months.includes(m.n)&&isCameraCompatible(o)&&getAlt(o,m.n).alt>=MIN_ALT).length;
-  const nc=document.getElementById(`nc-${m.n}`);
-  if(nc)nc.textContent=vis;
-});
-updateTotCount();
+  // Pre-count for nav badges
+  MONTHS.forEach(m=>{
+    const vis=OBJ.filter(o=>o.months.includes(m.n)&&isCameraCompatible(o)&&getAlt(o,m.n).alt>=MIN_ALT).length;
+    const nc=document.getElementById(`nc-${m.n}`);
+    if(nc)nc.textContent=vis;
+  });
+  updateTotCount();
+})(); // end bootWithData
 
 </script>
 </body>
