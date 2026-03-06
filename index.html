@@ -480,7 +480,11 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
               </div>
             </div>
           </div>
-          <button onclick="document.getElementById('adminCameraForm').style.display='block'" style="background:none;border:1px dashed var(--border);border-radius:3px;padding:7px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--ink4);cursor:pointer;width:100%;text-align:center">+ AGGIUNGI CAMERA</button>
+          <div style="display:flex;gap:6px">
+            <button onclick="document.getElementById('adminCameraForm').style.display='block'" style="flex:1;background:none;border:1px dashed var(--border);border-radius:3px;padding:7px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--ink4);cursor:pointer;text-align:center">+ AGGIUNGI CAMERA</button>
+            <button onclick="recalcAllBest()" style="flex:1;background:var(--ink);border:none;border-radius:3px;padding:7px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:#fff;cursor:pointer;text-align:center">⟳ VERIFICA VISIBILITÀ</button>
+          </div>
+          <div id="recalcLog" style="display:none;margin-top:8px;background:var(--bg2);border-radius:3px;padding:10px;font-family:'DM Mono',monospace;font-size:8px;line-height:1.8;color:var(--ink3)"></div>
         </div>
 
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
@@ -3057,34 +3061,18 @@ function renderAdminCameraList(){
   const list = document.getElementById('adminCameraList');
   if(!list) return;
   list.innerHTML = '';
-
-  // Built-in cameras
-  const builtins = [
-    {id:'sony_a6000', name:'Sony A6000', builtin:true},
-    {id:'zwo_asi224mc', name:'ZWO ASI 224 MC Color', builtin:true}
-  ];
-  const customs = loadCustomCameras();
-  const all = [...builtins, ...customs];
-
-  [...builtins, ...customs].forEach(cam => {
+  Object.values(CAMERAS).forEach(cam => {
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:3px;gap:8px';
     const nameEl = document.createElement('span');
     nameEl.style.cssText = "font-family:'Jost',sans-serif;font-size:11px;color:var(--ink)";
-    nameEl.textContent = cam.name;
+    nameEl.textContent = cam.name + (cam.w ? ' — ' + cam.w + '×' + cam.h + 'mm' : '');
     row.appendChild(nameEl);
-    if(cam.builtin){
-      const lbl = document.createElement('span');
-      lbl.style.cssText = "font-family:'DM Mono',monospace;font-size:7px;color:var(--ink4)";
-      lbl.textContent = 'BUILT-IN';
-      row.appendChild(lbl);
-    } else {
-      const btn = document.createElement('button');
-      btn.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--ink4);font-size:14px;line-height:1;padding:0 2px';
-      btn.textContent = '×';
-      btn.onclick = () => deleteCustomCamera(cam.id);
-      row.appendChild(btn);
-    }
+    const btn = document.createElement('button');
+    btn.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--ink4);font-size:16px;line-height:1;padding:0 4px;flex-shrink:0';
+    btn.textContent = '×';
+    btn.onclick = () => deleteCamera(cam.id);
+    row.appendChild(btn);
     list.appendChild(row);
   });
 }
@@ -3125,18 +3113,53 @@ window.saveNewCamera = function(){
   document.getElementById('adminCameraForm').style.display = 'none';
 };
 
-window.deleteCustomCamera = function(id){
-  const cams = loadCustomCameras().filter(c => c.id !== id);
-  saveCustomCameras(cams);
+window.deleteCamera = function(id){
   delete CAMERAS[id];
-  // If active camera was deleted, reset to sony
-  if(activeCamera.id === id){
-    activeCamera = CAMERAS.sony_a6000;
-    document.getElementById('cameraSelect').value = 'sony_a6000';
-    updateCameraInfo();
+  // Remove from custom storage too if present
+  saveCustomCameras(loadCustomCameras().filter(c => c.id !== id));
+  // If deleted camera was active, switch to first available
+  if(activeCamera && activeCamera.id === id){
+    const first = Object.values(CAMERAS)[0];
+    if(first){ activeCamera = first; updateCameraInfo(); }
   }
   rebuildCameraSelect();
   renderAdminCameraList();
+  refreshAll();
+};
+
+window.recalcAllBest = function(){
+  const log = [], errors = [];
+  let updated = 0;
+  OBJ.forEach(obj => {
+    if(obj.type === 'planet' || obj.type === 'double'){
+      log.push('⊙ ' + obj.name + ': saltato (pianeta/doppia)'); return;
+    }
+    const sizeStr = obj.size || '';
+    const m = sizeStr.match(/([\d.]+)/);
+    if(!m){ errors.push('✗ ' + obj.name + ': dimensione non leggibile'); return; }
+    let sz = parseFloat(m[1]);
+    if(sizeStr.includes('°')) sz *= 60;
+    if(!sz){ errors.push('✗ ' + obj.name + ': dimensione zero'); return; }
+    const goodFocals = new Set();
+    const camDetails = [];
+    Object.values(CAMERAS).forEach(cam => {
+      const cf = [];
+      cam.fovs.forEach(([fl,fw]) => { if(sz/fw > 0.15 && sz/fw < 0.9){ goodFocals.add(fl); cf.push(fl+'mm'); } });
+      camDetails.push(cam.name + ': ' + (cf.length ? cf.join(', ') : 'nessuna'));
+    });
+    const newBest = [...goodFocals].sort((a,b)=>a-b);
+    if(!newBest.length){ errors.push('✗ ' + obj.name + ' (dim=' + sz + ' arcmin): ' + camDetails.join(' | ')); return; }
+    const oldBest = JSON.stringify(obj.best||[]);
+    obj.best = newBest;
+    if(JSON.stringify(newBest) !== oldBest){ updated++; log.push('✓ ' + obj.name + ' → ' + camDetails.join(' | ')); }
+  });
+  const logEl = document.getElementById('recalcLog');
+  logEl.style.display = 'block';
+  const lines = ['<strong>Ricalcolo: ' + updated + ' aggiornati su ' + OBJ.length + '</strong>', '', ...errors, ...(errors.length?['']:[]), ...log];
+  logEl.innerHTML = lines.map(l =>
+    l.startsWith('✗') ? '<span style="color:#c0392b">'+l+'</span>' :
+    l.startsWith('✓') ? '<span style="color:#1a7a4a">'+l+'</span>' : l
+  ).join('<br>');
   refreshAll();
 };
 
