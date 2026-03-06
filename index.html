@@ -239,7 +239,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 #landingSearch{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Jost',sans-serif;font-size:15px;font-weight:300;padding:16px 0;caret-color:#fff}
 #landingSearch::placeholder{color:rgba(255,255,255,.2)}
 .search-hint{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:2px;padding:10px 2px}
-.search-results{display:none;background:rgba(20,16,12,.95);border:1px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 3px 3px;max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.search-results{display:none;background:rgba(20,16,12,.95);border:1px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 3px 3px;max-height:320px;overflow-y:auto}
 .search-results.show{display:block}
 .sr-item{display:flex;align-items:center;gap:14px;padding:12px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05)}
 .sr-item:last-child{border-bottom:none}
@@ -1433,9 +1433,7 @@ const OBJ=[
 {id:'ngc2683',lx:0,name:'NGC 2683',cat:'NGC 2683 · UFO Galaxy',type:'galaxy',ra:133.17,dec:33.42,months:[1,2,3,4],
  nasaQ:'NGC 2683 UFO Galaxy edge-on spiral',mag:9.7,size:"9×2.4'",diff:3,best:[750,1085],
  notes:'Edge-on quasi perfetta. La forma allungata le vale il soprannome UFO.'},
-{id:'ngc4631b',lx:0,name:'NGC 4656',cat:'NGC 4656 · Hockey Stick',type:'galaxy',ra:190.99,dec:32.17,months:[3,4,5,6],
- nasaQ:'NGC 4656 Hockey Stick Galaxy peculiar',mag:10.5,size:"14×3'",diff:3,best:[336,750],
- notes:'Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.'},
+{id:'ngc4631b',lx:0,name:'NGC 4656',cat:'NGC 4656 · Hockey Stick',type:'galaxy',ra:190.99,dec:32.169999999999995,months:[3,4,5,6],mag:10.5,size:"14×3'",diff:3,best:[336,750],notes:'Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.'},
 {id:'m87',lx:0,name:'M87',cat:'M87 · NGC 4486 · Virgo A',type:'galaxy',ra:187.71,dec:12.39,months:[3,4,5,6],
  nasaQ:'M87 Virgo A elliptical galaxy jet black hole',mag:8.6,size:"7×7'",diff:3,best:[750,1085,1625],
  notes:'Galassia ellittica con il famoso jet. Il jet è visibile a 1625mm in esposizione profonda.'},
@@ -1713,6 +1711,7 @@ const OBJ=[
 // Falls back to canvas if image not found
 // ═══════════════════════════════════════════════════════
 const LOCAL_IMGS = {
+  'ngc4631b':'img/ngc4631b.jpg',
   'ngc2362':'img/ngc2362.jpg',
   'ngc2976':'img/ngc2976.jpg','ngc3077':'img/ngc3077.jpg',
   'm42':'img/m42.jpg','ic434':'img/ic434.jpg','ngc1977':'img/ngc1977.jpg',
@@ -2275,7 +2274,7 @@ function initLanding(){
     showLanding();
     // reset search
     document.getElementById('landingSearch').value = '';
-    document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
+    document.getElementById('searchResults').classList.remove('show');
   });
 
   // Search logic
@@ -2307,8 +2306,6 @@ function initLanding(){
   function renderSearchResults(results){
     const el = document.getElementById('searchResults');
     el.classList.add('show');
-    // Prevent background scroll on mobile
-    if(window.innerWidth <= 768) document.body.style.overflow = 'hidden';
     if(!results.length){
       el.innerHTML='<div class="sr-empty">NESSUN RISULTATO</div>';
       return;
@@ -2344,14 +2341,14 @@ function initLanding(){
   inp.addEventListener('input', ()=>{
     const q = inp.value.trim();
     if(q) renderSearchResults(searchObjects(q));
-    else document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
+    else document.getElementById('searchResults').classList.remove('show');
   });
   inp.addEventListener('keydown', e=>{
     if(e.key==='Enter'){
       const results = searchObjects(inp.value.trim());
       if(results.length) openFromSearch(results[0]);
     }
-    if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
+    if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show');
   });
 }
 // ═══════════════════════════════════════════════════════
