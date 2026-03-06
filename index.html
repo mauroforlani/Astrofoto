@@ -371,6 +371,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
           <select id="filterSort">
             <option value="alt">Altitudine</option>
             <option value="mag">Magnitudine</option>
+            <option value="name">Nome</option>
           </select>
         </span>
       </div>
@@ -462,8 +463,9 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 
       <!-- Admin panel -->
       <div id="adminPanel" style="display:none">
-        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:12px">OGGETTI NEL CATALOGO — clicca per rimuovere</div>
-        <div id="adminList" style="max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:10px">OGGETTI NEL CATALOGO — clicca per rimuovere</div>
+        <input type="text" id="adminSearch" class="at-inp" placeholder="Cerca per nome o catalogo..." style="margin-bottom:10px;width:100%;box-sizing:border-box" oninput="filterAdminList(this.value)">
+        <div id="adminList" style="max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
         <div id="adminEmpty" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;padding:24px">Nessun oggetto nel catalogo</div>
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px">
           <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;line-height:1.5">I target custom vengono incorporati<br>nel file index.html per tutti i device</div>
@@ -2112,6 +2114,7 @@ function renderGrid(n){
               .map(o=>({...o,_alt:getAlt(o,n).alt}));
 
   if(srtMode==='alt') list.sort((a,b)=>b._alt-a._alt);
+  else if(srtMode==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
   else list.sort((a,b)=>a.mag-b.mag);
 
   const vis=list.filter(o=>o._alt>=MIN_ALT).length;
@@ -2898,6 +2901,18 @@ function initAdmin(){
     document.body.style.overflow = '';
   }
 
+  window.filterAdminList = function filterAdminList(query){
+    const q = query.trim().toLowerCase();
+    document.querySelectorAll('#adminList .admin-item').forEach(item=>{
+      const name = item.querySelector('.admin-item-name').textContent.toLowerCase();
+      const cat = item.querySelector('.admin-item-cat').textContent.toLowerCase();
+      item.style.display = (!q || name.includes(q) || cat.includes(q)) ? '' : 'none';
+    });
+    // Show/hide empty state
+    const visible = [...document.querySelectorAll('#adminList .admin-item')].filter(i=>i.style.display!=='none');
+    document.getElementById('adminEmpty').style.display = visible.length ? 'none' : 'block';
+  };
+
   window.renderAdminList = function renderAdminList(){
     const list = document.getElementById('adminList');
     const empty = document.getElementById('adminEmpty');
@@ -3050,6 +3065,7 @@ function initAdmin(){
     if(pwd === ADMIN_PWD){
       document.getElementById('adminAuth').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
+      document.getElementById('adminSearch').value = '';
       renderAdminList();
     } else {
       document.getElementById('adminAuthErr').style.display = 'block';
