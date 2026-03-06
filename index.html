@@ -239,7 +239,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 #landingSearch{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Jost',sans-serif;font-size:15px;font-weight:300;padding:16px 0;caret-color:#fff}
 #landingSearch::placeholder{color:rgba(255,255,255,.2)}
 .search-hint{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:2px;padding:10px 2px}
-.search-results{display:none;background:rgba(20,16,12,.95);border:1px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 3px 3px;max-height:320px;overflow-y:auto}
+.search-results{display:none;background:rgba(20,16,12,.95);border:1px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 3px 3px;max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .search-results.show{display:block}
 .sr-item{display:flex;align-items:center;gap:14px;padding:12px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05)}
 .sr-item:last-child{border-bottom:none}
@@ -2275,7 +2275,7 @@ function initLanding(){
     showLanding();
     // reset search
     document.getElementById('landingSearch').value = '';
-    document.getElementById('searchResults').classList.remove('show');
+    document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
   });
 
   // Search logic
@@ -2307,6 +2307,8 @@ function initLanding(){
   function renderSearchResults(results){
     const el = document.getElementById('searchResults');
     el.classList.add('show');
+    // Prevent background scroll on mobile
+    if(window.innerWidth <= 768) document.body.style.overflow = 'hidden';
     if(!results.length){
       el.innerHTML='<div class="sr-empty">NESSUN RISULTATO</div>';
       return;
@@ -2342,14 +2344,14 @@ function initLanding(){
   inp.addEventListener('input', ()=>{
     const q = inp.value.trim();
     if(q) renderSearchResults(searchObjects(q));
-    else document.getElementById('searchResults').classList.remove('show');
+    else document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
   });
   inp.addEventListener('keydown', e=>{
     if(e.key==='Enter'){
       const results = searchObjects(inp.value.trim());
       if(results.length) openFromSearch(results[0]);
     }
-    if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show');
+    if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
   });
 }
 // ═══════════════════════════════════════════════════════
