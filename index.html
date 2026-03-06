@@ -112,9 +112,9 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 .obj-card{position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .2s}
 .obj-card:hover{box-shadow:var(--shadow2);transform:translateY(-2px);z-index:2}
 .obj-card.hidden{display:none}
-.card-canvas-wrap{position:relative;height:175px;overflow:hidden}
+.card-canvas-wrap{position:relative;height:175px;overflow:hidden}.card-canvas-wrap::after{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(rgba(0,0,0,.35),transparent);z-index:2;pointer-events:none}
 .card-canvas-wrap canvas{width:100%;height:100%;display:block}
-.card-top{position:absolute;top:9px;left:9px;right:9px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
+.card-top{position:absolute;top:9px;left:9px;right:9px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:3}
 .type-badge{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;padding:3px 7px;background:rgba(250,249,246,.92);backdrop-filter:blur(8px);border-radius:2px;color:var(--ink2);border:1px solid rgba(26,22,18,.1)}
 .lx-tag-sm{font-family:'DM Mono',monospace;font-size:7px;padding:2px 6px;border-radius:2px;background:rgba(124,58,237,.18);border:1px solid rgba(167,139,250,.4);color:#7c3aed;backdrop-filter:blur(8px)}
 .alt-badge{font-family:'DM Mono',monospace;font-size:8px;padding:3px 7px;border-radius:2px;backdrop-filter:blur(8px);display:flex;align-items:center;gap:3px;background:rgba(250,249,246,.92);border:1px solid transparent}
