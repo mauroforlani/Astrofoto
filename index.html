@@ -2541,7 +2541,27 @@ function initAddTarget(){
 
     const id = 'custom_' + name.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'') + '_' + Date.now();
 
-    const bestFocals = selectedFocals.length > 0 ? selectedFocals : [336, 750];
+    // Auto-calculate best focals from size if user didn't pick manually
+    let bestFocals = selectedFocals;
+    if(!bestFocals.length){
+      const sizeRaw = document.getElementById('atSizeVal').value;
+      const sizeStr = sizeRaw ? sizeRaw + "'" : "5'";
+      const tempObj = {type: selectedType, size: sizeStr, best: []};
+      // Calculate for each camera and union the results
+      const allFocals = new Set();
+      for(const cam of [CAMERAS[0], CAMERAS[1]]){
+        const m = sizeStr.match(/([\d.]+)/);
+        if(m){
+          let sz = parseFloat(m[1]);
+          if(sizeStr.includes('°')) sz *= 60;
+          for(const [fl,fw,fh] of cam.fovs){
+            const ratio = sz / fw;
+            if(ratio > 0.15 && ratio < 0.9) allFocals.add(fl);
+          }
+        }
+      }
+      bestFocals = allFocals.size > 0 ? [...allFocals].sort((a,b)=>a-b) : [336, 750];
+    }
     const {ra: raVal, dec: decVal} = getRaDec();
     // Recalculate months at save time (in case location changed)
     if(raVal || decVal) selectedMonths = calcVisibleMonths(raVal, decVal);
