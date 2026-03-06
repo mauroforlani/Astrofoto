@@ -2619,6 +2619,8 @@ function openEditModal(obj){
   document.getElementById('editName').value = obj.name;
   document.getElementById('editCat').value = obj.cat||'';
   document.getElementById('editMag').value = obj.mag===99 ? '' : obj.mag;
+  // Store original size for preservation if field not meaningfully changed
+  editingObj._origSize = obj.size||'';
   const sizeNum = parseFloat((obj.size||'').replace(/[^0-9.]/g,''));
   document.getElementById('editSizeVal').value = isNaN(sizeNum) ? '' : sizeNum;
   document.getElementById('editNotes').value = obj.notes||'';
@@ -2656,6 +2658,9 @@ function openEditModal(obj){
   document.getElementById('editError').style.display='none';
   document.getElementById('editMonthsPreview').textContent='';
   editPhotoDataUrl = null;
+  // Store original RA/Dec degree values to detect if user changed them
+  editingObj._origRA = obj.ra;
+  editingObj._origDec = obj.dec;
   document.getElementById('editPhotoPreview').style.display='none';
   document.getElementById('editPhotoPlaceholder').style.display='flex';
   document.getElementById('editPhotoName').textContent = '';
@@ -2769,7 +2774,10 @@ function initEdit(){
     if(RAh!==''&&Decd!==''){
       newRA = hmsToRaDeg(document.getElementById('editRAh').value, document.getElementById('editRAm').value, document.getElementById('editRAs').value);
       newDec = dmsToDecDeg(document.getElementById('editDecd').value, document.getElementById('editDecm').value, document.getElementById('editDecs').value);
-      newMonths = calcVisibleMonths(newRA, newDec);
+      // Only recalculate months if coords actually changed from original
+      const coordsChanged = Math.abs(newRA - (editingObj._origRA||0)) > 0.01 ||
+                            Math.abs(newDec - (editingObj._origDec||0)) > 0.01;
+      if(coordsChanged) newMonths = calcVisibleMonths(newRA, newDec);
     }
 
     const selectedType = document.querySelector('#editTypeRow .at-type-btn.on')?.dataset.type || editingObj.type;
@@ -2833,7 +2841,13 @@ function initEdit(){
         editingObj.months = newMonths;
         editingObj.best = selectedFocals.length ? selectedFocals : editingObj.best;
         editingObj.mag = isNaN(magVal) ? 99 : magVal;
-        editingObj.size = isNaN(sizeVal) ? '—' : sizeVal+"'";
+        // Preserve original size string if the numeric value matches original
+        const origSizeNum = parseFloat((editingObj._origSize||'').replace(/[^0-9.]/g,''));
+        if(!isNaN(sizeVal) && Math.abs(sizeVal - origSizeNum) < 0.01 && editingObj._origSize && editingObj._origSize !== '—'){
+          editingObj.size = editingObj._origSize; // keep "13×11'" intact
+        } else {
+          editingObj.size = isNaN(sizeVal) ? '—' : sizeVal+"'";
+        }
         editingObj.notes = document.getElementById('editNotes').value.trim();
         if(editPhotoDataUrl){
           editingObj._photo = editPhotoDataUrl;
@@ -3052,13 +3066,17 @@ initSliders();
 initMonthNav();
 updateTotCount();
 injectCustomTargets();
-// Apply saved modifications to existing objects
+// Apply saved modifications to existing objects (including _photo)
 (function(){
   try {
     const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
     Object.values(mods).forEach(mod=>{
       const obj = OBJ.find(o=>o.id===mod.id);
-      if(obj) Object.assign(obj, mod);
+      if(obj){
+        Object.assign(obj, mod);
+        // Register photo in LOCAL_IMGS so buildCard/openModal can find it
+        if(mod._photo) LOCAL_IMGS[obj.id] = mod._photo;
+      }
     });
   } catch(e){}
 })();
