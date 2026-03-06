@@ -3071,7 +3071,16 @@ function renderAdminCameraList(){
     const btn = document.createElement('button');
     btn.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--ink4);font-size:16px;line-height:1;padding:0 4px;flex-shrink:0';
     btn.textContent = '×';
-    btn.onclick = () => deleteCamera(cam.id);
+    btn.onclick = () => {
+      showConfirm({
+        title: 'Elimina camera',
+        msg: 'Vuoi eliminare ' + cam.name + '?',
+        icon: '✕',
+        okLabel: 'Elimina',
+        okColor: '#c0392b',
+        onOk: () => deleteCamera(cam.id)
+      });
+    };
     row.appendChild(btn);
     list.appendChild(row);
   });
