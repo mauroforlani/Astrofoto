@@ -3161,13 +3161,15 @@ window.recalcAllBest = function(){
     const oldBest = JSON.stringify(obj.best||[]);
     obj.best = newBest;
     if(JSON.stringify(newBest) !== oldBest){ updated++; log.push('✓ ' + obj.name + ' → ' + camDetails.join(' | ')); }
+    else { log.push('· ' + obj.name + ' → ' + camDetails.join(' | ')); }
   });
   const logEl = document.getElementById('recalcLog');
   logEl.style.display = 'block';
   const lines = ['<strong>Ricalcolo: ' + updated + ' aggiornati su ' + OBJ.length + '</strong>', '', ...errors, ...(errors.length?['']:[]), ...log];
   logEl.innerHTML = lines.map(l =>
     l.startsWith('✗') ? '<span style="color:#c0392b">'+l+'</span>' :
-    l.startsWith('✓') ? '<span style="color:#1a7a4a">'+l+'</span>' : l
+    l.startsWith('✓') ? '<span style="color:#1a7a4a">'+l+'</span>' :
+    l.startsWith('·') ? '<span style="color:var(--ink4)">'+l+'</span>' : l
   ).join('<br>');
   refreshAll();
 };
