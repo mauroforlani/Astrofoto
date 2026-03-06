@@ -1,0 +1,209 @@
+{
+  "customs": [],
+  "modified": [
+    {
+      "id": "ngc4631b",
+      "lx": 0,
+      "name": "NGC 4656",
+      "cat": "NGC 4656 · Hockey Stick",
+      "type": "galaxy",
+      "ra": 190.99,
+      "dec": 32.169999999999995,
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "nasaQ": "NGC 4656 Hockey Stick Galaxy peculiar",
+      "mag": 10.5,
+      "size": "14×3'",
+      "diff": 3,
+      "best": [
+        336,
+        750
+      ],
+      "notes": "Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.",
+      "_origSize": "14×3'",
+      "_origRA": 190.99,
+      "_origDec": 32.17,
+      "_modified": true
+    },
+    {
+      "id": "ngc1502",
+      "lx": 0,
+      "name": "NGC 1502",
+      "cat": "NGC 1502 · Jolly Roger",
+      "type": "cluster",
+      "ra": 60.879999999999995,
+      "dec": 62.330000000000005,
+      "months": [
+        10,
+        11,
+        12,
+        1,
+        2
+      ],
+      "mag": 5.7,
+      "size": "8'",
+      "diff": 1,
+      "best": [
+        336,
+        750
+      ],
+      "notes": "Piccolo ma brillante in Camelopardalis. Punto finale della Cascata di Kemble (asterismo).",
+      "nasaQ": "NGC 1502 Jolly Roger cluster Camelopardalis",
+      "_origSize": "8'",
+      "_origRA": 60.879999999999995,
+      "_origDec": 62.330000000000005,
+      "_modified": true
+    },
+    {
+      "id": "ngc6633",
+      "lx": 0,
+      "name": "NGC 6633",
+      "cat": "NGC 6633 · Ophiuchus",
+      "type": "cluster",
+      "ra": 276.85,
+      "dec": 6.609999999999999,
+      "months": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "nasaQ": "NGC 6633 open cluster Ophiuchus",
+      "mag": 4.6,
+      "size": "27'",
+      "diff": 1,
+      "best": [
+        135,
+        336
+      ],
+      "notes": "Campo a 135mm con IC 4756 vicino. Stelle brillanti con molte binarie.",
+      "_origSize": "27'",
+      "_origRA": 276.85,
+      "_origDec": 6.609999999999999,
+      "_modified": true
+    },
+    {
+      "id": "venere",
+      "lx": 0,
+      "name": "Venere",
+      "cat": "Venere · Pianeta",
+      "type": "planet",
+      "fixedAlt": 18,
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        10,
+        11,
+        12
+      ],
+      "nasaQ": "Venus phases telescope crescent ultraviolet",
+      "mag": -4.5,
+      "size": "10-64\"",
+      "diff": 2,
+      "best": [
+        750,
+        1085
+      ],
+      "notes": "Le fasi in UV mostrano le nuvole di acido solforico. Visibile in ore crepuscolari.",
+      "_origSize": "10-64\"",
+      "_modified": true
+    },
+    {
+      "id": "ngc2976",
+      "lx": 0,
+      "name": "NGC 2976",
+      "cat": "NGC 2976 · M81 Group",
+      "type": "galaxy",
+      "ra": 147.57000000000002,
+      "dec": 67.9,
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "mag": 10.2,
+      "size": "6×3'",
+      "diff": 3,
+      "best": [
+        750,
+        1085
+      ],
+      "notes": "Membro del Gruppo M81. Spirale con bracci non definiti, quasi irregolare.",
+      "nasaQ": "NGC 2976 M81 Group spiral galaxy",
+      "_origSize": "6×3'",
+      "_origRA": 147.57,
+      "_origDec": 67.9,
+      "_modified": true
+    },
+    {
+      "id": "ngc3077",
+      "lx": 0,
+      "name": "NGC 3077",
+      "cat": "NGC 3077 · M81 Group",
+      "type": "galaxy",
+      "ra": 150.83,
+      "dec": 68.74,
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "mag": 9.9,
+      "size": "5×4'",
+      "diff": 3,
+      "best": [
+        750,
+        1085
+      ],
+      "notes": "Terzo membro principale del Gruppo M81. Ellittica perturbata con code di marea.",
+      "nasaQ": "NGC 3077 M81 Group elliptical interacting",
+      "_origSize": "5×4'",
+      "_origRA": 150.83,
+      "_origDec": 68.74,
+      "_modified": true
+    },
+    {
+      "id": "ngc2362",
+      "lx": 0,
+      "name": "τ Canis Majoris Cluster",
+      "cat": "NGC 2362 · Tau Canis Majoris",
+      "type": "cluster",
+      "ra": 109.66999999999999,
+      "dec": -24.95,
+      "months": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "mag": 4.1,
+      "size": "8'",
+      "diff": 1,
+      "best": [
+        336,
+        750
+      ],
+      "notes": "Compatto e molto giovane (~5 Ma). Stelle blu brillanti attorno a τ CMa. Basso dal Nord.",
+      "nasaQ": "NGC 2362 open cluster Canis Major young blue stars",
+      "_origSize": "8'",
+      "_origRA": 109.67,
+      "_origDec": -24.95,
+      "_modified": true
+    }
+  ],
+  "imgs": {
+    "ngc6633": "img/ngc6633.jpg"
+  }
+}
