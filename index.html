@@ -1748,7 +1748,7 @@ const LOCAL_IMGS = {
   'ngc6946':'img/ngc6946.jpg','ngc7331':'img/ngc7331.jpg','ic342':'img/ic342.jpg',
   'ngc2903':'img/ngc2903.jpg','ngc772':'img/ngc772.jpg','ngc4594':'img/ngc4594.jpg',
   'ngc253':'img/ngc253.jpg','ngc1316':'img/ngc1316.jpg','ngc2403':'img/ngc2403.jpg',
-  'ngc247':'img/ngc247.jpg','ngc4725':'img/ngc4725.jpg','ngc2841':'img/ngc2841.jpg',
+  'ngc247':'img/ngc247.jpg','ngc4725':'img/ngc4725.jpg','ngc2683':'img/ngc2683.jpg','ngc2841':'img/ngc2841.jpg',
   'ngc7479':'img/ngc7479.jpg','ngc7814':'img/ngc7814.jpg','ngc3521':'img/ngc3521.jpg',
   'ngc5055':'img/ngc5055.jpg','ngc4490':'img/ngc4490.jpg','ngc5139':'img/ngc5139.jpg',
   'ngc1232':'img/ngc1232.jpg','ngc300':'img/ngc300.jpg','ngc55':'img/ngc55.jpg',
@@ -2952,7 +2952,7 @@ function initAdmin(){
       .then(src=>{
         function esc(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
         function serializeEntry(o){
-          const photo = o._photo ? (",_photo:'" + o._photo + "'") : '';
+          // Never embed base64 — photo will be referenced via LOCAL_IMGS as img/{id}.jpg
           const custom = o._custom ? ',_custom:true' : '';
           return "{id:'" + esc(o.id) + "',lx:" + (o.lx||0) +
             ",name:'" + esc(o.name) + "',cat:'" + esc(o.cat||o.name) +
@@ -2960,7 +2960,7 @@ function initAdmin(){
             ",months:[" + o.months.join(',') + "]" +
             ",mag:" + (o.mag||99) + ',size:"' + (o.size||'--') + '"' +
             ",diff:" + (o.diff||1) + ",best:[" + (o.best||[336,750]).join(',') + "]" +
-            ",notes:'" + esc(o.notes||'') + "'" + custom + photo + "}";
+            ",notes:'" + esc(o.notes||'') + "'" + custom + "}";
         }
 
         // Step 1: patch modified standard objects directly in source
@@ -3004,16 +3004,18 @@ function initAdmin(){
           return;
         }
 
-        // Download jpg files for objects with new photos
-        const withPhotos = [...customs, ...modified].filter(o=>o._photo);
-        withPhotos.forEach(o=>{
-          const imgA = document.createElement('a');
-          imgA.href = o._photo;
-          imgA.download = o.id + '.jpg';
-          setTimeout(()=>imgA.click(), 300);
-        });
-
         // Download index.html
+        // Inject LOCAL_IMGS entries for objects with new photos -> img/{id}.jpg
+        const withPhotos = [...customs, ...modified].filter(o=>o._photo);
+        if(withPhotos.length){
+          const liIdx = src.indexOf('LOCAL_IMGS = {');
+          if(liIdx !== -1){
+            const insertAfter = liIdx + 'LOCAL_IMGS = {'.length;
+            const newEntries = withPhotos.map(o=>"'"+o.id+"':'img/"+o.id+".jpg'").join(',');
+            src = src.slice(0, insertAfter) + "\n  " + newEntries + ',' + src.slice(insertAfter);
+          }
+        }
+
         const blob = new Blob([src],{type:'text/html'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
