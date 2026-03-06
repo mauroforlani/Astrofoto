@@ -1338,7 +1338,9 @@ const OBJ=[
 {id:'ngc7822',lx:3,name:'NGC 7822',cat:'NGC 7822 · Ced 214',type:'nebula',ra:0.72,dec:68.17,months:[9,10,11,12],
  nasaQ:'NGC 7822 Cedric 214 Cepheus star forming',mag:7.0,size:"60'",diff:3,best:[135,336],
  notes:'Pilastri di formazione stellare in Cefeo. Alta e quasi circumpolare. In SHO molto bella.'},
-{id:'ngc2068b',lx:3,name:'Barnard\'s Loop',cat:'Barnard\'s Loop · Sh2-276',type:'nebula',ra:85,dec:-4,months:[11,12,1,2],mag:5,size:"600'",diff:5,best:[135],notes:'Arco di emissione attorno ad Orione. Richiede 135mm, cielo buio e molte ore. Sfida estrema.'},
+{id:'ngc2068b',lx:3,name:'Barnard\'s Loop',cat:'Barnard\'s Loop · Sh2-276',type:'nebula',ra:85.00,dec:-4.00,months:[11,12,1,2],
+ nasaQ:'Barnard\'s Loop Orion supernova remnant',mag:5.0,size:"600'",diff:5,best:[135],
+ notes:'Arco di emissione attorno ad Orione. Richiede 135mm, cielo buio e molte ore. Sfida estrema.'},
 {id:'ngc2023',lx:2,name:'NGC 2023',cat:'NGC 2023 · Flame Nebula',type:'nebula',ra:85.42,dec:-2.26,months:[11,12,1,2],
  nasaQ:'NGC 2023 reflection nebula Horsehead Orion',mag:10.0,size:"10'",diff:3,best:[336,750],
  notes:'Nebulosa a riflessione vicino alla Testa di Cavallo. Stessa inquadratura con un campo adatto.'},
@@ -1719,7 +1721,6 @@ const OBJ=[
 // Falls back to canvas if image not found
 // ═══════════════════════════════════════════════════════
 const LOCAL_IMGS = {
-  'ngc2068b':'img/ngc2068b.jpg',
   'ngc2362':'img/ngc2362.jpg',
   'ngc2976':'img/ngc2976.jpg','ngc3077':'img/ngc3077.jpg',
   'm42':'img/m42.jpg','ic434':'img/ic434.jpg','ngc1977':'img/ngc1977.jpg',
@@ -2807,10 +2808,6 @@ function initEdit(){
     // Apply new photo if uploaded
     if(editPhotoDataUrl){
       editingObj._photo = editPhotoDataUrl;
-      const imgA = document.createElement('a');
-      imgA.href = editPhotoDataUrl;
-      imgA.download = editingObj.id + '.jpg';
-      imgA.click();
     }
 
     // Persist to localStorage
