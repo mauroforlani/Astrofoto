@@ -1563,7 +1563,9 @@ const OBJ=[
 {id:'ngc884b',lx:0,name:'Ammasso χ Persei',cat:'NGC 884 · Chi Persei',type:'cluster',ra:35.70,dec:57.14,months:[9,10,11,12,1,2],
  nasaQ:'NGC 884 chi Persei open cluster young stars',mag:4.4,size:"30'",diff:1,best:[135,336],
  notes:'Componente orientale del Doppio Ammasso. Stelle molto giovani (~14 milioni di anni).'},
-{id:'ngc1502',lx:0,name:'NGC 1502',cat:'NGC 1502 · Jolly Roger',type:'cluster',ra:60.879999999999995,dec:62.330000000000005,months:[10,11,12,1,2],mag:5.7,size:"8'",diff:1,best:[336,750],notes:'Piccolo ma brillante in Camelopardalis. Punto finale della Cascata di Kemble (asterismo).'},
+{id:'ngc1502',lx:0,name:'NGC 1502',cat:'NGC 1502 · Jolly Roger',type:'cluster',ra:60.88,dec:62.33,months:[10,11,12,1,2],
+ nasaQ:'NGC 1502 Jolly Roger cluster Camelopardalis',mag:5.7,size:"8'",diff:1,best:[336,750],
+ notes:'Piccolo ma brillante in Camelopardalis. Punto finale della Cascata di Kemble (asterismo).'},
 {id:'m48',lx:0,name:'M48',cat:'M48 · NGC 2548',type:'cluster',ra:123.42,dec:-5.80,months:[1,2,3,4],
  nasaQ:'M48 NGC 2548 Hydra open cluster Messier',mag:5.5,size:"54'",diff:1,best:[135,336],
  notes:'Grande ammasso in Idra. Ricco di stelle binarie. Bello in campo largo.'},
@@ -1711,8 +1713,6 @@ const OBJ=[
 {id:'ngc5139',lx:0,name:'Omega Centauri',cat:'NGC 5139 · ω Centauri',type:'cluster',ra:201.70,dec:-47.48,months:[4,5,6],
  nasaQ:'Omega Centauri NGC 5139 largest globular Hubble',mag:3.9,size:"36'",diff:1,best:[135,336],
  notes:'Il più grande globulare della Via Lattea (~10 milioni di stelle). Solo da Sud Europa.'},
-,
-{id:'custom_hcg_44_1772749965793',lx:0,name:'HCG 44',cat:'Leo Quartet',type:'galaxy',ra:154.89166666666665,dec:21.698611111111113,months:[1,2,3,4,5,6,7,8,9,10,11,12],mag:11.15,size:"—",diff:1,best:[1625],notes:'Gruppo compatto di galassie',_custom:true}
 /* __OBJ_END__ */];
 
 
@@ -1721,7 +1721,6 @@ const OBJ=[
 // Falls back to canvas if image not found
 // ═══════════════════════════════════════════════════════
 const LOCAL_IMGS = {
-  'custom_hcg_44_1772749965793':'img/custom_hcg_44_1772749965793.jpg','ngc1502':'img/ngc1502.jpg',
   'm42':'img/m42.jpg','ic434':'img/ic434.jpg','ngc1977':'img/ngc1977.jpg',
   'm78':'img/m78.jpg','m1':'img/m1.jpg','ngc2174':'img/ngc2174.jpg',
   'ngc2244':'img/ngc2244.jpg','ngc1499':'img/ngc1499.jpg','ic1805':'img/ic1805.jpg',
@@ -1760,7 +1759,7 @@ const LOCAL_IMGS = {
   'ngc6397':'img/ngc6397.jpg','m56':'img/m56.jpg','m107':'img/m107.jpg',
   'm62':'img/m62.jpg','m79':'img/m79.jpg','ngc5024':'img/ngc5024.jpg',
   'ngc6752':'img/ngc6752.jpg',
-  'm45':'img/m45.jpg','ngc869':'img/ngc869.jpg','ngc884b':'img/ngc884b.jpg',
+  'm45':'img/m45.jpg','ngc1502':'img/ngc1502.jpg','ngc869':'img/ngc869.jpg','ngc884b':'img/ngc884b.jpg',
   'ngc7789':'img/ngc7789.jpg','ngc457':'img/ngc457.jpg','m35':'img/m35.jpg',
   'm36':'img/m36.jpg','m37':'img/m37.jpg','m38':'img/m38.jpg','m34':'img/m34.jpg',
   'm11':'img/m11.jpg','m41':'img/m41.jpg','m50':'img/m50.jpg','m52':'img/m52.jpg',
@@ -3013,13 +3012,18 @@ function initAdmin(){
 
         // Download index.html
         // Inject LOCAL_IMGS entries for objects with new photos -> img/{id}.jpg
-        const withPhotos = [...customs, ...modified].filter(o=>o._photo);
-        if(withPhotos.length){
+        // Include ALL objects with _photo (custom, modified, or any edited object)
+        const allWithPhotos = OBJ.filter(o=>o._photo);
+        if(allWithPhotos.length){
           const liIdx = src.indexOf('LOCAL_IMGS = {');
           if(liIdx !== -1){
             const insertAfter = liIdx + 'LOCAL_IMGS = {'.length;
-            const newEntries = withPhotos.map(o=>"'"+o.id+"':'img/"+o.id+".jpg'").join(',');
-            src = src.slice(0, insertAfter) + "\n  " + newEntries + ',' + src.slice(insertAfter);
+            // Only add entries not already present in LOCAL_IMGS
+            const newEntries = allWithPhotos
+              .filter(o=>src.indexOf("'"+o.id+"'") === -1 || src.indexOf("'"+o.id+"':'img/") === -1)
+              .map(o=>"'"+o.id+"':'img/"+o.id+".jpg'")
+              .join(',');
+            if(newEntries) src = src.slice(0, insertAfter) + "\n  " + newEntries + ',' + src.slice(insertAfter);
           }
         }
 
