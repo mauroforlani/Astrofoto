@@ -56,7 +56,7 @@
       "ra": 188.85,
       "dec": 7.551222222222222,
       "mag": 10.13,
-      "size": "7'",
+      "size": "2'",
       "diff": 1,
       "lx": 0,
       "best": [
@@ -64,7 +64,10 @@
         750
       ],
       "notes": "Galassia lenticolare nella costellazione della Vergine",
-      "_custom": true
+      "_custom": true,
+      "_origSize": "7'",
+      "_origRA": 188.85,
+      "_origDec": 7.551222222222222
     }
   ],
   "modified": [
