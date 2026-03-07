@@ -2104,31 +2104,7 @@ function buildCard(obj,month){
   }
   renderCanvas(canvas,obj,false);
 
-  // Delete button for all objects
-  {
-    const delBtn=document.createElement('button');
-    delBtn.style.cssText='position:absolute;top:9px;right:9px;z-index:10;background:rgba(192,57,43,.85);border:none;border-radius:2px;color:#fff;font-size:9px;font-family:DM Mono,monospace;padding:3px 7px;cursor:pointer;letter-spacing:1px;display:none';
-    delBtn.textContent='✕ rimuovi';
-    delBtn.addEventListener('click', e=>{
-      e.stopPropagation();
-      if(!confirm('Rimuovere "'+obj.name+'" dal catalogo?')) return;
-      if(obj._custom){
-        const targets=loadCustomTargets().filter(t=>t.id!==obj.id);
-        saveCustomTargets(targets);
-      }
-      try {
-        const deleted=JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
-        if(!deleted.includes(obj.id)) deleted.push(obj.id);
-        localStorage.setItem('astrofoto_deleted',JSON.stringify(deleted));
-      } catch(e){}
-      const i=OBJ.findIndex(o=>o.id===obj.id);
-      if(i>-1) OBJ.splice(i,1);
-      renderGrid(activeMonth);
-    });
-    d.appendChild(delBtn);
-    d.addEventListener('mouseenter',()=>delBtn.style.display='block');
-    d.addEventListener('mouseleave',()=>delBtn.style.display='none');
-  }
+
 
   // Click → modal
   d.addEventListener('click',()=>openModal(obj,month));
