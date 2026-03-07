@@ -2930,6 +2930,8 @@ function initEdit(){
     // Apply new photo if uploaded
     if(editPhotoDataUrl){
       editingObj._photo = editPhotoDataUrl;
+      // Auto-upload photo to GitHub immediately if token available
+      autoUploadPhoto(editingObj.id, editPhotoDataUrl);
     }
 
     // Persist to localStorage
@@ -2977,6 +2979,7 @@ function initEdit(){
         editingObj.notes = document.getElementById('editNotes').value.trim();
         if(editPhotoDataUrl){
           editingObj._photo = editPhotoDataUrl;
+          autoUploadPhoto(editingObj.id, editPhotoDataUrl);
         }
         if(editingObj._custom){
           const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
@@ -3001,6 +3004,33 @@ function initEdit(){
 // ═══════════════════════════════════════════════════════
 // GITHUB PUBLISH
 // ═══════════════════════════════════════════════════════
+async function autoUploadPhoto(id, dataUrl){
+  const GH_USER = 'mauroforlani';
+  const GH_REPO = 'Astrofoto';
+  const GH_TOKEN = localStorage.getItem('astrofoto_gh_token')||'';
+  if(!GH_TOKEN || !dataUrl || !dataUrl.startsWith('data:')) return;
+  const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
+  try {
+    const path = 'img/' + id + '.jpg';
+    const base64 = dataUrl.split(',')[1];
+    // Get current SHA if file exists
+    let sha;
+    try {
+      const r = await fetch(API+path, {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
+      if(r.ok){ const d=await r.json(); sha=d.sha; }
+    } catch(e){}
+    const body = {message:'Astrofoto: foto '+id, content:base64};
+    if(sha) body.sha = sha;
+    await fetch(API+path, {
+      method:'PUT',
+      headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    // Also update LOCAL_IMGS so other devices can find it via data.json on next publish
+    LOCAL_IMGS[id] = 'img/' + id + '.jpg';
+  } catch(e){ console.warn('autoUploadPhoto failed:', e); }
+}
+
 async function publishToGitHub(){
   const GH_USER = 'mauroforlani';
   const GH_REPO = 'Astrofoto';
@@ -3051,28 +3081,19 @@ async function publishToGitHub(){
       delete obj._alt;
       return obj;
     });
-    // Local imgs: all objects with photos (from OBJ and from localStorage)
+    // Local imgs added by user (not in original LOCAL_IMGS)
     const newImgs = {};
     OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
-    Object.keys(photoMap).forEach(id=>{ newImgs[id]='img/'+id+'.jpg'; });
 
     const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
 
-    // Upload photos: from OBJ in memory + from localStorage modified_objs
-    const photoMap = {};
-    // From OBJ in memory
-    OBJ.filter(o=>o._photo && o._photo.startsWith('data:')).forEach(o=>{ photoMap[o.id]=o._photo; });
-    // Also from localStorage (catches custom objects whose _photo may not be in OBJ)
-    try {
-      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
-      Object.values(mods).forEach(mod=>{ if(mod._photo && mod._photo.startsWith('data:')) photoMap[mod.id]=mod._photo; });
-    } catch(e){}
-    const photoEntries = Object.entries(photoMap);
-    for(let i=0; i<photoEntries.length; i++){
-      const [id, photo] = photoEntries[i];
-      setStatus(`⏳ Foto ${i+1}/${photoEntries.length}: ${id}.jpg`);
-      await uploadFile('img/'+id+'.jpg', photo.split(',')[1]);
+    // Upload photos first
+    const withPhotos = OBJ.filter(o=>o._photo && o._photo.startsWith('data:'));
+    for(let i=0; i<withPhotos.length; i++){
+      const o = withPhotos[i];
+      setStatus(`⏳ Foto ${i+1}/${withPhotos.length}: ${o.id}.jpg`);
+      await uploadFile('img/'+o.id+'.jpg', o._photo.split(',')[1]);
     }
 
     // Upload data.json
@@ -3489,14 +3510,7 @@ injectCustomCameras();
         data.customs.forEach(t=>{
           if(!t||!t.id||!t.name) return;
           if(deletedIds.includes(t.id)) return;
-          if(!OBJ.find(o=>o.id===t.id)){
-            OBJ.push(t);
-            // Apply any locally saved photo for this custom object
-            try {
-              const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
-              if(mods[t.id] && mods[t.id]._photo) LOCAL_IMGS[t.id] = mods[t.id]._photo;
-            } catch(e){}
-          }
+          if(!OBJ.find(o=>o.id===t.id)) OBJ.push(t);
         });
       }
       // Remove built-in objects in deleted list
@@ -3533,11 +3547,8 @@ injectCustomCameras();
       const obj = OBJ.find(o=>o.id===mod.id);
       if(obj){
         Object.assign(obj, mod);
+        // Register photo in LOCAL_IMGS so buildCard/openModal can find it
         if(mod._photo) LOCAL_IMGS[obj.id] = mod._photo;
-      } else if(mod._photo) {
-        // Object not yet in OBJ (e.g. custom loaded after this block)
-        // Register photo anyway so it shows up when object is added
-        LOCAL_IMGS[mod.id] = mod._photo;
       }
     });
   } catch(e){}
