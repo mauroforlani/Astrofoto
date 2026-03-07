@@ -63,6 +63,9 @@
       "diff": 1,
       "lx": 0,
       "best": [
+        336,
+        750,
+        1085,
         1625
       ],
       "notes": "Gruppo compatto di galassie",
@@ -70,6 +73,35 @@
     }
   ],
   "modified": [
+    {
+      "id": "ngc4649",
+      "lx": 0,
+      "name": "NGC 4649",
+      "cat": "NGC 4649 · M60",
+      "type": "galaxy",
+      "ra": 190.92,
+      "dec": 11.55,
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "nasaQ": "NGC 4649 M60 Virgo elliptical galaxy",
+      "mag": 8.8,
+      "size": "7×6'",
+      "diff": 3,
+      "best": [
+        750,
+        1085,
+        1625
+      ],
+      "notes": "Ellittica gigante in Vergine con compagna spirale NGC 4647. Coppia interessante.",
+      "_origSize": "7×6'",
+      "_origRA": 190.92,
+      "_origDec": 11.55,
+      "_modified": true
+    },
     {
       "id": "ngc4559",
       "lx": 1,
@@ -90,7 +122,9 @@
       "diff": 3,
       "best": [
         336,
-        750
+        750,
+        1085,
+        1625
       ],
       "notes": "Spirale irregular con regioni HII evidenti. In Chioma di Berenice.",
       "_origSize": "10×4.4'",
@@ -118,7 +152,9 @@
       "diff": 3,
       "best": [
         336,
-        750
+        750,
+        1085,
+        1625
       ],
       "notes": "Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.",
       "_origSize": "14×3'",
@@ -146,7 +182,9 @@
       "diff": 1,
       "best": [
         336,
-        750
+        750,
+        1085,
+        1625
       ],
       "notes": "Piccolo ma brillante in Camelopardalis. Punto finale della Cascata di Kemble (asterismo).",
       "nasaQ": "NGC 1502 Jolly Roger cluster Camelopardalis",
@@ -175,7 +213,10 @@
       "diff": 1,
       "best": [
         135,
-        336
+        336,
+        750,
+        1085,
+        1625
       ],
       "notes": "Campo a 135mm con IC 4756 vicino. Stelle brillanti con molte binarie.",
       "_origSize": "27'",
@@ -232,7 +273,8 @@
       "diff": 3,
       "best": [
         750,
-        1085
+        1085,
+        1625
       ],
       "notes": "Membro del Gruppo M81. Spirale con bracci non definiti, quasi irregolare.",
       "nasaQ": "NGC 2976 M81 Group spiral galaxy",
@@ -262,7 +304,8 @@
       "diff": 3,
       "best": [
         750,
-        1085
+        1085,
+        1625
       ],
       "notes": "Terzo membro principale del Gruppo M81. Ellittica perturbata con code di marea.",
       "nasaQ": "NGC 3077 M81 Group elliptical interacting",
@@ -290,8 +333,10 @@
       "size": "8×2'",
       "diff": 3,
       "best": [
+        336,
         750,
-        1085
+        1085,
+        1625
       ],
       "notes": "Edge-on con evidente rigonfiamento centrale. Vicina al confine Vergine/Bilancia.",
       "_origSize": "8×2'",
@@ -318,8 +363,10 @@
       "size": "8×2'",
       "diff": 3,
       "best": [
+        336,
         750,
-        1085
+        1085,
+        1625
       ],
       "notes": "Edge-on nel cuore del Virgo Cluster. NGC 4206 e NGC 4222 nelle immediate vicinanze.",
       "_origSize": "8×2'",
@@ -373,7 +420,9 @@
       "diff": 1,
       "best": [
         336,
-        750
+        750,
+        1085,
+        1625
       ],
       "notes": "Compatto e molto giovane (~5 Ma). Stelle blu brillanti attorno a τ CMa. Basso dal Nord.",
       "nasaQ": "NGC 2362 open cluster Canis Major young blue stars",
@@ -384,6 +433,7 @@
     }
   ],
   "imgs": {
+    "ngc4649": "img/ngc4649.jpg",
     "ngc4559": "img/ngc4559.jpg",
     "ngc4631b": "img/ngc4631b.jpg",
     "ngc6633": "img/ngc6633.jpg",
