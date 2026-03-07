@@ -3639,6 +3639,11 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js').catch(()=>{});
   });
 }
+// Show exit button only in PWA standalone mode
+if(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone){
+  const btn = document.getElementById('btnExit');
+  if(btn) btn.style.display = 'inline-block';
+}
 </script>
 </body>
 </html>
