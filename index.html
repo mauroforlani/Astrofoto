@@ -3587,10 +3587,11 @@ initEdit();
     const precip = h.precipitation || [];
 
     // Group by day, show only night hours (20:00–06:00)
+    // Open-Meteo format: "2024-03-07T20:00"
     const days = {};
     times.forEach((t, i) => {
-      const [date, time] = t.split(' ');
-      const hour = parseInt(time.split(':')[0]);
+      const [date, timePart] = t.includes('T') ? t.split('T') : t.split(' ');
+      const hour = parseInt((timePart||'0').split(':')[0]);
       const isNight = hour >= 20 || hour <= 6;
       if(!isNight) return;
       const key = hour >= 20 ? date : new Date(new Date(date).getTime() - 86400000).toISOString().slice(0,10);
