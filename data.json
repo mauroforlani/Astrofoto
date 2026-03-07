@@ -299,10 +299,6 @@
   ],
   "imgs": {
     "ngc6633": "img/ngc6633.jpg",
-    "ngc5746": "img/ngc5746.jpg",
-    "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg"
-  },
-  "deleted": [
-    "ngc5194b"
-  ]
+    "ngc5746": "img/ngc5746.jpg"
+  }
 }
