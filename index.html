@@ -402,6 +402,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
         <div id="locationLabel" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-top:4px;letter-spacing:1px">📍 Milano, IT</div>
         <div id="locationResults" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:var(--bg);border:1px solid var(--border);border-radius:3px;margin-top:2px;max-height:200px;overflow-y:auto"></div>
       </div>
+      <div id="southernHemisphereWarning" style="display:none;margin-top:8px;padding:8px 10px;background:rgba(200,120,30,0.15);border:1px solid rgba(200,120,30,0.4);border-radius:3px;font-family:'DM Mono',monospace;font-size:8px;color:#c8781e;letter-spacing:0.5px;line-height:1.6">⚠ Posizione nell'emisfero australe — il catalogo è ottimizzato per l'emisfero nord. I dati di visibilità potrebbero non essere accurati.</div>
     </div>
     <div class="ctrl-block time-block">
       <div class="ctrl-lbl">Finestra Osservativa</div>
@@ -1911,6 +1912,7 @@ function initLocationSearch(){
           document.getElementById('locationSearch').value = '';
           document.getElementById('locationSearch').placeholder = shortName;
           res.style.display = 'none';
+          checkHemisphere();
           refreshAll();
         };
         res.appendChild(row);
@@ -1926,6 +1928,13 @@ function initLocationSearch(){
       document.getElementById('locationResults').style.display = 'none';
     }
   });
+
+  checkHemisphere();
+}
+
+function checkHemisphere(){
+  const w = document.getElementById('southernHemisphereWarning');
+  if(w) w.style.display = activeLat < 0 ? 'block' : 'none';
 }
 
 
