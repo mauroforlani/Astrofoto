@@ -257,7 +257,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 
 </style>
 </head>
-<body><button id="btnMeteo" style="display:none"></button>
+<body>
 
 <!-- ══ LANDING PAGE ════════════════════════════════════════════════ -->
 <div id="landing">
@@ -373,10 +373,6 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
           </select>
         </span>
       </div>
-      <div class="chip interactive" onclick="document.getElementById('btnMeteo').click()" style="cursor:pointer">
-        <span class="chip-lbl">☁</span>
-        <span class="chip-val">Meteo</span>
-      </div>
       <div class="chip">
         <span class="chip-lbl">Visibili</span>
         <span class="chip-val" id="totCount">…</span>
@@ -419,6 +415,31 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 
 <!-- ══ MONTH NAV ═══════════════════════════════════════════════════ -->
 <nav class="mnav"><div class="mnav-track" id="mnav"></div></nav>
+
+<!-- ══ METEO STRIP ══════════════════════════════════════════════════ -->
+<div id="meteoStrip" style="background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px">
+  <!-- Location bar -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0 8px;gap:12px">
+    <div style="display:flex;align-items:center;gap:8px;min-width:0">
+      <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);letter-spacing:1px;flex-shrink:0">☁</span>
+      <span id="meteoStripLocation" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer" onclick="toggleMeteoSearch()">Colma di Sormano, CO</span>
+    </div>
+    <button onclick="toggleMeteoSearch()" style="background:none;border:none;font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);cursor:pointer;letter-spacing:1px;padding:0;flex-shrink:0">✎ cambia</button>
+  </div>
+  <!-- Search box (hidden by default) -->
+  <div id="meteoSearchBox" style="display:none;padding-bottom:10px">
+    <div style="display:flex;gap:6px">
+      <input type="text" id="meteoStripCity" class="at-inp" placeholder="Cerca città..." style="flex:1;font-size:11px" onkeydown="if(event.key==='Enter')searchMeteoStrip()">
+      <button onclick="searchMeteoStrip()" style="background:var(--ink);border:none;border-radius:3px;padding:7px 12px;font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;color:#fff">Cerca</button>
+    </div>
+    <div id="meteoStripResults" style="margin-top:4px"></div>
+  </div>
+  <!-- Forecast cards row -->
+  <div id="meteoStripCards" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;scrollbar-width:thin;-webkit-overflow-scrolling:touch"></div>
+  <div id="meteoStripLoading" style="padding:12px 0;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);text-align:center">Caricamento previsioni...</div>
+  <div id="meteoStripError" style="display:none;padding:10px 0;font-family:'DM Mono',monospace;font-size:9px;color:#c0392b"></div>
+</div>
+
 <main id="main"></main>
 
 <!-- ══ MODAL ═══════════════════════════════════════════════════════ -->
@@ -530,30 +551,6 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
       <button id="confirmCancel" style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:9px 20px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:var(--ink3)">Annulla</button>
       <button id="confirmOk" style="border:none;border-radius:3px;padding:9px 22px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;font-weight:500">Conferma</button>
     </div>
-  </div>
-</div>
-
-<!-- ══ METEO OVERLAY ══════════════════════════════════════════ -->
-<div class="modal-overlay" id="meteoOverlay" style="align-items:flex-start;overflow-y:auto;padding:0">
-  <div id="meteoModal" style="background:var(--bg);width:100%;min-height:100vh;max-width:640px;margin:0 auto;padding:40px 32px 60px;box-sizing:border-box">
-    <button class="modal-close" id="meteoClose" style="position:fixed;top:16px;right:16px;z-index:10">✕</button>
-    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:6px">Previsioni notturne</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;letter-spacing:-1px;margin-bottom:8px">Meteo</div>
-
-    <!-- Location selector -->
-    <div style="display:flex;gap:8px;margin-bottom:24px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="meteoCity" class="at-inp" placeholder="Città (es. Colma di Sormano)" style="flex:1;min-width:160px">
-      <button onclick="searchMeteoCity()" style="background:var(--ink);border:none;border-radius:3px;padding:9px 16px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;white-space:nowrap">Cerca</button>
-    </div>
-    <div id="meteoCityResults" style="display:none;background:var(--bg2);border-radius:4px;margin-bottom:16px;overflow:hidden"></div>
-    <div id="meteoLocationLabel" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);letter-spacing:1px;margin-bottom:16px"></div>
-
-    <!-- Forecast -->
-    <div id="meteoContent" style="display:none">
-      <div id="meteoCards" style="display:flex;flex-direction:column;gap:12px"></div>
-    </div>
-    <div id="meteoLoading" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;padding:32px">Caricamento previsioni...</div>
-    <div id="meteoError" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:#c0392b;padding:16px"></div>
   </div>
 </div>
 
@@ -3480,185 +3477,149 @@ initEdit();
   updateTotCount();
 })(); // end bootWithData
 // ═══════════════════════════════════════════════════════
-// METEO
+// METEO STRIP
 // ═══════════════════════════════════════════════════════
-(function initMeteo(){
-  let meteoLat = null, meteoLon = null, meteoName = '';
+(function initMeteoStrip(){
+  let meteoLat = 45.9197, meteoLon = 9.2775, meteoName = 'Colma di Sormano, CO';
 
-  // Restore saved location or use default (Colma di Sormano)
   try {
     const saved = JSON.parse(localStorage.getItem('astrofoto_meteo_loc')||'null');
     if(saved){ meteoLat=saved.lat; meteoLon=saved.lon; meteoName=saved.name; }
-    else { meteoLat=45.9197; meteoLon=9.2775; meteoName='Colma di Sormano, CO'; }
-  } catch(e){ meteoLat=45.9197; meteoLon=9.2775; meteoName='Colma di Sormano, CO'; }
+  } catch(e){}
 
-  function openMeteo(){
-    const overlay = document.getElementById('meteoOverlay');
-    overlay.classList.add('open');
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    if(meteoLat !== null){
-      document.getElementById('meteoLocationLabel').textContent = '📍 ' + meteoName;
-      loadMeteo();
-    }
+  function updateLocationLabel(){
+    const el = document.getElementById('meteoStripLocation');
+    if(el) el.textContent = meteoName;
   }
 
-  function closeMeteo(){
-    const overlay = document.getElementById('meteoOverlay');
-    overlay.classList.remove('open');
-    overlay.style.display = 'none';
-    document.body.style.overflow = '';
-  }
+  window.toggleMeteoSearch = function(){
+    const box = document.getElementById('meteoSearchBox');
+    const open = box.style.display === 'none';
+    box.style.display = open ? 'block' : 'none';
+    if(open) document.getElementById('meteoStripCity').focus();
+  };
 
-  document.getElementById('btnMeteo').addEventListener('click', openMeteo);
-  document.getElementById('meteoClose').addEventListener('click', closeMeteo);
-  document.getElementById('meteoOverlay').addEventListener('click', e => { if(e.target.id==='meteoOverlay') closeMeteo(); });
-
-  window.searchMeteoCity = async function(){
-    const q = document.getElementById('meteoCity').value.trim();
+  window.searchMeteoStrip = async function(){
+    const q = document.getElementById('meteoStripCity').value.trim();
     if(!q) return;
-    const res = document.getElementById('meteoCityResults');
-    res.innerHTML = '<div style="padding:10px;font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">Ricerca in corso...</div>';
-    res.style.display = 'block';
+    const res = document.getElementById('meteoStripResults');
+    res.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4);padding:6px 0">Ricerca...</div>';
     try {
       const r = await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&limit=5&accept-language=it');
       const data = await r.json();
-      if(!data.length){ res.innerHTML = '<div style="padding:10px;font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">Nessun risultato</div>'; return; }
+      if(!data.length){ res.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4);padding:6px 0">Nessun risultato</div>'; return; }
       res.innerHTML = '';
       data.forEach(place => {
         const row = document.createElement('div');
-        row.style.cssText = 'padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border);font-family:Jost,sans-serif;font-size:12px;color:var(--ink)';
-        row.textContent = place.display_name;
-        row.onmouseover = () => row.style.background = 'var(--bg)';
-        row.onmouseout = () => row.style.background = '';
+        row.style.cssText = 'padding:7px 8px;cursor:pointer;border-radius:3px;font-family:Jost,sans-serif;font-size:11px;color:var(--ink);margin-bottom:2px;background:var(--bg)';
+        row.textContent = place.display_name.split(',').slice(0,3).join(', ');
+        row.onmouseover = () => row.style.background = 'var(--bg2)';
+        row.onmouseout  = () => row.style.background = 'var(--bg)';
         row.onclick = () => {
           meteoLat = parseFloat(place.lat);
           meteoLon = parseFloat(place.lon);
-          meteoName = place.display_name.split(',').slice(0,2).join(',');
+          meteoName = place.display_name.split(',').slice(0,2).join(', ');
           localStorage.setItem('astrofoto_meteo_loc', JSON.stringify({lat:meteoLat,lon:meteoLon,name:meteoName}));
-          document.getElementById('meteoLocationLabel').textContent = '📍 ' + meteoName;
-          document.getElementById('meteoCity').value = '';
-          res.style.display = 'none';
-          loadMeteo();
+          updateLocationLabel();
+          document.getElementById('meteoStripCity').value = '';
+          document.getElementById('meteoStripResults').innerHTML = '';
+          document.getElementById('meteoSearchBox').style.display = 'none';
+          loadMeteoStrip();
         };
         res.appendChild(row);
       });
-    } catch(e) {
-      res.innerHTML = '<div style="padding:10px;font-family:DM Mono,monospace;font-size:9px;color:#c0392b">Errore nella ricerca</div>';
-    }
+    } catch(e){ res.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;color:#c0392b">Errore nella ricerca</div>'; }
   };
 
-  document.getElementById('meteoCity').addEventListener('keydown', e => { if(e.key==='Enter') searchMeteoCity(); });
-
-  async function loadMeteo(){
-    if(meteoLat === null) return;
-    const loading = document.getElementById('meteoLoading');
-    const content = document.getElementById('meteoContent');
-    const errEl = document.getElementById('meteoError');
+  async function loadMeteoStrip(){
+    const loading = document.getElementById('meteoStripLoading');
+    const errEl   = document.getElementById('meteoStripError');
+    const cards   = document.getElementById('meteoStripCards');
     loading.style.display = 'block';
-    content.style.display = 'none';
-    errEl.style.display = 'none';
-
+    cards.style.display   = 'none';
+    errEl.style.display   = 'none';
     try {
-      // Open-Meteo: free, no key, CORS-friendly
       const url = 'https://api.open-meteo.com/v1/forecast?latitude='+meteoLat+'&longitude='+meteoLon
         +'&hourly=temperature_2m,relativehumidity_2m,precipitation,cloudcover,windspeed_10m'
         +'&timezone=Europe%2FRome&forecast_days=5';
       const r = await fetch(url);
-      if(!r.ok) throw new Error('API error ' + r.status);
+      if(!r.ok) throw new Error('HTTP ' + r.status);
       const data = await r.json();
-      renderMeteo(data);
+      renderMeteoStrip(data);
       loading.style.display = 'none';
-      content.style.display = 'block';
-    } catch(e) {
+      cards.style.display   = 'flex';
+    } catch(e){
       loading.style.display = 'none';
-      errEl.style.display = 'block';
-      errEl.textContent = 'Errore: ' + e.message;
+      errEl.style.display   = 'block';
+      errEl.textContent     = 'Errore: ' + e.message;
     }
   }
 
-  function renderMeteo(data){
+  function renderMeteoStrip(data){
     const h = data.hourly;
-    const times = h.time;
-    const clouds = h.cloudcover || [];
-    const temp = h.temperature_2m || [];
-    const humidity = h.relativehumidity_2m || [];
-    const wind = h.windspeed_10m || [];
-    const precip = h.precipitation || [];
-
-    // Group by day, show only night hours (20:00–06:00)
-    // Open-Meteo format: "2024-03-07T20:00"
-    const days = {};
-    // Today's date to filter out past nights
+    const times = h.time, clouds = h.cloudcover||[], temp = h.temperature_2m||[], humidity = h.relativehumidity_2m||[], wind = h.windspeed_10m||[], precip = h.precipitation||[];
     const todayStr = new Date().toISOString().slice(0,10);
-
-    times.forEach((t, i) => {
+    const days = {};
+    times.forEach((t,i)=>{
       const [date, timePart] = t.includes('T') ? t.split('T') : t.split(' ');
       const hour = parseInt((timePart||'0').split(':')[0]);
       const isNight = hour >= 17 || hour <= 6;
       if(!isNight) return;
-      // Hours 00-06 belong to the same night as the previous evening (17-23)
-      // Group key = the evening date (hour>=17 → that date, hour<=6 → previous date)
-      const key = hour >= 17 ? date : new Date(new Date(date).getTime() - 86400000).toISOString().slice(0,10);
-      // Skip nights that started before today
+      const key = hour >= 17 ? date : new Date(new Date(date).getTime()-86400000).toISOString().slice(0,10);
       if(key < todayStr) return;
-      if(!days[key]) days[key] = [];
-      days[key].push({ hour, cloud: clouds[i]||0, temp: temp[i]||0, hum: humidity[i]||0, wind: wind[i]||0, precip: precip[i]||0 });
+      if(!days[key]) days[key]=[];
+      days[key].push({hour, cloud:clouds[i]||0, temp:temp[i]||0, hum:humidity[i]||0, wind:wind[i]||0, precip:precip[i]||0});
     });
 
-    const cards = document.getElementById('meteoCards');
+    const cards = document.getElementById('meteoStripCards');
     cards.innerHTML = '';
-    const dayKeys = Object.keys(days).sort().slice(0, 4);
-
+    const dayKeys = Object.keys(days).sort().slice(0,5);
     dayKeys.forEach(dateKey => {
       const entries = days[dateKey];
       if(!entries.length) return;
       const avgCloud = Math.round(entries.reduce((s,e)=>s+e.cloud,0)/entries.length);
-      const minTemp = Math.min(...entries.map(e=>e.temp)).toFixed(1);
-      const avgHum = Math.round(entries.reduce((s,e)=>s+e.hum,0)/entries.length);
-      const avgWind = (entries.reduce((s,e)=>s+e.wind,0)/entries.length).toFixed(1);
+      const minTemp  = Math.min(...entries.map(e=>e.temp)).toFixed(1);
+      const avgHum   = Math.round(entries.reduce((s,e)=>s+e.hum,0)/entries.length);
+      const avgWind  = (entries.reduce((s,e)=>s+e.wind,0)/entries.length).toFixed(1);
       const hasPrecip = entries.some(e=>e.precip>0.1);
-
-      // Sky quality color
       const skyColor = avgCloud < 20 ? '#1a7a4a' : avgCloud < 50 ? '#e67e22' : '#c0392b';
-      const skyLabel = avgCloud < 20 ? '✦ Cielo sereno' : avgCloud < 50 ? '◑ Parzialmente nuvoloso' : '● Nuvoloso';
+      const skyIcon  = avgCloud < 20 ? '✦' : avgCloud < 50 ? '◑' : '●';
+      const dateObj  = new Date(dateKey + 'T12:00:00');
+      const dayLabel = dateObj.toLocaleDateString('it-IT',{weekday:'short',day:'numeric',month:'short'});
 
-      const dateObj = new Date(dateKey + 'T12:00:00');
-      const dayLabel = dateObj.toLocaleDateString('it-IT', {weekday:'long', day:'numeric', month:'long'});
-
-      // Hourly cloud bar
-      const barHtml = entries.map(e => {
-        const col = e.cloud < 20 ? '#1a7a4a' : e.cloud < 50 ? '#e67e22' : '#c0392b';
-        return '<div title="'+e.hour+':00 — '+e.cloud+'%" style="flex:1;height:100%;background:'+col+';opacity:'+(0.4+e.cloud/100*0.6).toFixed(2)+'"></div>';
+      // Hourly bar
+      const barSegs = entries.map(e=>{
+        const c = e.cloud < 20 ? '#1a7a4a' : e.cloud < 50 ? '#e67e22' : '#c0392b';
+        const op = (0.35 + e.cloud/100*0.65).toFixed(2);
+        return '<div title="'+e.hour+':00 '+e.cloud+'%" style="flex:1;height:6px;background:'+c+';opacity:'+op+'"></div>';
       }).join('');
-      const labelsHtml = entries.map(e => {
-        return '<div style="flex:1;text-align:center;font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);line-height:1">'+e.hour+'</div>';
-      }).join('');
+      const barLabels = entries.filter((_,i)=>i%2===0).map(e=>
+        '<div style="flex:1;text-align:center;font-size:6px;color:var(--ink4);font-family:DM Mono,monospace;line-height:1">'+e.hour+'</div>'
+      ).join('');
 
       const card = document.createElement('div');
-      card.style.cssText = 'background:var(--bg2);border-radius:6px;padding:16px;border-left:3px solid '+skyColor;
-      card.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">' +
-        '<div>' +
-          '<div style="font-family:Jost,sans-serif;font-size:14px;font-weight:600;color:var(--ink);text-transform:capitalize">'+dayLabel+'</div>' +
-          '<div style="font-family:DM Mono,monospace;font-size:9px;color:'+skyColor+';letter-spacing:1px;margin-top:3px">'+skyLabel+'</div>' +
+      card.style.cssText = 'flex:0 0 auto;width:160px;background:var(--bg);border-radius:6px;padding:10px 10px 8px;border-top:2px solid '+skyColor+';box-sizing:border-box';
+      card.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">' +
+          '<div style="font-family:Jost,sans-serif;font-size:11px;font-weight:600;color:var(--ink);text-transform:capitalize">'+dayLabel+'</div>' +
+          '<div style="font-family:DM Mono,monospace;font-size:13px;font-weight:700;color:'+skyColor+'">'+avgCloud+'%</div>' +
         '</div>' +
-        '<div style="font-family:DM Mono,monospace;font-size:22px;font-weight:700;color:'+skyColor+'">'+avgCloud+'%</div>' +
+        '<div style="display:flex;align-items:center;gap:4px;margin-bottom:6px">' +
+          '<span style="font-size:8px;color:'+skyColor+'">'+skyIcon+'</span>' +
+          (hasPrecip ? '<span style="font-family:DM Mono,monospace;font-size:7px;color:#3498db">pioggia</span>' : '') +
         '</div>' +
-        '<div style="display:flex;height:8px;border-radius:3px;overflow:hidden;margin-bottom:4px;gap:1px">'+barHtml+'</div>' +
-        '<div style="display:flex;margin-bottom:10px">'+labelsHtml+'</div>' +
-        '<div style="display:flex;gap:16px;flex-wrap:wrap">' +
-          '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">🌡 min '+minTemp+'°C</div>' +
-          '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">💧 '+avgHum+'%</div>' +
-          '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">💨 '+avgWind+' m/s</div>' +
-          (hasPrecip ? '<div style="font-family:DM Mono,monospace;font-size:9px;color:#3498db">🌧 precipitazioni</div>' : '') +
+        '<div style="display:flex;border-radius:2px;overflow:hidden;margin-bottom:2px;gap:1px;height:6px">'+barSegs+'</div>' +
+        '<div style="display:flex;margin-bottom:7px">'+barLabels+'</div>' +
+        '<div style="display:flex;flex-direction:column;gap:2px">' +
+          '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4)">🌡 '+minTemp+'°  💧 '+avgHum+'%  💨 '+avgWind+'m/s</div>' +
         '</div>';
       cards.appendChild(card);
     });
-
-    if(!dayKeys.length) {
-      cards.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:10px;color:var(--ink4);padding:16px">Nessun dato notturno disponibile</div>';
-    }
+    if(!dayKeys.length) cards.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4);padding:8px 0">Nessun dato disponibile</div>';
   }
+
+  updateLocationLabel();
+  loadMeteoStrip();
 })();
 
 
