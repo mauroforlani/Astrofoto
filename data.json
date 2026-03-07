@@ -269,6 +269,33 @@
       "_modified": true
     },
     {
+      "id": "ngc4038b",
+      "lx": 0,
+      "name": "Copernicus Cluster",
+      "cat": "Mel 111 · Coma Berenices",
+      "type": "cluster",
+      "ra": 186.07999999999998,
+      "dec": 26,
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "nasaQ": "Melotte 111 Coma Star Cluster wide field",
+      "mag": 1.8,
+      "size": "275'",
+      "diff": 1,
+      "best": [
+        135
+      ],
+      "notes": "Ammasso aperto sparso in Chioma di Berenice. Solo a 135mm o meno si vede il campo completo.",
+      "_origSize": "275'",
+      "_origRA": 186.08,
+      "_origDec": 26,
+      "_modified": true
+    },
+    {
       "id": "ngc2362",
       "lx": 0,
       "name": "τ Canis Majoris Cluster",
@@ -302,6 +329,7 @@
     "ngc4631b": "img/ngc4631b.jpg",
     "ngc6633": "img/ngc6633.jpg",
     "ngc5746": "img/ngc5746.jpg",
+    "ngc4038b": "img/ngc4038b.jpg",
     "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg"
   },
   "deleted": [
