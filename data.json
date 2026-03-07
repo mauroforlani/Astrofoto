@@ -45,7 +45,7 @@
       "name": "NGC 4559",
       "cat": "NGC 4559",
       "type": "galaxy",
-      "ra": 188.00000000000003,
+      "ra": 188,
       "dec": 27.96,
       "months": [
         3,
@@ -63,7 +63,7 @@
       ],
       "notes": "Spirale irregular con regioni HII evidenti. In Chioma di Berenice.",
       "_origSize": "10×4.4'",
-      "_origRA": 188,
+      "_origRA": 188.00000000000003,
       "_origDec": 27.96,
       "_modified": true
     },
@@ -298,6 +298,7 @@
     }
   ],
   "imgs": {
+    "ngc4559": "img/ngc4559.jpg",
     "ngc4631b": "img/ngc4631b.jpg",
     "ngc6633": "img/ngc6633.jpg",
     "ngc5746": "img/ngc5746.jpg",
