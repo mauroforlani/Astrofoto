@@ -2114,6 +2114,12 @@ function buildCard(obj,month){
       if(!confirm('Rimuovere "'+obj.name+'" dal catalogo?')) return;
       const targets=loadCustomTargets().filter(t=>t.id!==obj.id);
       saveCustomTargets(targets);
+      // Track deleted IDs so publish can include them
+      try {
+        const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
+        if(!deleted.includes(obj.id)) deleted.push(obj.id);
+        localStorage.setItem('astrofoto_deleted', JSON.stringify(deleted));
+      } catch(e){}
       const i=OBJ.findIndex(o=>o.id===obj.id);
       if(i>-1) OBJ.splice(i,1);
       renderGrid(activeMonth);
@@ -3072,7 +3078,8 @@ async function publishToGitHub(){
     const newImgs = {};
     OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
 
-    const dataJson = JSON.stringify({customs, modified, imgs:newImgs}, null, 2);
+    const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
+    const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
 
     // Upload photos first
     const withPhotos = OBJ.filter(o=>o._photo && o._photo.startsWith('data:'));
@@ -3482,10 +3489,12 @@ injectCustomCameras();
     const r = await fetch('data.json?v=' + Date.now());
     if(r.ok){
       const data = await r.json();
-      // Apply remote custom targets
+      // Apply remote custom targets (skip deleted ones)
+      const deletedIds = Array.isArray(data.deleted) ? data.deleted : [];
       if(Array.isArray(data.customs)){
         data.customs.forEach(t=>{
           if(!t||!t.id||!t.name) return;
+          if(deletedIds.includes(t.id)) return;
           if(!OBJ.find(o=>o.id===t.id)) OBJ.push(t);
         });
       }
