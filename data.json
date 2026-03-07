@@ -269,6 +269,34 @@
       "_modified": true
     },
     {
+      "id": "ngc4216",
+      "lx": 0,
+      "name": "NGC 4216",
+      "cat": "NGC 4216 · Virgo Cluster",
+      "type": "galaxy",
+      "ra": 183.98,
+      "dec": 13.15,
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "nasaQ": "NGC 4216 edge-on spiral Virgo cluster",
+      "mag": 9.9,
+      "size": "8×2'",
+      "diff": 3,
+      "best": [
+        750,
+        1085
+      ],
+      "notes": "Edge-on nel cuore del Virgo Cluster. NGC 4206 e NGC 4222 nelle immediate vicinanze.",
+      "_origSize": "8×2'",
+      "_origRA": 183.98,
+      "_origDec": 13.15,
+      "_modified": true
+    },
+    {
       "id": "ngc4038b",
       "lx": 0,
       "name": "Copernicus Cluster",
@@ -329,6 +357,7 @@
     "ngc4631b": "img/ngc4631b.jpg",
     "ngc6633": "img/ngc6633.jpg",
     "ngc5746": "img/ngc5746.jpg",
+    "ngc4216": "img/ngc4216.jpg",
     "ngc4038b": "img/ngc4038b.jpg",
     "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg"
   },
