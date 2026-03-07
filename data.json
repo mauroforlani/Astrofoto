@@ -69,7 +69,10 @@
         1625
       ],
       "notes": "Gruppo compatto di galassie",
-      "_custom": true
+      "_custom": true,
+      "_origSize": "16'",
+      "_origRA": 154.86666666666665,
+      "_origDec": 21.678611111111113
     }
   ],
   "modified": [
@@ -100,6 +103,36 @@
       "_origSize": "7×6'",
       "_origRA": 190.92,
       "_origDec": 11.55,
+      "_modified": true
+    },
+    {
+      "id": "ngc4517",
+      "lx": 0,
+      "name": "NGC 4517",
+      "cat": "NGC 4517",
+      "type": "galaxy",
+      "ra": 188.06,
+      "dec": 0.11,
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "nasaQ": "NGC 4517 edge-on spiral Virgo",
+      "mag": 10.4,
+      "size": "10×2'",
+      "diff": 3,
+      "best": [
+        336,
+        750,
+        1085,
+        1625
+      ],
+      "notes": "Edge-on sottile in Vergine. Banda di polvere molto marcata.",
+      "_origSize": "10×2'",
+      "_origRA": 188.06,
+      "_origDec": 0.11,
       "_modified": true
     },
     {
@@ -464,6 +497,7 @@
   ],
   "imgs": {
     "ngc4649": "img/ngc4649.jpg",
+    "ngc4517": "img/ngc4517.jpg",
     "ngc4559": "img/ngc4559.jpg",
     "ngc4631b": "img/ngc4631b.jpg",
     "ngc6633": "img/ngc6633.jpg",
