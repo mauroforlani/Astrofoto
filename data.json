@@ -92,7 +92,7 @@
       "notes": "Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.",
       "_origSize": "14×3'",
       "_origRA": 190.99,
-      "_origDec": 32.17,
+      "_origDec": 32.169999999999995,
       "_modified": true
     },
     {
@@ -298,6 +298,7 @@
     }
   ],
   "imgs": {
+    "ngc4631b": "img/ngc4631b.jpg",
     "ngc6633": "img/ngc6633.jpg",
     "ngc5746": "img/ngc5746.jpg",
     "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg"
