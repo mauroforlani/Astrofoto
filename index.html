@@ -3589,12 +3589,19 @@ initEdit();
     // Group by day, show only night hours (20:00–06:00)
     // Open-Meteo format: "2024-03-07T20:00"
     const days = {};
+    // Today's date to filter out past nights
+    const todayStr = new Date().toISOString().slice(0,10);
+
     times.forEach((t, i) => {
       const [date, timePart] = t.includes('T') ? t.split('T') : t.split(' ');
       const hour = parseInt((timePart||'0').split(':')[0]);
       const isNight = hour >= 17 || hour <= 6;
       if(!isNight) return;
-      const key = hour >= 20 ? date : new Date(new Date(date).getTime() - 86400000).toISOString().slice(0,10);
+      // Hours 00-06 belong to the same night as the previous evening (17-23)
+      // Group key = the evening date (hour>=17 → that date, hour<=6 → previous date)
+      const key = hour >= 17 ? date : new Date(new Date(date).getTime() - 86400000).toISOString().slice(0,10);
+      // Skip nights that started before today
+      if(key < todayStr) return;
       if(!days[key]) days[key] = [];
       days[key].push({ hour, cloud: clouds[i]||0, temp: temp[i]||0, hum: humidity[i]||0, wind: wind[i]||0, precip: precip[i]||0 });
     });
