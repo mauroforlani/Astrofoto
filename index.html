@@ -294,8 +294,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
           <span class="land-btn-val">+ Aggiungi target</span>
         </button>
       </div>
-      <div style="margin-top:8px;display:flex;align-items:center;gap:16px">
-        <button id="btnExit" onclick="window.close()" style="display:none;background:none;border:none;color:rgba(255,255,255,.15);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;cursor:pointer;padding:4px 0;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.35)'" onmouseout="this.style.color='rgba(255,255,255,.15)'">✕ esci</button>
+      <div style="margin-top:8px">
         <button id="btnAdmin" style="background:none;border:none;color:rgba(255,255,255,.15);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;cursor:pointer;padding:4px 0;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.35)'" onmouseout="this.style.color='rgba(255,255,255,.15)'">⚙ gestione catalogo</button>
       </div>
 
@@ -3639,11 +3638,6 @@ if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(()=>{});
   });
-}
-// Show exit button only in PWA standalone mode
-if(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone){
-  const btn = document.getElementById('btnExit');
-  if(btn) btn.style.display = 'inline-block';
 }
 </script>
 </body>
