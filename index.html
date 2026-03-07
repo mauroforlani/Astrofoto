@@ -393,13 +393,14 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 <div class="ctrl">
   <div class="ctrl-inner">
     <div class="ctrl-block">
-      <div class="ctrl-lbl">Paese / Posizione</div>
-      <div class="loc-row">
-        <select class="ctrl-sel" id="countrySelect"></select>
-        <div class="lat-lon-inputs">
-          <div class="latlon-field"><span>φ</span><input type="number" id="inpLat" class="latlon-inp" step="0.1" min="-90" max="90" value="45.5"></div>
-          <div class="latlon-field"><span>λ</span><input type="number" id="inpLon" class="latlon-inp" step="0.1" min="-180" max="180" value="10.0"></div>
+      <div class="ctrl-lbl">Posizione</div>
+      <div style="position:relative">
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="text" id="locationSearch" class="ctrl-sel" placeholder="Cerca città..." style="flex:1;cursor:text" autocomplete="off" oninput="onLocationInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation()}">
+          <button onclick="searchLocation()" style="background:var(--ink);border:none;border-radius:3px;padding:6px 10px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:#fff;cursor:pointer;white-space:nowrap">Cerca</button>
         </div>
+        <div id="locationLabel" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-top:4px;letter-spacing:1px">📍 Milano, IT</div>
+        <div id="locationResults" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:var(--bg);border:1px solid var(--border);border-radius:3px;margin-top:2px;max-height:200px;overflow-y:auto"></div>
       </div>
     </div>
     <div class="ctrl-block time-block">
@@ -799,7 +800,7 @@ const COUNTRIES = [
   {id:'gr',   label:'🇬🇷 Grecia',          lat:38.0, lon:23.5},
   {id:'custom',label:'📍 Personalizzato', lat:45.5, lon:10.0},
 ];
-let activeLat=45.5, activeLon=10.0;
+let activeLat=45.4654, activeLon=9.1859; // Milano default
 let timeStart=20, timeEnd=24, activeMonth=new Date().getMonth()+1;
 let activeFilt={type:null,focal:null,lx:false};
 let activeSortMode='alt';
@@ -1860,33 +1861,73 @@ const MONTHS=[
 // ═══════════════════════════════════════════════════════
 // INIT UI
 // ═══════════════════════════════════════════════════════
-function initCountrySelect(){
-  const sel=document.getElementById('countrySelect');
-  COUNTRIES.forEach(c=>{
-    const o=document.createElement('option');
-    o.value=c.id; o.textContent=c.label;
-    sel.appendChild(o);
-  });
-  sel.addEventListener('change',()=>{
-    const c=COUNTRIES.find(x=>x.id===sel.value);
-    if(c&&c.id!=='custom'){
-      activeLat=c.lat; activeLon=c.lon;
-      document.getElementById('inpLat').value=activeLat;
-      document.getElementById('inpLon').value=activeLon;
+function initLocationSearch(){
+  // Restore saved location
+  try {
+    const saved = JSON.parse(localStorage.getItem('astrofoto_obs_loc') || 'null');
+    if(saved){
+      activeLat = saved.lat; activeLon = saved.lon;
+      document.getElementById('locationLabel').textContent = '📍 ' + saved.name;
+      document.getElementById('locationSearch').placeholder = saved.name;
     }
-    refreshAll();
-  });
-  document.getElementById('inpLat').addEventListener('change',e=>{
-    activeLat=parseFloat(e.target.value)||45.5;
-    document.getElementById('countrySelect').value='custom';
-    refreshAll();
-  });
-  document.getElementById('inpLon').addEventListener('change',e=>{
-    activeLon=parseFloat(e.target.value)||10.0;
-    document.getElementById('countrySelect').value='custom';
-    refreshAll();
+  } catch(e){}
+
+  let searchTimeout = null;
+
+  window.onLocationInput = function(val){
+    clearTimeout(searchTimeout);
+    if(!val.trim()){ document.getElementById('locationResults').style.display='none'; return; }
+    searchTimeout = setTimeout(() => searchLocation(val), 500);
+  };
+
+  window.searchLocation = async function(q){
+    const input = document.getElementById('locationSearch');
+    q = q || input.value.trim();
+    if(!q) return;
+    const res = document.getElementById('locationResults');
+    res.innerHTML = '<div style="padding:8px 10px;font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">Ricerca...</div>';
+    res.style.display = 'block';
+    try {
+      const r = await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&limit=5&accept-language=it');
+      const data = await r.json();
+      res.innerHTML = '';
+      if(!data.length){
+        res.innerHTML = '<div style="padding:8px 10px;font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">Nessun risultato</div>';
+        return;
+      }
+      data.forEach(place => {
+        const row = document.createElement('div');
+        row.style.cssText = 'padding:8px 10px;cursor:pointer;font-family:Jost,sans-serif;font-size:11px;color:var(--ink);border-bottom:1px solid var(--border)';
+        const name = place.display_name.split(',').slice(0,3).join(', ');
+        row.textContent = name;
+        row.onmouseover = () => row.style.background = 'var(--bg2)';
+        row.onmouseout  = () => row.style.background = '';
+        row.onclick = () => {
+          activeLat = parseFloat(place.lat);
+          activeLon = parseFloat(place.lon);
+          const shortName = place.display_name.split(',').slice(0,2).join(', ');
+          localStorage.setItem('astrofoto_obs_loc', JSON.stringify({lat:activeLat, lon:activeLon, name:shortName}));
+          document.getElementById('locationLabel').textContent = '📍 ' + shortName;
+          document.getElementById('locationSearch').value = '';
+          document.getElementById('locationSearch').placeholder = shortName;
+          res.style.display = 'none';
+          refreshAll();
+        };
+        res.appendChild(row);
+      });
+    } catch(e){
+      res.innerHTML = '<div style="padding:8px 10px;font-family:DM Mono,monospace;font-size:9px;color:#c0392b">Errore nella ricerca</div>';
+    }
+  };
+
+  // Close results on outside click
+  document.addEventListener('click', e => {
+    if(!e.target.closest('#locationResults') && e.target.id !== 'locationSearch'){
+      document.getElementById('locationResults').style.display = 'none';
+    }
   });
 }
+
 
 function initGlobalFilters(){
   document.getElementById('filterType').addEventListener('change',e=>{
@@ -3420,7 +3461,7 @@ function initAdmin(){
   });
 }
 
-initCountrySelect();
+initLocationSearch();
 initCameraSelect();
 initGlobalFilters();
 // Inject custom cameras before boot
