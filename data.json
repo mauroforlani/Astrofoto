@@ -315,6 +315,36 @@
       "_modified": true
     },
     {
+      "id": "ngc4762",
+      "lx": 0,
+      "name": "NGC 4762",
+      "cat": "NGC 4762 · Virgo",
+      "type": "galaxy",
+      "ra": 191.94,
+      "dec": 11.23,
+      "months": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "nasaQ": "NGC 4762 lenticular galaxy edge-on Virgo",
+      "mag": 10.3,
+      "size": "9×2'",
+      "diff": 3,
+      "best": [
+        336,
+        750,
+        1085,
+        1625
+      ],
+      "notes": "Lenticolare edge-on in Vergine. Una delle più sottili galassie note.",
+      "_origSize": "9×2'",
+      "_origRA": 191.94,
+      "_origDec": 11.23,
+      "_modified": true
+    },
+    {
       "id": "ngc5746",
       "lx": 0,
       "name": "NGC 5746",
@@ -437,6 +467,7 @@
     "ngc4559": "img/ngc4559.jpg",
     "ngc4631b": "img/ngc4631b.jpg",
     "ngc6633": "img/ngc6633.jpg",
+    "ngc4762": "img/ngc4762.jpg",
     "ngc5746": "img/ngc5746.jpg",
     "ngc4216": "img/ngc4216.jpg",
     "ngc4038b": "img/ngc4038b.jpg",
