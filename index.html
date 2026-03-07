@@ -3592,7 +3592,7 @@ initEdit();
     times.forEach((t, i) => {
       const [date, timePart] = t.includes('T') ? t.split('T') : t.split(' ');
       const hour = parseInt((timePart||'0').split(':')[0]);
-      const isNight = hour >= 20 || hour <= 6;
+      const isNight = hour >= 17 || hour <= 6;
       if(!isNight) return;
       const key = hour >= 20 ? date : new Date(new Date(date).getTime() - 86400000).toISOString().slice(0,10);
       if(!days[key]) days[key] = [];
@@ -3624,6 +3624,9 @@ initEdit();
         const col = e.cloud < 20 ? '#1a7a4a' : e.cloud < 50 ? '#e67e22' : '#c0392b';
         return '<div title="'+e.hour+':00 — '+e.cloud+'%" style="flex:1;height:100%;background:'+col+';opacity:'+(0.4+e.cloud/100*0.6).toFixed(2)+'"></div>';
       }).join('');
+      const labelsHtml = entries.map(e => {
+        return '<div style="flex:1;text-align:center;font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);line-height:1">'+e.hour+'</div>';
+      }).join('');
 
       const card = document.createElement('div');
       card.style.cssText = 'background:var(--bg2);border-radius:6px;padding:16px;border-left:3px solid '+skyColor;
@@ -3634,7 +3637,8 @@ initEdit();
         '</div>' +
         '<div style="font-family:DM Mono,monospace;font-size:22px;font-weight:700;color:'+skyColor+'">'+avgCloud+'%</div>' +
         '</div>' +
-        '<div style="display:flex;height:8px;border-radius:3px;overflow:hidden;margin-bottom:12px;gap:1px">'+barHtml+'</div>' +
+        '<div style="display:flex;height:8px;border-radius:3px;overflow:hidden;margin-bottom:4px;gap:1px">'+barHtml+'</div>' +
+        '<div style="display:flex;margin-bottom:10px">'+labelsHtml+'</div>' +
         '<div style="display:flex;gap:16px;flex-wrap:wrap">' +
           '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">🌡 min '+minTemp+'°C</div>' +
           '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">💧 '+avgHum+'%</div>' +
