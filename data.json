@@ -87,14 +87,12 @@
       "diff": 3,
       "best": [
         336,
-        750,
-        1085,
-        1625
+        750
       ],
       "notes": "Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.",
       "_origSize": "14×3'",
       "_origRA": 190.99,
-      "_origDec": 32.169999999999995,
+      "_origDec": 32.17,
       "_modified": true
     },
     {
@@ -117,9 +115,7 @@
       "diff": 1,
       "best": [
         336,
-        750,
-        1085,
-        1625
+        750
       ],
       "notes": "Piccolo ma brillante in Camelopardalis. Punto finale della Cascata di Kemble (asterismo).",
       "nasaQ": "NGC 1502 Jolly Roger cluster Camelopardalis",
@@ -148,10 +144,7 @@
       "diff": 1,
       "best": [
         135,
-        336,
-        750,
-        1085,
-        1625
+        336
       ],
       "notes": "Campo a 135mm con IC 4756 vicino. Stelle brillanti con molte binarie.",
       "_origSize": "27'",
@@ -208,8 +201,7 @@
       "diff": 3,
       "best": [
         750,
-        1085,
-        1625
+        1085
       ],
       "notes": "Membro del Gruppo M81. Spirale con bracci non definiti, quasi irregolare.",
       "nasaQ": "NGC 2976 M81 Group spiral galaxy",
@@ -239,8 +231,7 @@
       "diff": 3,
       "best": [
         750,
-        1085,
-        1625
+        1085
       ],
       "notes": "Terzo membro principale del Gruppo M81. Ellittica perturbata con code di marea.",
       "nasaQ": "NGC 3077 M81 Group elliptical interacting",
@@ -268,10 +259,8 @@
       "size": "8×2'",
       "diff": 3,
       "best": [
-        336,
         750,
-        1085,
-        1625
+        1085
       ],
       "notes": "Edge-on con evidente rigonfiamento centrale. Vicina al confine Vergine/Bilancia.",
       "_origSize": "8×2'",
@@ -298,9 +287,7 @@
       "diff": 1,
       "best": [
         336,
-        750,
-        1085,
-        1625
+        750
       ],
       "notes": "Compatto e molto giovane (~5 Ma). Stelle blu brillanti attorno a τ CMa. Basso dal Nord.",
       "nasaQ": "NGC 2362 open cluster Canis Major young blue stars",
@@ -311,6 +298,8 @@
     }
   ],
   "imgs": {
-    "ngc4631b": "img/ngc4631b.jpg"
+    "ngc6633": "img/ngc6633.jpg",
+    "ngc5746": "img/ngc5746.jpg",
+    "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg"
   }
 }
