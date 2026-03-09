@@ -3081,9 +3081,10 @@ async function publishToGitHub(){
       delete obj._alt;
       return obj;
     });
-    // Local imgs added by user (not in original LOCAL_IMGS)
+    // Local imgs: all objects with photos (from OBJ and from localStorage)
     const newImgs = {};
     OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
+    Object.keys(photoMap).forEach(id=>{ newImgs[id]='img/'+id+'.jpg'; });
 
     const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
@@ -3629,9 +3630,12 @@ initEdit();
     cards.style.display   = 'none';
     errEl.style.display   = 'none';
     try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Rome';
+      const tzEnc = encodeURIComponent(tz);
       const url = 'https://api.open-meteo.com/v1/forecast?latitude='+meteoLat+'&longitude='+meteoLon
         +'&hourly=temperature_2m,relativehumidity_2m,precipitation,cloudcover,windspeed_10m'
-        +'&timezone=Europe%2FRome&forecast_days=5';
+        +'&daily=sunrise,sunset,precipitation_probability_max'
+        +'&timezone='+tzEnc+'&forecast_days=7';
       const r = await fetch(url);
       if(!r.ok) throw new Error('HTTP ' + r.status);
       const data = await r.json();
@@ -3645,9 +3649,36 @@ initEdit();
     }
   }
 
+  function moonIllumination(dateStr){
+    const date = new Date(dateStr + 'T12:00:00');
+    const jd = date.getTime()/86400000 + 2440587.5;
+    const phase = ((jd - 2451550.1) / 29.530588) % 1;
+    const p = phase < 0 ? phase + 1 : phase;
+    const illum = Math.round((1 - Math.cos(p * 2 * Math.PI)) / 2 * 100);
+    const icon = p < 0.03||p > 0.97 ? '🌑' : p < 0.22 ? '🌒' : p < 0.28 ? '🌓' : p < 0.47 ? '🌔' : p < 0.53 ? '🌕' : p < 0.72 ? '🌖' : p < 0.78 ? '🌗' : '🌘';
+    return {illum, icon};
+  }
+
+  function fmtTime(isoStr){
+    if(!isoStr) return '--:--';
+    const t = isoStr.includes('T') ? isoStr.split('T')[1] : isoStr.split(' ')[1];
+    return (t||'').slice(0,5);
+  }
+
   function renderMeteoStrip(data){
     const h = data.hourly;
+    const d = data.daily || {};
     const times = h.time, clouds = h.cloudcover||[], temp = h.temperature_2m||[], humidity = h.relativehumidity_2m||[], wind = h.windspeed_10m||[], precip = h.precipitation||[];
+
+    const dailyMap = {};
+    (d.time||[]).forEach((dk, i) => {
+      dailyMap[dk] = {
+        sunrise:  (d.sunrise||[])[i]  || '',
+        sunset:   (d.sunset||[])[i]   || '',
+        rainProb: (d.precipitation_probability_max||[])[i] || 0
+      };
+    });
+
     const todayStr = new Date().toISOString().slice(0,10);
     const days = {};
     times.forEach((t,i)=>{
@@ -3677,31 +3708,46 @@ initEdit();
       const dateObj  = new Date(dateKey + 'T12:00:00');
       const dayLabel = dateObj.toLocaleDateString('it-IT',{weekday:'short',day:'numeric',month:'short'});
 
-      // Hourly bar
+      const nextDay  = new Date(new Date(dateKey+'T12:00:00').getTime()+86400000).toISOString().slice(0,10);
+      const dayInfo  = dailyMap[dateKey]  || {};
+      const nextInfo = dailyMap[nextDay]  || {};
+      const sunsetTime  = fmtTime(dayInfo.sunset);
+      const sunriseTime = fmtTime(nextInfo.sunrise);
+      const rainProb = Math.max(dayInfo.rainProb||0, nextInfo.rainProb||0);
+      const moon = moonIllumination(nextDay);
+
       const barSegs = entries.map(e=>{
         const c = e.cloud < 20 ? '#1a7a4a' : e.cloud < 50 ? '#e67e22' : '#c0392b';
         const op = (0.35 + e.cloud/100*0.65).toFixed(2);
-        return '<div title="'+e.hour+':00 '+e.cloud+'%" style="flex:1;height:6px;background:'+c+';opacity:'+op+'"></div>';
+        return '<div title="'+e.hour+':00 · copertura '+e.cloud+'%" style="flex:1;height:6px;background:'+c+';opacity:'+op+'"></div>';
       }).join('');
       const barLabels = entries.filter((_,i)=>i%2===0).map(e=>
         '<div style="flex:1;text-align:center;font-size:6px;color:var(--ink4);font-family:DM Mono,monospace;line-height:1">'+e.hour+'</div>'
       ).join('');
 
       const card = document.createElement('div');
-      card.style.cssText = 'flex:0 0 auto;width:160px;background:var(--bg);border-radius:6px;padding:10px 10px 8px;border-top:2px solid '+skyColor+';box-sizing:border-box';
+      card.style.cssText = 'flex:0 0 auto;width:170px;background:var(--bg);border-radius:6px;padding:10px 10px 8px;border-top:2px solid '+skyColor+';box-sizing:border-box';
       card.innerHTML =
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
           '<div style="font-family:Jost,sans-serif;font-size:11px;font-weight:600;color:var(--ink);text-transform:capitalize">'+dayLabel+'</div>' +
           '<div style="font-family:DM Mono,monospace;font-size:13px;font-weight:700;color:'+skyColor+'">'+avgCloud+'%</div>' +
         '</div>' +
-        '<div style="display:flex;align-items:center;gap:4px;margin-bottom:6px">' +
-          '<span style="font-size:8px;color:'+skyColor+'">'+skyIcon+'</span>' +
-          (hasPrecip ? '<span style="font-family:DM Mono,monospace;font-size:7px;color:#3498db">pioggia</span>' : '') +
+        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">' +
+          '<span style="font-size:9px;color:'+skyColor+'">'+skyIcon+'</span>' +
+          (rainProb > 20 ? '<span style="font-family:DM Mono,monospace;font-size:7px;color:#3498db">🌧 '+rainProb+'%</span>' : '') +
         '</div>' +
         '<div style="display:flex;border-radius:2px;overflow:hidden;margin-bottom:2px;gap:1px;height:6px">'+barSegs+'</div>' +
         '<div style="display:flex;margin-bottom:7px">'+barLabels+'</div>' +
-        '<div style="display:flex;flex-direction:column;gap:2px">' +
-          '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4)">🌡 '+minTemp+'°  💧 '+avgHum+'%  💨 '+avgWind+'m/s</div>' +
+        '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);margin-bottom:6px">🌡 '+minTemp+'°  💧 '+avgHum+'%  💨 '+avgWind+'m/s</div>' +
+        '<div style="border-top:1px solid var(--border);margin-bottom:6px"></div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center">' +
+          '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);line-height:1.7">' +
+            '🌇 '+sunsetTime+'<br>🌅 '+sunriseTime +
+          '</div>' +
+          '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);text-align:right;line-height:1.7">' +
+            moon.icon+' '+moon.illum+'%<br>' +
+            '<span style="color:'+(moon.illum>50?'#c0392b':'#1a7a4a')+'">'+( moon.illum>75?'luna piena':moon.illum>50?'luna intensa':moon.illum>25?'quarto':'favorevole')+'</span>' +
+          '</div>' +
         '</div>';
       cards.appendChild(card);
     });
