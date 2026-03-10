@@ -136,6 +136,36 @@
       "_modified": true
     },
     {
+      "id": "ngc5907",
+      "lx": 0,
+      "name": "NGC 5907",
+      "cat": "NGC 5907 · Splinter Galaxy",
+      "type": "galaxy",
+      "ra": 228.97,
+      "dec": 56.330000000000005,
+      "months": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "nasaQ": "NGC 5907 Splinter Galaxy edge-on tidal streams",
+      "mag": 10.4,
+      "size": "12×1.4'",
+      "diff": 3,
+      "best": [
+        336,
+        750,
+        1085,
+        1625
+      ],
+      "notes": "Edge-on con correnti mareali stellari visibili attorno in esposizioni profondissime.",
+      "_origSize": "12×1.4'",
+      "_origRA": 228.97,
+      "_origDec": 56.330000000000005,
+      "_modified": true
+    },
+    {
       "id": "ngc4559",
       "lx": 1,
       "name": "NGC 4559",
@@ -185,14 +215,12 @@
       "diff": 3,
       "best": [
         336,
-        750,
-        1085,
-        1625
+        750
       ],
       "notes": "Mazza da Hockey peculiare vicina a NGC 4631. Campo a 336mm include entrambe.",
       "_origSize": "14×3'",
       "_origRA": 190.99,
-      "_origDec": 32.169999999999995,
+      "_origDec": 32.17,
       "_modified": true
     },
     {
@@ -215,9 +243,7 @@
       "diff": 1,
       "best": [
         336,
-        750,
-        1085,
-        1625
+        750
       ],
       "notes": "Piccolo ma brillante in Camelopardalis. Punto finale della Cascata di Kemble (asterismo).",
       "nasaQ": "NGC 1502 Jolly Roger cluster Camelopardalis",
@@ -246,10 +272,7 @@
       "diff": 1,
       "best": [
         135,
-        336,
-        750,
-        1085,
-        1625
+        336
       ],
       "notes": "Campo a 135mm con IC 4756 vicino. Stelle brillanti con molte binarie.",
       "_origSize": "27'",
@@ -306,8 +329,7 @@
       "diff": 3,
       "best": [
         750,
-        1085,
-        1625
+        1085
       ],
       "notes": "Membro del Gruppo M81. Spirale con bracci non definiti, quasi irregolare.",
       "nasaQ": "NGC 2976 M81 Group spiral galaxy",
@@ -337,8 +359,7 @@
       "diff": 3,
       "best": [
         750,
-        1085,
-        1625
+        1085
       ],
       "notes": "Terzo membro principale del Gruppo M81. Ellittica perturbata con code di marea.",
       "nasaQ": "NGC 3077 M81 Group elliptical interacting",
@@ -396,10 +417,8 @@
       "size": "8×2'",
       "diff": 3,
       "best": [
-        336,
         750,
-        1085,
-        1625
+        1085
       ],
       "notes": "Edge-on con evidente rigonfiamento centrale. Vicina al confine Vergine/Bilancia.",
       "_origSize": "8×2'",
@@ -426,10 +445,8 @@
       "size": "8×2'",
       "diff": 3,
       "best": [
-        336,
         750,
-        1085,
-        1625
+        1085
       ],
       "notes": "Edge-on nel cuore del Virgo Cluster. NGC 4206 e NGC 4222 nelle immediate vicinanze.",
       "_origSize": "8×2'",
@@ -483,9 +500,7 @@
       "diff": 1,
       "best": [
         336,
-        750,
-        1085,
-        1625
+        750
       ],
       "notes": "Compatto e molto giovane (~5 Ma). Stelle blu brillanti attorno a τ CMa. Basso dal Nord.",
       "nasaQ": "NGC 2362 open cluster Canis Major young blue stars",
@@ -497,16 +512,11 @@
   ],
   "imgs": {
     "ngc4649": "img/ngc4649.jpg",
-    "ngc4517": "img/ngc4517.jpg",
-    "ngc4559": "img/ngc4559.jpg",
-    "ngc4631b": "img/ngc4631b.jpg",
+    "ngc5907": "img/ngc5907.jpg",
     "ngc6633": "img/ngc6633.jpg",
-    "ngc4762": "img/ngc4762.jpg",
     "ngc5746": "img/ngc5746.jpg",
     "ngc4216": "img/ngc4216.jpg",
-    "ngc4038b": "img/ngc4038b.jpg",
-    "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg",
-    "custom_hcg_44_1772914802811": "img/custom_hcg_44_1772914802811.jpg"
+    "ngc4038b": "img/ngc4038b.jpg"
   },
   "deleted": [
     "ngc5194b"
