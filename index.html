@@ -643,7 +643,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
           </div>
         </div>
         <div id="editPhotoName" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-top:5px;letter-spacing:1px"></div>
-        <div id="editPhotoHint" style="display:none;font-family:'DM Mono',monospace;font-size:8px;color:#e67e22;margin-top:4px;letter-spacing:0.5px"></div>
+        <div id="editPhotoHint" style="display:none;font-family:'DM Mono',monospace;font-size:8px;color:#e67e22;margin-top:4px"></div>
       </div>
 
       <div id="editError" style="display:none;font-size:11px;color:var(--red);margin-bottom:12px;font-family:'DM Mono',monospace"></div>
@@ -2685,8 +2685,9 @@ function initAddTarget(){
     closeAddTarget();
     syncDataJson('Nuovo target: ' + newObj.name);
     if(photoDataUrl){
+      LOCAL_IMGS[newObj.id] = 'img/'+newObj.id+'.jpg';
       const st = document.getElementById('publishStatus');
-      if(st){ st.textContent='📁 Carica manualmente: img/'+newObj.id+'.jpg su GitHub'; st.style.color='#e67e22'; }
+      if(st){ st.textContent='📁 Carica su GitHub: img/'+newObj.id+'.jpg'; st.style.color='#e67e22'; }
     }
     // Go to catalog at first visible month
     const targetMonth = newObj.months[0];
@@ -2844,7 +2845,7 @@ function updateEditMonthPreview(){
 function initEdit(){
   const overlay = document.getElementById('editOverlay');
   let editPhotoDataUrl = null;
-  function closeEdit(){ overlay.classList.remove('open'); document.body.style.overflow=''; editPhotoDataUrl=null; const h=document.getElementById('editPhotoHint'); if(h){h.style.display='none';h.textContent='';} }
+  function closeEdit(){ overlay.classList.remove('open'); document.body.style.overflow=''; editPhotoDataUrl=null; }
 
   // Photo upload handler
   const editPhotoArea = document.getElementById('editPhotoArea');
@@ -2872,6 +2873,10 @@ function initEdit(){
       img.src = editPhotoDataUrl;
     };
     reader.readAsDataURL(file);
+    if(editingObj){
+      const hint = document.getElementById('editPhotoHint');
+      if(hint){ hint.textContent='📁 Da caricare: img/'+editingObj.id+'.jpg'; hint.style.display='block'; }
+    }
   });
 
   document.getElementById('editClose').addEventListener('click', closeEdit);
@@ -2938,9 +2943,9 @@ function initEdit(){
     // Apply new photo if uploaded
     if(editPhotoDataUrl){
       editingObj._photo = editPhotoDataUrl;
-      // Show manual upload instruction
+      LOCAL_IMGS[editingObj.id] = 'img/'+editingObj.id+'.jpg';
       const st1 = document.getElementById('publishStatus');
-      if(st1){ st1.textContent='📁 Carica manualmente: img/'+editingObj.id+'.jpg su GitHub'; st1.style.color='#e67e22'; }
+      if(st1){ st1.textContent='📁 Carica su GitHub: img/'+editingObj.id+'.jpg'; st1.style.color='#e67e22'; }
     }
 
     // Persist to localStorage
@@ -2988,9 +2993,9 @@ function initEdit(){
         editingObj.notes = document.getElementById('editNotes').value.trim();
         if(editPhotoDataUrl){
           editingObj._photo = editPhotoDataUrl;
-          // Show manual upload instruction
+          LOCAL_IMGS[editingObj.id] = 'img/'+editingObj.id+'.jpg';
           const st2 = document.getElementById('publishStatus');
-          if(st2){ st2.textContent='📁 Carica manualmente: img/'+editingObj.id+'.jpg su GitHub'; st2.style.color='#e67e22'; }
+          if(st2){ st2.textContent='📁 Carica su GitHub: img/'+editingObj.id+'.jpg'; st2.style.color='#e67e22'; }
         }
         if(editingObj._custom){
           const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
@@ -3067,11 +3072,10 @@ async function publishToGitHub(){
       delete obj._alt;
       return obj;
     });
-    // Build imgs map from LOCAL_IMGS (set when photos are referenced)
+    // Build imgs map from LOCAL_IMGS
     const newImgs = {};
-    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
-    // Also include any already known img paths
     Object.entries(LOCAL_IMGS).forEach(([id,path])=>{ newImgs[id]=path; });
+    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
 
     const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
