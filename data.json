@@ -365,7 +365,7 @@
         135,
         336
       ],
-      "notes": "Uno dei più belli del cielo australo. Solo da latitudini molto meridionali.",
+      "notes": "Uno dei più belli del cielo australe. Solo da latitudini molto meridionali.",
       "_origSize": "55'",
       "_origRA": 166.41000000000003,
       "_origDec": -58.74,
@@ -904,7 +904,8 @@
     "ngc7217": "img/ngc7217.jpg",
     "ngc4517": "img/ngc4517.jpg",
     "ngc5907": "img/ngc5907.jpg",
-    "ngc1512": "img/ngc1512.jpg"
+    "ngc1512": "img/ngc1512.jpg",
+    "ngc3532": "img/ngc3532.jpg"
   },
   "deleted": [
     "ngc5194b"
