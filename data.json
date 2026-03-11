@@ -431,6 +431,34 @@
       "_modified": true
     },
     {
+      "id": "ngc6231",
+      "lx": 0,
+      "name": "NGC 6231",
+      "cat": "NGC 6231 · Scorpion",
+      "type": "cluster",
+      "ra": 253.56999999999996,
+      "dec": -41.84,
+      "months": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "nasaQ": "NGC 6231 Scorpius open cluster OB association",
+      "mag": 2.6,
+      "size": "15'",
+      "diff": 1,
+      "best": [
+        135,
+        336
+      ],
+      "notes": "Ammasso molto giovane e brillante in Scorpione. Meridionale.",
+      "_origSize": "15'",
+      "_origRA": 253.57,
+      "_origDec": -41.84,
+      "_modified": true
+    },
+    {
       "id": "ic4665",
       "lx": 0,
       "name": "IC 4665",
@@ -906,7 +934,8 @@
     "ngc5907": "img/ngc5907.jpg",
     "ngc1512": "img/ngc1512.jpg",
     "ngc3532": "img/ngc3532.jpg",
-    "ngc752": "img/ngc752.jpg"
+    "ngc752": "img/ngc752.jpg",
+    "ngc6231": "img/ngc6231.jpg"
   },
   "deleted": [
     "ngc5194b"
