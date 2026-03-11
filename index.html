@@ -2098,7 +2098,7 @@ function buildCard(obj,month){
 
   // Load real image or canvas fallback
   const canvas=d.querySelector('canvas');
-  const localSrc=obj._photo||LOCAL_IMGS[obj.id];
+  const localSrc=obj._photo||(LOCAL_IMGS[obj.id] ? LOCAL_IMGS[obj.id]+'?v='+Math.floor(Date.now()/3600000) : null);
   if(localSrc){
     const imgEl=document.createElement('img');
     imgEl.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s;z-index:1';
@@ -2131,7 +2131,7 @@ function openModal(obj,month,origin){
   // Canvas + real image overlay for modal
   const mc=document.getElementById('modalCanvas');
   renderCanvas(mc,obj,true);
-  const mSrc=obj._photo||LOCAL_IMGS[obj.id];
+  const mSrc=obj._photo||(LOCAL_IMGS[obj.id] ? LOCAL_IMGS[obj.id]+'?v='+Math.floor(Date.now()/3600000) : null);
   const mWrap=document.querySelector('.modal-canvas-wrap');
   let mImg=mWrap.querySelector('.modal-real-img');
   if(!mImg){
@@ -2687,7 +2687,12 @@ function initAddTarget(){
 
     addCustomTarget(newObj);
     closeAddTarget();
+    if(photoDataUrl) LOCAL_IMGS[newObj.id] = 'img/'+newObj.id+'.jpg';
     syncDataJson('Nuovo target: ' + newObj.name);
+    if(photoDataUrl){
+      const st = document.getElementById('publishStatus');
+      if(st){ st.textContent='📁 Carica su GitHub: img/'+newObj.id+'.jpg'; st.style.color='#e67e22'; }
+    }
     // Go to catalog at first visible month
     const targetMonth = newObj.months[0];
     enterCatalog();
@@ -2938,8 +2943,10 @@ function initEdit(){
     // Apply new photo if uploaded
     if(editPhotoDataUrl){
       editingObj._photo = editPhotoDataUrl;
-      // Auto-upload photo to GitHub immediately if token available
-      autoUploadPhoto(editingObj.id, editPhotoDataUrl);
+      LOCAL_IMGS[editingObj.id] = 'img/'+editingObj.id+'.jpg';
+      syncDataJson('Foto: ' + editingObj.name);
+      const st1 = document.getElementById('publishStatus');
+      if(st1){ st1.textContent='📁 Carica su GitHub: img/'+editingObj.id+'.jpg'; st1.style.color='#e67e22'; }
     }
 
     // Persist to localStorage
@@ -2987,7 +2994,10 @@ function initEdit(){
         editingObj.notes = document.getElementById('editNotes').value.trim();
         if(editPhotoDataUrl){
           editingObj._photo = editPhotoDataUrl;
-          autoUploadPhoto(editingObj.id, editPhotoDataUrl);
+          LOCAL_IMGS[editingObj.id] = 'img/'+editingObj.id+'.jpg';
+          syncDataJson('Foto: ' + editingObj.name);
+          const st2 = document.getElementById('publishStatus');
+          if(st2){ st2.textContent='📁 Carica su GitHub: img/'+editingObj.id+'.jpg'; st2.style.color='#e67e22'; }
         }
         if(editingObj._custom){
           const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
@@ -3013,75 +3023,6 @@ function initEdit(){
 // ═══════════════════════════════════════════════════════
 // GITHUB PUBLISH
 // ═══════════════════════════════════════════════════════
-async function autoUploadPhoto(id, dataUrl){
-  const GH_USER = 'mauroforlani';
-  const GH_REPO = 'Astrofoto';
-  const GH_TOKEN = getGHToken();
-  if(!GH_TOKEN || !dataUrl || !dataUrl.startsWith('data:')) return;
-  const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
-  try {
-    const path = 'img/' + id + '.jpg';
-    const base64 = dataUrl.split(',')[1];
-    // Get current SHA if file exists
-    let sha;
-    try {
-      const r = await fetch(API+path, {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
-      if(r.ok){ const d=await r.json(); sha=d.sha; }
-    } catch(e){}
-    const body = {message:'Astrofoto: foto '+id, content:base64};
-    if(sha) body.sha = sha;
-    await fetch(API+path, {
-      method:'PUT',
-      headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-      body: JSON.stringify(body)
-    });
-    // Also update LOCAL_IMGS so other devices can find it via data.json on next publish
-    LOCAL_IMGS[id] = 'img/' + id + '.jpg';
-  } catch(e){ console.warn('autoUploadPhoto failed:', e); }
-}
-
-function getGHToken(){
-  return (prompt('GitHub Personal Access Token (scope: repo):') || '').trim();
-}
-
-async function syncDataJson(reason){
-  const GH_USER = 'mauroforlani';
-  const GH_REPO = 'Astrofoto';
-  const GH_TOKEN = getGHToken();
-  const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
-  try {
-    const customs = OBJ.filter(o=>o._custom).map(o=>{ const x={...o}; delete x._photo; delete x._alt; return x; });
-    const modified = OBJ.filter(o=>o._modified && !o._custom).map(o=>{ const x={...o}; delete x._photo; delete x._alt; return x; });
-    const newImgs = {};
-    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
-    try {
-      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
-      Object.keys(mods).forEach(id=>{ if(mods[id]._photo) newImgs[id]='img/'+id+'.jpg'; });
-    } catch(e){}
-    const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
-    const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
-    const b64 = btoa(unescape(encodeURIComponent(dataJson)));
-    let sha;
-    try {
-      const r = await fetch(API+'data.json', {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
-      if(r.ok){ const d=await r.json(); sha=d.sha; }
-    } catch(e){}
-    const body = {message:'Astrofoto: '+reason, content:b64};
-    if(sha) body.sha = sha;
-    const res = await fetch(API+'data.json', {
-      method:'PUT',
-      headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-      body: JSON.stringify(body)
-    });
-    if(res.ok){
-      const st = document.getElementById('publishStatus');
-      if(st){ st.textContent='✓ '+reason; st.style.color='#1a7a4a'; setTimeout(()=>{if(st.textContent.startsWith('✓')) st.textContent='';}, 3000); }
-    } else {
-      const err = await res.json();
-      console.warn('syncDataJson error:', err.message);
-    }
-  } catch(e){ console.warn('syncDataJson failed:', e); }
-}
 
 async function publishToGitHub(){
   const GH_USER = 'mauroforlani';
