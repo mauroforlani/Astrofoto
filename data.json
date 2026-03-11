@@ -102,7 +102,10 @@
         336
       ],
       "notes": "Oggetto personalizzato.",
-      "_custom": true
+      "_custom": true,
+      "_origSize": "160'",
+      "_origRA": 75.81666666666666,
+      "_origDec": -7.864166666666667
     }
   ],
   "modified": [
@@ -676,7 +679,8 @@
   "imgs": {
     "ngc2683": "img/ngc2683.jpg",
     "ic2391": "img/ic2391.jpg",
-    "custom_hcg_44_1772914802811": "img/custom_hcg_44_1772914802811.jpg"
+    "custom_hcg_44_1772914802811": "img/custom_hcg_44_1772914802811.jpg",
+    "custom_ic_2118_1773213201586": "img/custom_ic_2118_1773213201586.jpg"
   },
   "deleted": []
 }
