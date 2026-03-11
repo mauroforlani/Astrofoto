@@ -154,7 +154,7 @@
       ],
       "nasaQ": "NGC 7217 ringed spiral galaxy Pegasus",
       "mag": 10.2,
-      "size": "4×3.5'",
+      "size": "43.5'",
       "diff": 3,
       "best": [
         1085,
@@ -163,7 +163,7 @@
       "notes": "Spirale anulare con sistema di anelli concentrici inusuali. In Pegaso.",
       "_origSize": "4×3.5'",
       "_origRA": 332.19,
-      "_origDec": 31.36,
+      "_origDec": 31.360000000000003,
       "_modified": true
     },
     {
@@ -900,7 +900,8 @@
     "etacas": "img/etacas.jpg",
     "algedi": "img/algedi.jpg",
     "custom_hcg_44_1772914802811": "img/custom_hcg_44_1772914802811.jpg",
-    "ngc4649": "img/ngc4649.jpg"
+    "ngc4649": "img/ngc4649.jpg",
+    "ngc7217": "img/ngc7217.jpg"
   },
   "deleted": [
     "ngc5194b"
