@@ -347,6 +347,33 @@
       "_modified": true
     },
     {
+      "id": "ngc3532",
+      "lx": 0,
+      "name": "NGC 3532",
+      "cat": "NGC 3532 · Wishing Well",
+      "type": "cluster",
+      "ra": 166.41000000000003,
+      "dec": -58.74,
+      "months": [
+        3,
+        4,
+        5
+      ],
+      "nasaQ": "NGC 3532 Wishing Well Cluster Carina southern",
+      "mag": 3,
+      "size": "55'",
+      "diff": 1,
+      "best": [
+        135,
+        336
+      ],
+      "notes": "Uno dei più belli del cielo australo. Solo da latitudini molto meridionali.",
+      "_origSize": "55'",
+      "_origRA": 166.41,
+      "_origDec": -58.74,
+      "_modified": true
+    },
+    {
       "id": "ngc752",
       "lx": 0,
       "name": "NGC 752",
