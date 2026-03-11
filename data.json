@@ -320,6 +320,33 @@
       "_modified": true
     },
     {
+      "id": "ngc1512",
+      "lx": 0,
+      "name": "NGC 1512",
+      "cat": "NGC 1512 · Horologium",
+      "type": "galaxy",
+      "ra": 60.98,
+      "dec": -43.35,
+      "months": [
+        11,
+        12,
+        1
+      ],
+      "nasaQ": "NGC 1512 barred spiral Hubble inner ring",
+      "mag": 10.6,
+      "size": "9×6'",
+      "diff": 3,
+      "best": [
+        750,
+        1085
+      ],
+      "notes": "Spirale barrata con sistema di anelli. Molto meridionale.",
+      "_origSize": "9×6'",
+      "_origRA": 60.98,
+      "_origDec": -43.35,
+      "_modified": true
+    },
+    {
       "id": "ngc752",
       "lx": 0,
       "name": "NGC 752",
