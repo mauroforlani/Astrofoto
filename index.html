@@ -3095,6 +3095,19 @@ async function publishToGitHub(){
     const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
 
+    // Build photoMap from all in-memory objects that have a _photo (base64)
+    const photoMap = {};
+    OBJ.filter(o => o._photo && typeof o._photo === 'string' && o._photo.startsWith('data:'))
+       .forEach(o => { photoMap[o.id] = o._photo; });
+    // Also include photos from modified objects saved in localStorage
+    try {
+      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
+      Object.values(mods).forEach(mod => {
+        if(mod._photo && typeof mod._photo === 'string' && mod._photo.startsWith('data:'))
+          photoMap[mod.id] = mod._photo;
+      });
+    } catch(e){}
+
     // Upload photos
     const photoEntries = Object.entries(photoMap);
     for(let i=0; i<photoEntries.length; i++){
@@ -3114,6 +3127,110 @@ async function publishToGitHub(){
   }
 
   btn.disabled=false; btn.style.opacity='1';
+}
+
+
+// ═══════════════════════════════════════════════════════
+// SYNC DATA.JSON (silent auto-save after each change)
+// ═══════════════════════════════════════════════════════
+
+async function syncDataJson(label){
+  const GH_USER = 'mauroforlani';
+  const GH_REPO = 'Astrofoto';
+  const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
+
+  // Ask for token — if user cancels or leaves empty, abort without touching anything
+  const GH_TOKEN = (prompt('GitHub Personal Access Token (scope: repo) per salvare "' + label + '":') || '').trim();
+  if(!GH_TOKEN) return;
+
+  const statusEl = document.getElementById('publishStatus');
+  function setStatus(msg, color){ if(statusEl){ statusEl.textContent=msg; statusEl.style.color=color||'var(--ink4)'; } }
+
+  setStatus('⏳ Sincronizzazione: ' + label + '...');
+
+  try {
+    function toBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
+
+    async function getSHA(path){
+      try {
+        const r = await fetch(API+path, {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
+        if(r.ok){ const d=await r.json(); return d.sha; }
+      } catch(e){}
+      return null;
+    }
+
+    async function uploadFile(path, base64content){
+      const sha = await getSHA(path);
+      const r = await fetch(API+path, {
+        method: 'PUT',
+        headers: {'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+        body: JSON.stringify({message:'Astrofoto: '+label, content:base64content, ...(sha?{sha}:{})})
+      });
+      if(!r.ok){
+        const msg = (await r.json()).message || 'Upload failed';
+        throw new Error(msg);
+      }
+    }
+
+    // Read current remote data.json FIRST — never overwrite blindly
+    let remote = {customs:[], modified:[], imgs:{}, deleted:[]};
+    try {
+      const rr = await fetch('https://raw.githubusercontent.com/'+GH_USER+'/'+GH_REPO+'/main/data.json?t='+Date.now(), {cache:'no-store'});
+      if(rr.ok) remote = await rr.json();
+    } catch(e){}
+
+    // Build merged data.json — local wins for same id, remote fills the rest
+    const localCustomIds = new Set(OBJ.filter(o=>o._custom).map(o=>o.id));
+    const localModIds    = new Set(OBJ.filter(o=>o._modified&&!o._custom).map(o=>o.id));
+
+    const customs = [
+      ...OBJ.filter(o=>o._custom).map(o=>{ const c={...o}; delete c._photo; delete c._alt; return c; }),
+      ...(remote.customs||[]).filter(o=>!localCustomIds.has(o.id))
+    ];
+    const modified = [
+      ...OBJ.filter(o=>o._modified&&!o._custom).map(o=>{ const c={...o}; delete c._photo; delete c._alt; return c; }),
+      ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
+    ];
+
+    const newImgs = {...(remote.imgs||{})};
+    Object.entries(LOCAL_IMGS).forEach(([id,path])=>{ newImgs[id]=path; });
+    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
+
+    const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
+    const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
+
+    const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
+
+    // Upload any pending photos (base64 in memory)
+    const photoMap = {};
+    OBJ.filter(o=>o._photo && typeof o._photo==='string' && o._photo.startsWith('data:'))
+       .forEach(o=>{ photoMap[o.id]=o._photo; });
+    try {
+      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
+      Object.values(mods).forEach(mod=>{
+        if(mod._photo && typeof mod._photo==='string' && mod._photo.startsWith('data:'))
+          photoMap[mod.id]=mod._photo;
+      });
+    } catch(e){}
+
+    const photoEntries = Object.entries(photoMap);
+    for(let i=0; i<photoEntries.length; i++){
+      const [id, photo] = photoEntries[i];
+      setStatus(`⏳ Foto ${i+1}/${photoEntries.length}: ${id}.jpg`);
+      await uploadFile('img/'+id+'.jpg', photo.split(',')[1]);
+    }
+
+    // Upload data.json last — only if everything above succeeded
+    setStatus('⏳ Aggiornamento data.json...');
+    await uploadFile('data.json', toBase64(dataJson));
+
+    setStatus('✓ Salvato: ' + label, '#1a7a4a');
+
+  } catch(err){
+    // Upload failed — local data is untouched, remote is unchanged (we never got to uploadFile for data.json)
+    setStatus('✗ Sync fallita (' + label + '): ' + err.message + ' — dati locali intatti', '#c0392b');
+    console.warn('syncDataJson error:', err);
+  }
 }
 
 
