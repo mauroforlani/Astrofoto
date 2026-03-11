@@ -332,7 +332,7 @@
       ],
       "nasaQ": "NGC 1512 barred spiral Hubble inner ring",
       "mag": 10.6,
-      "size": "9×6'",
+      "size": "96'",
       "diff": 3,
       "best": [
         750,
@@ -903,7 +903,8 @@
     "ngc4649": "img/ngc4649.jpg",
     "ngc7217": "img/ngc7217.jpg",
     "ngc4517": "img/ngc4517.jpg",
-    "ngc5907": "img/ngc5907.jpg"
+    "ngc5907": "img/ngc5907.jpg",
+    "ngc1512": "img/ngc1512.jpg"
   },
   "deleted": [
     "ngc5194b"
