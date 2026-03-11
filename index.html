@@ -3028,46 +3028,6 @@ function getGHToken(){
   return (prompt('GitHub Personal Access Token (scope: repo):') || '').trim();
 }
 
-async function syncDataJson(reason){
-  const GH_USER = 'mauroforlani';
-  const GH_REPO = 'Astrofoto';
-  const GH_TOKEN = getGHToken();
-  if(!GH_TOKEN) return;
-  const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
-  try {
-    const customs = OBJ.filter(o=>o._custom).map(o=>{ const x={...o}; delete x._photo; delete x._alt; return x; });
-    const modified = OBJ.filter(o=>o._modified && !o._custom).map(o=>{ const x={...o}; delete x._photo; delete x._alt; return x; });
-    const newImgs = {};
-    Object.entries(LOCAL_IMGS).forEach(([id,path])=>{ newImgs[id]=path; });
-    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
-    const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
-    const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
-    const b64 = btoa(unescape(encodeURIComponent(dataJson)));
-    let sha;
-    try {
-      const r = await fetch(API+'data.json', {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
-      if(r.ok){ const d=await r.json(); sha=d.sha; }
-    } catch(e){}
-    const body = {message:'Astrofoto: '+reason, content:b64};
-    if(sha) body.sha = sha;
-    const res = await fetch(API+'data.json', {
-      method:'PUT',
-      headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-      body: JSON.stringify(body)
-    });
-    const st = document.getElementById('publishStatus');
-    if(res.ok){
-      if(st){ st.textContent='✓ '+reason; st.style.color='#1a7a4a'; setTimeout(()=>{if(st.textContent.startsWith('✓')) st.textContent='';}, 3000); }
-    } else {
-      const err = await res.json();
-      if(st){ st.textContent='✗ Errore: '+(err.message||'unknown'); st.style.color='#c0392b'; }
-    }
-  } catch(e){
-    const st = document.getElementById('publishStatus');
-    if(st){ st.textContent='✗ Errore: '+e.message; st.style.color='#c0392b'; }
-  }
-}
-
 async function publishToGitHub(){
   const GH_USER = 'mauroforlani';
   const GH_REPO = 'Astrofoto';
@@ -3105,33 +3065,34 @@ async function publishToGitHub(){
       return btoa(unescape(encodeURIComponent(str)));
     }
 
-    // Build data.json
-    const customs = OBJ.filter(o=>o._custom).map(o=>{
-      const obj = {...o};
-      delete obj._photo; // photos stored separately as img/ files
-      delete obj._alt;
-      return obj;
-    });
-    const modified = OBJ.filter(o=>o._modified && !o._custom).map(o=>{
-      const obj = {...o};
-      delete obj._photo;
-      delete obj._alt;
-      return obj;
-    });
-    // Build photo map: from OBJ in memory + from localStorage (catches custom objects)
-    const photoMap = {};
-    OBJ.filter(o=>o._photo && o._photo.startsWith('data:')).forEach(o=>{ photoMap[o.id]=o._photo; });
+    // Read current remote data.json FIRST — never overwrite blindly
+    let remote = {customs:[], modified:[], imgs:{}, deleted:[]};
     try {
-      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
-      Object.values(mods).forEach(mod=>{ if(mod._photo && mod._photo.startsWith('data:')) photoMap[mod.id]=mod._photo; });
+      const rr = await fetch('https://raw.githubusercontent.com/mauroforlani/Astrofoto/main/data.json?t='+Date.now(), {cache:'no-store'});
+      if(rr.ok) remote = await rr.json();
     } catch(e){}
 
-    // Local imgs: all objects with photos
-    const newImgs = {};
-    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
-    Object.keys(photoMap).forEach(id=>{ newImgs[id]='img/'+id+'.jpg'; });
+    // Build data.json — local wins for same id, remote fills the rest
+    const localCustomIds = new Set(OBJ.filter(o=>o._custom).map(o=>o.id));
+    const localModIds = new Set(OBJ.filter(o=>o._modified&&!o._custom).map(o=>o.id));
 
-    const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
+    const customs = [
+      ...OBJ.filter(o=>o._custom).map(o=>{ const obj={...o}; delete obj._photo; delete obj._alt; return obj; }),
+      ...(remote.customs||[]).filter(o=>!localCustomIds.has(o.id))
+    ];
+    const modified = [
+      ...OBJ.filter(o=>o._modified&&!o._custom).map(o=>{ const obj={...o}; delete obj._photo; delete obj._alt; return obj; }),
+      ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
+    ];
+
+    // Imgs: remote base + local overrides
+    const newImgs = {...(remote.imgs||{})};
+    Object.entries(LOCAL_IMGS).forEach(([id,path])=>{ newImgs[id]=path; });
+    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
+
+    // Deleted: union of remote + local
+    const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
+    const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
 
     // Upload photos
