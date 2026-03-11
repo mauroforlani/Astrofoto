@@ -291,8 +291,9 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
         </button>
 
       </div>
-      <div style="margin-top:8px">
+      <div style="margin-top:8px;display:flex;gap:20px;align-items:center">
         <button id="btnAdmin" style="background:none;border:none;color:rgba(255,255,255,.15);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;cursor:pointer;padding:4px 0;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.35)'" onmouseout="this.style.color='rgba(255,255,255,.15)'">⚙ gestione catalogo</button>
+        <button id="btnClearCache" style="background:none;border:none;color:rgba(255,255,255,.15);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;cursor:pointer;padding:4px 0;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.35)'" onmouseout="this.style.color='rgba(255,255,255,.15)'">↺ aggiorna da github</button>
       </div>
 
       <div class="landing-search" id="searchPanel" style="display:none">
@@ -3708,6 +3709,24 @@ function initAdmin(){
     }
   });
 }
+
+// ═══════════════════════════════════════════════════════
+// CLEAR CACHE & FORCE RELOAD
+// ═══════════════════════════════════════════════════════
+document.getElementById('btnClearCache').addEventListener('click', async () => {
+  const btn = document.getElementById('btnClearCache');
+  btn.textContent = '↺ pulizia...';
+  btn.style.color = 'rgba(255,255,255,.4)';
+  try {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => caches.delete(k)));
+    if('serviceWorker' in navigator){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+  } catch(e){}
+  location.reload(true);
+});
 
 initLocationSearch();
 initCameraSelect();
