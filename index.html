@@ -3095,15 +3095,18 @@ async function publishToGitHub(){
     const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
 
-    // Build photoMap from all in-memory objects that have a _photo (base64)
+    // Build photoMap: only photos that are base64 in memory AND not yet on GitHub
+    // (if LOCAL_IMGS[id] already points to 'img/...' the file is already on GitHub)
     const photoMap = {};
-    OBJ.filter(o => o._photo && typeof o._photo === 'string' && o._photo.startsWith('data:'))
+    OBJ.filter(o => o._photo && typeof o._photo === 'string' && o._photo.startsWith('data:')
+                 && !(LOCAL_IMGS[o.id] && LOCAL_IMGS[o.id].startsWith('img/')))
        .forEach(o => { photoMap[o.id] = o._photo; });
-    // Also include photos from modified objects saved in localStorage
+    // Also check localStorage for modified objects with pending base64 photos
     try {
       const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
       Object.values(mods).forEach(mod => {
-        if(mod._photo && typeof mod._photo === 'string' && mod._photo.startsWith('data:'))
+        if(mod._photo && typeof mod._photo === 'string' && mod._photo.startsWith('data:')
+           && !(LOCAL_IMGS[mod.id] && LOCAL_IMGS[mod.id].startsWith('img/')))
           photoMap[mod.id] = mod._photo;
       });
     } catch(e){}
@@ -3119,6 +3122,26 @@ async function publishToGitHub(){
     // Upload data.json
     setStatus('⏳ Caricamento data.json...');
     await uploadFile('data.json', toBase64(dataJson));
+
+    // Cleanup: remove base64 _photo from localStorage now that files are on GitHub
+    // so they won't be re-uploaded next time
+    try {
+      const modKey = 'astrofoto_modified_objs';
+      const mods = JSON.parse(localStorage.getItem(modKey)||'{}');
+      let changed = false;
+      Object.keys(photoMap).forEach(id => {
+        if(mods[id] && mods[id]._photo) { delete mods[id]._photo; changed = true; }
+        // Also clear from in-memory OBJ
+        const obj = OBJ.find(o=>o.id===id);
+        if(obj) delete obj._photo;
+      });
+      if(changed) localStorage.setItem(modKey, JSON.stringify(mods));
+      // Same for custom targets in localStorage
+      const customs = JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]');
+      let cChanged = false;
+      customs.forEach(t => { if(photoMap[t.id] && t._photo) { delete t._photo; cChanged = true; } });
+      if(cChanged) localStorage.setItem('astrofoto_custom_targets', JSON.stringify(customs));
+    } catch(e){}
 
     setStatus('✓ Pubblicato! Visibile dopo ~2 min', '#1a7a4a');
 
@@ -3201,14 +3224,16 @@ async function syncDataJson(label){
 
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
 
-    // Upload any pending photos (base64 in memory)
+    // Build photoMap: only photos that are base64 in memory AND not yet on GitHub
     const photoMap = {};
-    OBJ.filter(o=>o._photo && typeof o._photo==='string' && o._photo.startsWith('data:'))
+    OBJ.filter(o=>o._photo && typeof o._photo==='string' && o._photo.startsWith('data:')
+              && !(LOCAL_IMGS[o.id] && LOCAL_IMGS[o.id].startsWith('img/')))
        .forEach(o=>{ photoMap[o.id]=o._photo; });
     try {
       const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
       Object.values(mods).forEach(mod=>{
-        if(mod._photo && typeof mod._photo==='string' && mod._photo.startsWith('data:'))
+        if(mod._photo && typeof mod._photo==='string' && mod._photo.startsWith('data:')
+           && !(LOCAL_IMGS[mod.id] && LOCAL_IMGS[mod.id].startsWith('img/')))
           photoMap[mod.id]=mod._photo;
       });
     } catch(e){}
@@ -3223,6 +3248,23 @@ async function syncDataJson(label){
     // Upload data.json last — only if everything above succeeded
     setStatus('⏳ Aggiornamento data.json...');
     await uploadFile('data.json', toBase64(dataJson));
+
+    // Cleanup: remove base64 _photo from localStorage now that files are on GitHub
+    try {
+      const modKey = 'astrofoto_modified_objs';
+      const mods = JSON.parse(localStorage.getItem(modKey)||'{}');
+      let changed = false;
+      Object.keys(photoMap).forEach(id => {
+        if(mods[id] && mods[id]._photo) { delete mods[id]._photo; changed = true; }
+        const obj = OBJ.find(o=>o.id===id);
+        if(obj) delete obj._photo;
+      });
+      if(changed) localStorage.setItem(modKey, JSON.stringify(mods));
+      const customs = JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]');
+      let cChanged = false;
+      customs.forEach(t => { if(photoMap[t.id] && t._photo) { delete t._photo; cChanged = true; } });
+      if(cChanged) localStorage.setItem('astrofoto_custom_targets', JSON.stringify(customs));
+    } catch(e){}
 
     setStatus('✓ Salvato: ' + label, '#1a7a4a');
 
