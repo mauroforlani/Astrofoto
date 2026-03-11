@@ -3085,10 +3085,22 @@ async function publishToGitHub(){
       ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
     ];
 
-    // Imgs: remote base + local overrides
-    const newImgs = {...(remote.imgs||{})};
-    Object.entries(LOCAL_IMGS).forEach(([id,path])=>{ newImgs[id]=path; });
+    // Imgs: NEVER store base64 in imgs — only img/xxx.jpg paths
+    const newImgs = {};
+    // Start from remote, skip legacy base64 values
+    Object.entries(remote.imgs||{}).forEach(([id,p])=>{
+      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
+    });
+    // Apply LOCAL_IMGS, skip base64 values
+    Object.entries(LOCAL_IMGS).forEach(([id,p])=>{
+      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
+    });
+    // Objects with _photo in memory: register their path
     OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
+    // Custom targets whose _photo was already cleaned but path never registered
+    JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]')
+      .filter(t=>!t._photo && !newImgs[t.id] && (remote.imgs||{})[t.id])
+      .forEach(t=>{ newImgs[t.id]=(remote.imgs||{})[t.id]; });
 
     // Deleted: union of remote + local
     const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
@@ -3215,9 +3227,18 @@ async function syncDataJson(label){
       ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
     ];
 
-    const newImgs = {...(remote.imgs||{})};
-    Object.entries(LOCAL_IMGS).forEach(([id,path])=>{ newImgs[id]=path; });
+    // Imgs: NEVER store base64 in imgs — only img/xxx.jpg paths
+    const newImgs = {};
+    Object.entries(remote.imgs||{}).forEach(([id,p])=>{
+      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
+    });
+    Object.entries(LOCAL_IMGS).forEach(([id,p])=>{
+      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
+    });
     OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
+    JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]')
+      .filter(t=>!t._photo && !newImgs[t.id] && (remote.imgs||{})[t.id])
+      .forEach(t=>{ newImgs[t.id]=(remote.imgs||{})[t.id]; });
 
     const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
     const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
