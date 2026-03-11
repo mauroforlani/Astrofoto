@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Astrofotografia</title>
+<title>Tool Astrofoto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -112,9 +112,9 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 .obj-card{position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .2s}
 .obj-card:hover{box-shadow:var(--shadow2);transform:translateY(-2px);z-index:2}
 .obj-card.hidden{display:none}
-.card-canvas-wrap{position:relative;height:175px;overflow:hidden}.card-canvas-wrap::after{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(rgba(0,0,0,.35),transparent);z-index:2;pointer-events:none}
+.card-canvas-wrap{position:relative;height:175px;overflow:hidden}
 .card-canvas-wrap canvas{width:100%;height:100%;display:block}
-.card-top{position:absolute;top:9px;left:9px;right:9px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:3}
+.card-top{position:absolute;top:9px;left:9px;right:9px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
 .type-badge{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;padding:3px 7px;background:rgba(250,249,246,.92);backdrop-filter:blur(8px);border-radius:2px;color:var(--ink2);border:1px solid rgba(26,22,18,.1)}
 .lx-tag-sm{font-family:'DM Mono',monospace;font-size:7px;padding:2px 6px;border-radius:2px;background:rgba(124,58,237,.18);border:1px solid rgba(167,139,250,.4);color:#7c3aed;backdrop-filter:blur(8px)}
 .alt-badge{font-family:'DM Mono',monospace;font-size:8px;padding:3px 7px;border-radius:2px;backdrop-filter:blur(8px);display:flex;align-items:center;gap:3px;background:rgba(250,249,246,.92);border:1px solid transparent}
@@ -141,8 +141,8 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 .card-notes{font-size:9px;color:var(--ink3);line-height:1.7;font-style:italic;padding-top:8px;border-top:1px solid var(--border)}
 
 /* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(10,8,6,.85);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.open{display:flex}
+.modal-overlay{position:fixed;inset:0;background:rgba(10,8,6,.85);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
 .modal{background:var(--bg);max-width:880px;width:100%;max-height:90vh;overflow-y:auto;border-radius:2px;box-shadow:0 24px 80px rgba(0,0,0,.4);position:relative;transform:translateY(16px);transition:transform .25s}
 .modal-overlay.open .modal{transform:translateY(0)}
 .modal-close{position:absolute;top:16px;right:16px;background:var(--bg3);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink3);transition:background .15s;z-index:10}
@@ -182,35 +182,6 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 @media(max-width:900px){header,.ctrl,main{padding-left:20px;padding-right:20px}.mnav-track{padding:0 20px}.obj-grid{grid-template-columns:1fr 1fr}.header-inner{flex-direction:column;align-items:flex-start}}
 @media(max-width:580px){.obj-grid{grid-template-columns:1fr}.sec-hero{grid-template-columns:1fr}.sec-right{text-align:left}.modal-grid{grid-template-columns:1fr 1fr}}
 
-/* ── ADD TARGET MODAL ── */
-.at-field{margin-bottom:18px}
-.at-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);display:block;margin-bottom:8px}
-.at-inp{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-family:'Jost',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border-color .15s}
-.at-inp:focus{border-color:var(--blue2)}
-.at-type-row{display:flex;gap:6px;flex-wrap:wrap}
-.at-type-btn{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:6px 14px;font-family:'Jost',sans-serif;font-size:11px;color:var(--ink3);cursor:pointer;transition:all .15s}
-.at-type-btn:hover{border-color:var(--ink2);color:var(--ink)}
-.at-type-btn.on{background:var(--ink);border-color:var(--ink);color:#fff}
-.at-focal-btn{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:6px 14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);cursor:pointer;transition:all .15s}
-.at-focal-btn:hover{border-color:var(--blue2);color:var(--blue)}
-.at-focal-btn.on{background:var(--blue2);border-color:var(--blue2);color:#fff}
-.at-month-row{display:flex;gap:5px;flex-wrap:wrap}
-.at-month-btn{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:5px 10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--ink3);cursor:pointer;transition:all .15s}
-.at-month-btn:hover{border-color:var(--ink2);color:var(--ink)}
-.at-month-btn.on{background:var(--blue2);border-color:var(--blue2);color:#fff}
-.at-photo-area{border:1px dashed var(--border2);border-radius:3px;padding:20px;cursor:pointer;transition:border-color .15s;display:flex;align-items:center;justify-content:center;min-height:80px;gap:12px}
-.at-photo-area:hover{border-color:var(--ink3)}
-
-.admin-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:3px;border:1px solid var(--border);background:var(--bg);gap:12px;transition:border-color .15s}
-.admin-item:hover{border-color:var(--red)}
-.admin-item-info{flex:1;min-width:0}
-.admin-item-name{font-size:13px;color:var(--ink);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.admin-item-cat{font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-top:1px}
-.admin-item-del{background:none;border:1px solid var(--border);border-radius:2px;color:var(--ink4);font-size:10px;padding:3px 8px;cursor:pointer;font-family:'DM Mono',monospace;white-space:nowrap;transition:all .15s;flex-shrink:0}
-.admin-item-del:hover{background:var(--red);border-color:var(--red);color:#fff}
-.at-hms{width:58px!important;text-align:center}
-.at-hms-sep{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);flex-shrink:0}
-
 /* ── LANDING PAGE ── */
 #landing{position:fixed;inset:0;z-index:1000;background:var(--ink);display:flex;flex-direction:column;overflow:hidden;transition:opacity .5s,transform .5s}
 #landing.hidden{opacity:0;transform:translateY(-16px);pointer-events:none}
@@ -239,7 +210,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 #landingSearch{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Jost',sans-serif;font-size:15px;font-weight:300;padding:16px 0;caret-color:#fff}
 #landingSearch::placeholder{color:rgba(255,255,255,.2)}
 .search-hint{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:2px;padding:10px 2px}
-.search-results{display:none;background:rgba(20,16,12,.95);border:1px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 3px 3px;max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.search-results{display:none;background:rgba(20,16,12,.95);border:1px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 3px 3px;max-height:320px;overflow-y:auto}
 .search-results.show{display:block}
 .sr-item{display:flex;align-items:center;gap:14px;padding:12px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.05)}
 .sr-item:last-child{border-bottom:none}
@@ -256,14 +227,6 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 #starField{position:absolute;inset:0;opacity:.6}
 
 </style>
-  <!-- PWA -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Astrofoto">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#0a0806">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADmElEQVR4nO3cUW7TYBSE0TwhlMWyL3bCrgoSoqoK1ynpb884OdZ5DlPfT6iq1F4u+z/Xr19Y7oDDrXzi74trWzTx18E/aYLbZMENymCLLLhBGWxRBltkwQ3KYIs4GCmDLcpgizLYIg5GymCLMtgiDkbKYIs4Tunlz7PrvyKOU8rEEf+y+Yhj4ri+6yP+ZfMR4iBPGWw5NI7D/ktkCXEwEgcj33MwEgcjcTASByNlsEUcjMTBSByMxMFIHIzEwUgcjMTBSByMxMFIHIyK4vjx/dvxTjdJHC2XKJwkjpZLFE4SR8slCieJo+UShZPE0XKJwkniaLlE4SRxtFyicJI4Wi5ROEkcLZconCSOlksUThJHyyUKJ4mj5RKFk8TRconCSeJouUThJHG0XKJwkjhaLlE4SRwtlyicJI7172t5HPHXdQBxxCb1E0dsUj9xxCb1E0dsUj9xxCb1E0dsUj9xxCb1E0dsUj9xxCb1E0dsUj9xxCbt6uXNc/eHiCM2aVfiWPDhwUm7EseCDw9O2pU4Fnx4cFI/ccQm9RNHbFI/ccQm9RNHbFI/ccQm9RNHbFK/c8Sxn9NNEkfLJQoniaPlEoWTxNFyicJJ4mi5ROEkcbRconCSOFouUThJHC2XKJwkjpZLFE4SR8slCieJo+UShZPE0XKJwkniaLlE4SRxtFyicJI4Wi5ROEkcLZconCSOlksUThLH+ve1PI746zqAOGKT+okjNqmfOGKT+okjNqmfOGKT+okjNqmfOGKT+n0qjiV/IeSYS4jjDuKITeonjtikfuKITernG9LYpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE3qJ47YpH7iiE1aa+GvHr4qioPPEAcjcTASB4cSByNxMBIHo8uvJz6CQpffT3wHhcTBSByMxMGoJY49frrHJ4mDkTgYXV6f+BSqXN4+8TVUEUeFtX8/fpXLuyc+6DkVxvG+DHGkiIPROeLQB9epDHFw3YhDH09uqwx9PLPbZYjjaX0oDn08oY+WoY9n839l6ON53FOGOJ7EnXHo4+HdX4ZEHtiCLPTxkFaWoY9Hsr4MiTyAHbPQx6kdUYZETufQLFRyCskm/n7ir4NrWxM3n/j7ekgHHO4nQrFLB4e827sAAAAASUVORK5CYII=">
 </head>
 <body>
 
@@ -273,12 +236,12 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
   <div class="landing-grid"></div>
   <div class="landing-inner">
     <div class="landing-header">
-      <div class="landing-eye">// Astrofotografia · Europa</div>
+      <div class="landing-eye">// Tool Astrofoto · Europa</div>
     </div>
     <div class="landing-body">
       <div>
-        <h1 class="landing-title">Astrofotografia</h1>
-        <p class="landing-sub">Tool per l'astrofotografia</p>
+        <h1 class="landing-title">Tool<br><em>Astro</em>Foto</h1>
+        <p class="landing-sub">Pianificazione osservativa per astrofotografi europei. 155 oggetti, 9 paesi, calcolo altitudine dinamico.</p>
       </div>
       <div class="landing-actions">
         <button class="land-btn land-btn-primary" id="btnCatalog">
@@ -289,15 +252,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
           <span class="land-btn-lbl">Cerca oggetto</span>
           <span class="land-btn-val">Ricerca per nome</span>
         </button>
-        <button class="land-btn land-btn-secondary" id="btnAddTarget">
-          <span class="land-btn-lbl">Personalizza</span>
-          <span class="land-btn-val">+ Aggiungi target</span>
-        </button>
       </div>
-      <div style="margin-top:8px">
-        <button id="btnAdmin" style="background:none;border:none;color:rgba(255,255,255,.15);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;cursor:pointer;padding:4px 0;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.35)'" onmouseout="this.style.color='rgba(255,255,255,.15)'">⚙ gestione catalogo</button>
-      </div>
-
       <div class="landing-search" id="searchPanel" style="display:none">
         <div class="search-bar">
           <span class="search-icon">⊹</span>
@@ -317,8 +272,8 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
       <div style="display:flex;align-items:center;gap:20px">
       <button id="btnBackHome" title="Torna alla home" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:3px;color:rgba(255,255,255,.6);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:8px 14px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">← Home</button>
       <div class="brand">
-        <div class="brand-eye">// Astrofotografia</div>
-        <h1 class="brand-title">Astrofotografia</h1>
+        <div class="brand-eye">// Tool Astrofoto</div>
+        <h1 class="brand-title">Tool<br><em>Astro</em>Foto</h1>
       </div>
       </div>
     </div>
@@ -377,7 +332,6 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
           <select id="filterSort">
             <option value="alt">Altitudine</option>
             <option value="mag">Magnitudine</option>
-            <option value="name">Nome</option>
           </select>
         </span>
       </div>
@@ -393,16 +347,14 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 <div class="ctrl">
   <div class="ctrl-inner">
     <div class="ctrl-block">
-      <div class="ctrl-lbl">Posizione</div>
-      <div style="position:relative">
-        <div style="display:flex;gap:6px;align-items:center">
-          <input type="text" id="locationSearch" class="ctrl-sel" placeholder="Cerca città..." style="flex:1;cursor:text" autocomplete="off" oninput="onLocationInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLocation()}">
-          <button onclick="searchLocation()" style="background:var(--ink);border:none;border-radius:3px;padding:6px 10px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:#fff;cursor:pointer;white-space:nowrap">Cerca</button>
+      <div class="ctrl-lbl">Paese / Posizione</div>
+      <div class="loc-row">
+        <select class="ctrl-sel" id="countrySelect"></select>
+        <div class="lat-lon-inputs">
+          <div class="latlon-field"><span>φ</span><input type="number" id="inpLat" class="latlon-inp" step="0.1" min="-90" max="90" value="45.5"></div>
+          <div class="latlon-field"><span>λ</span><input type="number" id="inpLon" class="latlon-inp" step="0.1" min="-180" max="180" value="10.0"></div>
         </div>
-        <div id="locationLabel" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-top:4px;letter-spacing:1px">📍 Milano, IT</div>
-        <div id="locationResults" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:var(--bg);border:1px solid var(--border);border-radius:3px;margin-top:2px;max-height:200px;overflow-y:auto"></div>
       </div>
-      <div id="southernHemisphereWarning" style="display:none;margin-top:8px;padding:8px 10px;background:rgba(200,120,30,0.15);border:1px solid rgba(200,120,30,0.4);border-radius:3px;font-family:'DM Mono',monospace;font-size:8px;color:#c8781e;letter-spacing:0.5px;line-height:1.6">⚠ Posizione nell'emisfero australe — il catalogo è ottimizzato per l'emisfero nord. I dati di visibilità potrebbero non essere accurati.</div>
     </div>
     <div class="ctrl-block time-block">
       <div class="ctrl-lbl">Finestra Osservativa</div>
@@ -423,33 +375,8 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
   </div>
 </div>
 
-<!-- ══ METEO STRIP ══════════════════════════════════════════════════ -->
-<div id="meteoStrip" style="background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px"><div style="max-width:1400px;margin:0 auto">
-  <!-- Location bar -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0 8px;gap:12px">
-    <div style="display:flex;align-items:center;gap:8px;min-width:0">
-      <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);letter-spacing:1px;flex-shrink:0">☁</span>
-      <span id="meteoStripLocation" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer" onclick="toggleMeteoSearch()">Colma di Sormano, CO</span>
-    </div>
-    <button onclick="toggleMeteoSearch()" style="background:none;border:none;font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);cursor:pointer;letter-spacing:1px;padding:0;flex-shrink:0">✎ cambia</button>
-  </div>
-  <!-- Search box (hidden by default) -->
-  <div id="meteoSearchBox" style="display:none;padding-bottom:10px">
-    <div style="display:flex;gap:6px">
-      <input type="text" id="meteoStripCity" class="at-inp" placeholder="Cerca città..." style="flex:1;font-size:11px" onkeydown="if(event.key==='Enter')searchMeteoStrip()">
-      <button onclick="searchMeteoStrip()" style="background:var(--ink);border:none;border-radius:3px;padding:7px 12px;font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;color:#fff">Cerca</button>
-    </div>
-    <div id="meteoStripResults" style="margin-top:4px"></div>
-  </div>
-  <!-- Forecast cards row -->
-  <div id="meteoStripCards" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;scrollbar-width:thin;-webkit-overflow-scrolling:touch"></div>
-  <div id="meteoStripLoading" style="padding:12px 0;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);text-align:center">Caricamento previsioni...</div>
-  <div id="meteoStripError" style="display:none;padding:10px 0;font-family:'DM Mono',monospace;font-size:9px;color:#c0392b"></div>
-</div></div>
-
 <!-- ══ MONTH NAV ═══════════════════════════════════════════════════ -->
 <nav class="mnav"><div class="mnav-track" id="mnav"></div></nav>
-
 <main id="main"></main>
 
 <!-- ══ MODAL ═══════════════════════════════════════════════════════ -->
@@ -476,295 +403,13 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
   </div>
 </div>
 
-<!-- ══ ADMIN MODAL ══════════════════════════════════════════════════ -->
-<div class="modal-overlay" id="adminOverlay" style="align-items:flex-start;overflow-y:auto;padding:0">
-  <div id="adminModal" style="background:var(--bg);width:100%;min-height:100vh;max-width:640px;margin:0 auto;padding:40px 32px 60px;box-sizing:border-box">
-    <button class="modal-close" id="adminClose" style="position:fixed;top:16px;right:16px;z-index:10">✕</button>
-    <div>
-      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:6px">Accesso riservato</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;letter-spacing:-1px;margin-bottom:20px">Gestione catalogo</div>
-
-      <!-- Password screen -->
-      <div id="adminAuth">
-        <div style="font-size:12px;color:var(--ink3);margin-bottom:12px">Inserisci la password per accedere</div>
-        <div style="display:flex;gap:8px">
-          <input type="password" id="adminPwd" class="at-inp" placeholder="Password" style="flex:1" onkeydown="if(event.key==='Enter')document.getElementById('adminAuthBtn').click()">
-          <button id="adminAuthBtn" style="background:var(--ink);border:none;border-radius:3px;padding:10px 18px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;white-space:nowrap">Accedi</button>
-        </div>
-        <div id="adminAuthErr" style="display:none;font-size:10px;color:var(--red);margin-top:8px;font-family:'DM Mono',monospace">Password errata</div>
-      </div>
-
-      <!-- Admin panel -->
-      <div id="adminPanel" style="display:none">
-        <!-- Camera management -->
-        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
-          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:10px">CAMERE</div>
-          <div id="adminCameraList" style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px"></div>
-          <div id="adminCameraForm" style="display:none;background:var(--bg2);border-radius:4px;padding:12px;margin-bottom:8px">
-            <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;margin-bottom:8px">NUOVA CAMERA</div>
-            <div style="display:flex;flex-direction:column;gap:6px">
-              <input type="text" id="camName" class="at-inp" placeholder="Nome (es. Canon EOS R50)">
-              <div style="display:flex;gap:6px">
-                <input type="number" id="camW" class="at-inp" placeholder="Largh. sensore mm (es. 22.3)" step="0.1" style="flex:1">
-                <input type="number" id="camH" class="at-inp" placeholder="Alt. sensore mm (es. 14.9)" step="0.1" style="flex:1">
-              </div>
-              <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4)">I FOV vengono calcolati automaticamente per tutte le focali disponibili</div>
-              <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:4px">
-                <button onclick="document.getElementById('adminCameraForm').style.display='none'" style="background:none;border:1px solid var(--border);border-radius:3px;padding:6px 12px;font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;color:var(--ink3)">Annulla</button>
-                <button onclick="saveNewCamera()" style="background:var(--ink);border:none;border-radius:3px;padding:6px 14px;font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;color:#fff">Aggiungi</button>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;gap:6px">
-            <button onclick="document.getElementById('adminCameraForm').style.display='block'" style="flex:1;background:none;border:1px dashed var(--border);border-radius:3px;padding:7px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--ink4);cursor:pointer;text-align:center">+ AGGIUNGI CAMERA</button>
-            <button onclick="recalcAllBest()" style="flex:1;background:var(--ink);border:none;border-radius:3px;padding:7px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;color:#fff;cursor:pointer;text-align:center">⟳ VERIFICA VISIBILITÀ</button>
-          </div>
-          <div id="recalcLog" style="display:none;margin-top:8px;background:var(--bg2);border-radius:3px;padding:10px;font-family:'DM Mono',monospace;font-size:8px;line-height:1.8;color:var(--ink3)"></div>
-        </div>
-
-        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
-          <div id="ghTokenSection" style="display:none">
-            <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;margin-bottom:6px">GITHUB TOKEN (salvato solo su questo device)</div>
-            <div style="display:flex;gap:8px">
-              <input type="password" id="ghTokenInput" class="at-inp" placeholder="ghp_..." style="flex:1;font-family:'DM Mono',monospace;font-size:10px">
-              <button id="btnSaveToken" style="background:var(--ink);border:none;border-radius:3px;padding:8px 14px;font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;color:#fff;white-space:nowrap">Salva</button>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-            <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;line-height:1.5">Pubblica su GitHub Pages<br>automaticamente</div>
-            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-              <button id="btnExportIndex" style="background:var(--ink);border:none;border-radius:3px;padding:10px 18px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;white-space:nowrap" onclick="publishToGitHub()">⬆ Pubblica su GitHub</button>
-              <div id="publishStatus" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;min-height:14px"></div>
-            </div>
-          </div>
-
-        <!-- OGGETTI (in fondo) -->
-        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
-        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);margin-bottom:10px">OGGETTI NEL CATALOGO — clicca per rimuovere</div>
-        <input type="text" id="adminSearch" class="at-inp" placeholder="Cerca per nome o catalogo..." style="margin-bottom:10px;width:100%;box-sizing:border-box" oninput="filterAdminList(this.value)">
-        <div id="adminList" style="max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:2px"></div>
-        <div id="adminEmpty" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);text-align:center;padding:24px">Nessun oggetto nel catalogo</div>
-        </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ CONFIRM DIALOG ═══════════════════════════════════════════════ -->
-<div id="confirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center">
-  <div style="background:var(--bg);border-radius:4px;padding:28px 32px;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)">
-    <div id="confirmIcon" style="font-size:22px;margin-bottom:10px"></div>
-    <div id="confirmTitle" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:8px"></div>
-    <div id="confirmMsg" style="font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:24px"></div>
-    <div style="display:flex;gap:10px;justify-content:flex-end">
-      <button id="confirmCancel" style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:9px 20px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:var(--ink3)">Annulla</button>
-      <button id="confirmOk" style="border:none;border-radius:3px;padding:9px 22px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;font-weight:500">Conferma</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ EDIT OBJECT MODAL ════════════════════════════════════════════ -->
-<div class="modal-overlay" id="editOverlay">
-  <div class="modal" id="editModal" style="max-width:520px">
-    <button class="modal-close" id="editClose">✕</button>
-    <div style="padding:28px 32px 24px">
-      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:6px">Modifica oggetto</div>
-      <div id="editTitle" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:-1px;margin-bottom:20px"></div>
-
-      <div class="at-field"><label class="at-lbl">Nome</label><input type="text" id="editName" class="at-inp"></div>
-      <div class="at-field"><label class="at-lbl">Catalogo / Sigle</label><input type="text" id="editCat" class="at-inp"></div>
-
-      <div class="at-field" style="display:flex;gap:16px;flex-wrap:wrap">
-        <div style="flex:1;min-width:120px"><label class="at-lbl">Magnitudine</label><input type="number" id="editMag" class="at-inp" step="0.01"></div>
-        <div style="flex:1;min-width:120px"><label class="at-lbl">Dimensione</label><div style="display:flex;align-items:center;gap:6px"><input type="number" id="editSizeVal" class="at-inp" step="0.1"><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3)">'</span></div></div>
-      </div>
-
-      <div class="at-field">
-        <label class="at-lbl">Tipo</label>
-        <div class="at-type-row" id="editTypeRow">
-          <button class="at-type-btn" data-type="nebula">Nebulosa</button>
-          <button class="at-type-btn" data-type="galaxy">Galassia</button>
-          <button class="at-type-btn" data-type="cluster">Ammasso</button>
-          <button class="at-type-btn" data-type="planet">Pianeta</button>
-          <button class="at-type-btn" data-type="double">Doppia</button>
-        </div>
-      </div>
-
-      <div class="at-field">
-        <label class="at-lbl">Coordinate celesti</label>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:28px">RA</span>
-            <input type="number" id="editRAh" class="at-inp at-hms" placeholder="h" min="0" max="23" step="1">
-            <span class="at-hms-sep">h</span>
-            <input type="number" id="editRAm" class="at-inp at-hms" placeholder="m" min="0" max="59" step="1">
-            <span class="at-hms-sep">m</span>
-            <input type="number" id="editRAs" class="at-inp at-hms" placeholder="s" min="0" max="59" step="0.1">
-            <span class="at-hms-sep">s</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:28px">Dec</span>
-            <input type="number" id="editDecd" class="at-inp at-hms" placeholder="°" min="-90" max="90" step="1">
-            <span class="at-hms-sep">°</span>
-            <input type="number" id="editDecm" class="at-inp at-hms" placeholder="′" min="0" max="59" step="1">
-            <span class="at-hms-sep">′</span>
-            <input type="number" id="editDecs" class="at-inp at-hms" placeholder="″" min="0" max="59" step="0.1">
-            <span class="at-hms-sep">″</span>
-          </div>
-        </div>
-        <div id="editMonthsPreview" style="margin-top:8px;min-height:18px;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);letter-spacing:1px"></div>
-      </div>
-
-      <div class="at-field">
-        <label class="at-lbl">Focali consigliate</label>
-        <div class="at-type-row" id="editFocals">
-          <button class="at-focal-btn" data-focal="135">135mm</button>
-          <button class="at-focal-btn" data-focal="336">336mm</button>
-          <button class="at-focal-btn" data-focal="750">750mm</button>
-          <button class="at-focal-btn" data-focal="1085">1085mm</button>
-          <button class="at-focal-btn" data-focal="1625">1625mm</button>
-        </div>
-      </div>
-
-      <div class="at-field"><label class="at-lbl">Descrizione</label><textarea id="editNotes" class="at-inp" rows="3" style="resize:vertical;line-height:1.6"></textarea></div>
-
-      <div class="at-field">
-        <label class="at-lbl">Foto <span style="font-weight:300;opacity:.5">(opzionale — sostituisce l'attuale)</span></label>
-        <div class="at-photo-area" id="editPhotoArea">
-          <input type="file" id="editPhotoFile" accept="image/*" style="display:none">
-          <canvas id="editPhotoPreview" width="200" height="120" style="display:none;border-radius:2px"></canvas>
-          <div id="editPhotoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none">
-            <span style="font-size:20px;opacity:.3">⊹</span>
-            <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4)">CLICCA PER CARICARE</span>
-          </div>
-        </div>
-        <div id="editPhotoName" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);margin-top:5px;letter-spacing:1px"></div>
-      </div>
-
-      <div id="editError" style="display:none;font-size:11px;color:var(--red);margin-bottom:12px;font-family:'DM Mono',monospace"></div>
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-        <button id="editCancel" style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:10px 20px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:var(--ink3)">Annulla</button>
-        <button id="editSave" style="background:var(--ink);border:none;border-radius:3px;padding:10px 24px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;font-weight:500">Salva modifiche</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ ADD TARGET MODAL ════════════════════════════════════════════ -->
-<div class="modal-overlay" id="addTargetOverlay">
-  <div class="modal" id="addTargetModal" style="max-width:520px">
-    <button class="modal-close" id="addTargetClose">✕</button>
-    <div style="padding:32px 32px 28px">
-      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:6px">Nuovo target</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;letter-spacing:-1px;margin-bottom:24px">Aggiungi oggetto</div>
-
-      <div class="at-field">
-        <label class="at-lbl">Nome oggetto</label>
-        <input type="text" id="atName" class="at-inp" placeholder="es. NGC 2244, Nebulosa Rosetta…">
-      </div>
-
-      <div class="at-field">
-        <label class="at-lbl">Catalogo / Sigle <span style="font-weight:300;opacity:.5">(opzionale)</span></label>
-        <input type="text" id="atCat" class="at-inp" placeholder="es. NGC 2841 · Ursa Major · M82">
-      </div>
-
-      <div class="at-field" style="display:flex;gap:16px;flex-wrap:wrap">
-        <div style="flex:1;min-width:120px">
-          <label class="at-lbl">Magnitudine <span style="font-weight:300;opacity:.5">(opzionale)</span></label>
-          <input type="number" id="atMag" class="at-inp" placeholder="es. 8.5" min="-5" max="25" step="0.1">
-        </div>
-        <div style="flex:1;min-width:120px">
-          <label class="at-lbl">Dimensione <span style="font-weight:300;opacity:.5">(opzionale)</span></label>
-          <div style="display:flex;align-items:center;gap:6px">
-            <input type="number" id="atSizeVal" class="at-inp" placeholder="es. 15" min="0.1" max="1000" step="0.1">
-            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3)">'</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="at-field">
-        <label class="at-lbl">Tipo</label>
-        <div class="at-type-row">
-          <button class="at-type-btn on" data-type="nebula">Nebulosa</button>
-          <button class="at-type-btn" data-type="galaxy">Galassia</button>
-          <button class="at-type-btn" data-type="cluster">Ammasso</button>
-          <button class="at-type-btn" data-type="planet">Pianeta</button>
-          <button class="at-type-btn" data-type="double">Doppia</button>
-        </div>
-      </div>
-
-      <div class="at-field">
-        <label class="at-lbl">Focali consigliate</label>
-        <div class="at-type-row" id="atFocals">
-          <button class="at-focal-btn" data-focal="135">135mm</button>
-          <button class="at-focal-btn" data-focal="336">336mm</button>
-          <button class="at-focal-btn" data-focal="750">750mm</button>
-          <button class="at-focal-btn" data-focal="1085">1085mm</button>
-          <button class="at-focal-btn" data-focal="1625">1625mm</button>
-        </div>
-        <div style="font-size:9px;color:var(--ink3);font-family:'DM Mono',monospace;margin-top:6px;letter-spacing:1px">Seleziona le focali con cui intendi fotografare questo oggetto</div>
-      </div>
-
-      <div class="at-field">
-        <label class="at-lbl">Coordinate celesti</label>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:28px">RA</span>
-            <input type="number" id="atRAh" class="at-inp at-hms" placeholder="h" min="0" max="23" step="1">
-            <span class="at-hms-sep">h</span>
-            <input type="number" id="atRAm" class="at-inp at-hms" placeholder="m" min="0" max="59" step="1">
-            <span class="at-hms-sep">m</span>
-            <input type="number" id="atRAs" class="at-inp at-hms" placeholder="s" min="0" max="59" step="0.1">
-            <span class="at-hms-sep">s</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:28px">Dec</span>
-            <input type="number" id="atDecd" class="at-inp at-hms" placeholder="°" min="-90" max="90" step="1">
-            <span class="at-hms-sep">°</span>
-            <input type="number" id="atDecm" class="at-inp at-hms" placeholder="′" min="0" max="59" step="1">
-            <span class="at-hms-sep">′</span>
-            <input type="number" id="atDecs" class="at-inp at-hms" placeholder="″" min="0" max="59" step="0.1">
-            <span class="at-hms-sep">″</span>
-          </div>
-        </div>
-        <div id="atMonthsPreview" style="margin-top:10px;min-height:20px;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);letter-spacing:1px"></div>
-      </div>
-
-      <div class="at-field">
-        <label class="at-lbl">Descrizione <span style="font-weight:300;opacity:.5">(opzionale)</span></label>
-        <textarea id="atNotes" class="at-inp" placeholder="es. Spirale floccosa con prominente bulge giallastro. Bracci delicati e tante stelle di sfondo." rows="3" style="resize:vertical;line-height:1.6"></textarea>
-      </div>
-
-      <div class="at-field">
-        <label class="at-lbl">Foto (opzionale)</label>
-        <div class="at-photo-area" id="atPhotoArea">
-          <input type="file" id="atPhotoFile" accept="image/*" style="display:none">
-          <canvas id="atPhotoPreview" width="120" height="80" style="display:none;border-radius:2px;object-fit:cover"></canvas>
-          <div id="atPhotoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none">
-            <span style="font-size:20px;opacity:.3">⊹</span>
-            <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4)">CLICCA PER CARICARE</span>
-          </div>
-        </div>
-      </div>
-
-      <div id="atError" style="display:none;font-size:11px;color:var(--red);margin-bottom:12px;font-family:'DM Mono',monospace"></div>
-
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-        <button id="atCancel" style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:10px 20px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:var(--ink3)">Annulla</button>
-        <button id="atSave" style="background:var(--ink);border:none;border-radius:3px;padding:10px 24px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;font-weight:500">Salva nel catalogo</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 // ═══════════════════════════════════════════════════════
 // CAMERAS
 // ═══════════════════════════════════════════════════════
 const CAMERAS = {
   sony_a6000: {
-    id:'sony_a6000', name:'Sony A6000', type:'APS-C',
+    name:'Sony A6000', type:'APS-C',
     w:23.5, h:15.6,          // sensor mm
     px:3.92, cols:6000, rows:4000,
     // max angular FOV at each focal length (arcmin) = sensor_dim/fl * (180/PI) * 60
@@ -775,7 +420,7 @@ const CAMERAS = {
     desc:'APS-C · 23.5×15.6mm · 24.3MP'
   },
   zwo_asi224mc: {
-    id:'zwo_asi224mc', name:'ZWO ASI 224 MC Color', type:'Piccolo',
+    name:'ZWO ASI 224 MC Color', type:'Piccolo',
     w:4.8, h:3.6,
     px:3.75, cols:1304, rows:976,
     fovs: [[135,122,91],[336,49,37],[750,22,16],[1085,15,11],[1625,10,8]],
@@ -801,7 +446,7 @@ const COUNTRIES = [
   {id:'gr',   label:'🇬🇷 Grecia',          lat:38.0, lon:23.5},
   {id:'custom',label:'📍 Personalizzato', lat:45.5, lon:10.0},
 ];
-let activeLat=45.4654, activeLon=9.1859; // Milano default
+let activeLat=45.5, activeLon=10.0;
 let timeStart=20, timeEnd=24, activeMonth=new Date().getMonth()+1;
 let activeFilt={type:null,focal:null,lx:false};
 let activeSortMode='alt';
@@ -1361,6 +1006,9 @@ const OBJ=[
 {id:'ngc7635',lx:3,name:'Nebulosa Bolla',cat:'NGC 7635 · Bubble Nebula',type:'nebula',ra:350.24,dec:61.20,months:[8,9,10,11],
  nasaQ:'NGC 7635 Bubble Nebula Hubble 2016',mag:8.0,size:"15×8'",diff:4,best:[336,750],
  notes:'Bolla soffiata da stella massiva BD+60°2522. Vicina a M52. In Hα la sfera è nitida.'},
+{id:'ic5146',lx:3,name:'Nebulosa Bozzolo',cat:'IC 5146 · Cocoon',type:'nebula',ra:328.37,dec:47.26,months:[7,8,9,10],
+ nasaQ:'IC 5146 Cocoon Nebula Cygnus',mag:7.2,size:"12'",diff:3,best:[336,750],
+ notes:'Emissione + riflessione + banda oscura B168. Oggetto complesso e visivamente ricco.'},
 {id:'ngc896',lx:3,name:'NGC 896',cat:'NGC 896 · IC 1795',type:'nebula',ra:35.55,dec:62.01,months:[9,10,11,12,1],
  nasaQ:'NGC 896 IC 1795 Fish Head Nebula',mag:9.0,size:"20'",diff:3,best:[336,750],
  notes:'"Testa di Pesce" a fianco della Nebulosa Cuore. In SHO tricolore è spettacolare.'},
@@ -1420,7 +1068,7 @@ const OBJ=[
 {id:'m33',lx:2,name:'Galassia Triangolo',cat:'M33 · NGC 598',type:'galaxy',ra:23.46,dec:30.66,months:[8,9,10,11,12],
  nasaQ:'M33 Triangulum Galaxy Hubble star forming',mag:5.7,size:"73×45'",diff:4,best:[135,336],
  notes:'Terza del Gruppo Locale. Bassa SB: cielo Bortle ≤4. NGC 604 (regione HII gigante) visibile a 336mm.'},
-{id:'ngc891',lx:0,name:'NGC 891',cat:'NGC 891',type:'galaxy',ra:35.64,dec:42.35,months:[9,10,11,12],
+{id:'ngc891',lx:0,name:'Galassia Ago',cat:'NGC 891',type:'galaxy',ra:35.64,dec:42.35,months:[9,10,11,12],
  nasaQ:'NGC 891 edge-on galaxy dust lane',mag:9.9,size:"14×3'",diff:3,best:[750,1085],
  notes:'Archetipo delle edge-on. Banda di polvere asimmetrica. Filamenti verticali in profondità.'},
 {id:'m74',lx:1,name:'Galassia Fantasma',cat:'M74 · NGC 628',type:'galaxy',ra:24.17,dec:15.78,months:[9,10,11,12],
@@ -1438,7 +1086,7 @@ const OBJ=[
 {id:'m101',lx:2,name:'Galassia Girandola',cat:'M101 · NGC 5457',type:'galaxy',ra:210.80,dec:54.35,months:[2,3,4,5,6,7],
  nasaQ:'M101 Pinwheel Galaxy Hubble ULX regions',mag:7.9,size:"29×27'",diff:3,best:[336,750],
  notes:'Spirale frontale asimmetrica. Bassa SB: Bortle ≤4. Oltre 1000 regioni HII nei bracci.'},
-{id:'m63',lx:2,name:'Galassia Girasole',cat:'M63 · NGC 5055 · Girasole',type:'galaxy',ra:198.95,dec:42.03,months:[3,4,5,6],
+{id:'m63',lx:2,name:'Galassia Girasole',cat:'M63 · NGC 5055',type:'galaxy',ra:198.95,dec:42.03,months:[3,4,5,6],
  nasaQ:'M63 Sunflower Galaxy NGC 5055 spiral',mag:8.6,size:"12×8'",diff:2,best:[336,750],
  notes:'Spirale floccosa con bracci irregolari. Parte del Gruppo M51. Alone esteso in fotografia profonda.'},
 {id:'m64',lx:0,name:'Occhio Nero',cat:'M64 · NGC 4826',type:'galaxy',ra:194.18,dec:21.68,months:[3,4,5,6],
@@ -1516,6 +1164,9 @@ const OBJ=[
 {id:'m87',lx:0,name:'M87',cat:'M87 · NGC 4486 · Virgo A',type:'galaxy',ra:187.71,dec:12.39,months:[3,4,5,6],
  nasaQ:'M87 Virgo A elliptical galaxy jet black hole',mag:8.6,size:"7×7'",diff:3,best:[750,1085,1625],
  notes:'Galassia ellittica con il famoso jet. Il jet è visibile a 1625mm in esposizione profonda.'},
+{id:'ngc5055',lx:1,name:'NGC 5055',cat:'NGC 5055 · M63 Sunflower',type:'galaxy',ra:198.95,dec:42.03,months:[3,4,5,6],
+ nasaQ:'M63 Sunflower Galaxy NGC 5055 tidal streams',mag:8.6,size:"12×8'",diff:2,best:[336,750],
+ notes:'Spirale floccosa con correnti stellari tenue in profondità. Gruppo M51.'},
 {id:'ngc6744',lx:1,name:'NGC 6744',cat:'NGC 6744 · Pavo',type:'galaxy',ra:287.44,dec:-63.86,months:[7,8],
  nasaQ:'NGC 6744 Pavo spiral galaxy Milky Way twin',mag:9.0,size:"20×13'",diff:3,best:[135,336],
  notes:'Considerata simile alla Via Lattea. Molto meridionale, solo da Grecia estrema o Spagna meridionale.'},
@@ -1640,7 +1291,9 @@ const OBJ=[
 {id:'ngc884b',lx:0,name:'Ammasso χ Persei',cat:'NGC 884 · Chi Persei',type:'cluster',ra:35.70,dec:57.14,months:[9,10,11,12,1,2],
  nasaQ:'NGC 884 chi Persei open cluster young stars',mag:4.4,size:"30'",diff:1,best:[135,336],
  notes:'Componente orientale del Doppio Ammasso. Stelle molto giovani (~14 milioni di anni).'},
-{id:'ngc1502',lx:0,name:'NGC 1502',cat:'NGC 1502 · Jolly Roger',type:'cluster',ra:60.879999999999995,dec:62.330000000000005,months:[10,11,12,1,2],mag:5.7,size:"8'",diff:1,best:[336,750],notes:'Piccolo ma brillante in Camelopardalis. Punto finale della Cascata di Kemble (asterismo).'},
+{id:'ngc1502',lx:0,name:'NGC 1502',cat:'NGC 1502 · Jolly Roger',type:'cluster',ra:60.88,dec:62.33,months:[10,11,12,1,2],
+ nasaQ:'NGC 1502 Jolly Roger cluster Camelopardalis',mag:5.7,size:"8'",diff:1,best:[336,750],
+ notes:'Piccolo ma brillante in Camelopardalis. Punto finale della Cascata di Kemble (asterismo).'},
 {id:'m48',lx:0,name:'M48',cat:'M48 · NGC 2548',type:'cluster',ra:123.42,dec:-5.80,months:[1,2,3,4],
  nasaQ:'M48 NGC 2548 Hydra open cluster Messier',mag:5.5,size:"54'",diff:1,best:[135,336],
  notes:'Grande ammasso in Idra. Ricco di stelle binarie. Bello in campo largo.'},
@@ -1725,8 +1378,12 @@ const OBJ=[
 {id:'ngc247',lx:0,name:'NGC 247',cat:'NGC 247 · Sculptor',type:'galaxy',ra:11.79,dec:-20.76,months:[10,11,12],
  nasaQ:'NGC 247 Sculptor galaxy Group void',mag:9.1,size:"20×8'",diff:3,best:[336,750],
  notes:'Spirale del Gruppo dello Scultore. Contiene un "void" privo di stelle. Bassa dal Nord.'},
-{id:'ngc2976',lx:0,name:'NGC 2976',cat:'NGC 2976 · M81 Group',type:'galaxy',ra:147.57000000000002,dec:67.9,months:[1,2,3,4,5,6],mag:10.2,size:"6×3'",diff:3,best:[750,1085],notes:'Membro del Gruppo M81. Spirale con bracci non definiti, quasi irregolare.'},
-{id:'ngc3077',lx:0,name:'NGC 3077',cat:'NGC 3077 · M81 Group',type:'galaxy',ra:150.83,dec:68.74,months:[1,2,3,4,5,6],mag:9.9,size:"5×4'",diff:3,best:[750,1085],notes:'Terzo membro principale del Gruppo M81. Ellittica perturbata con code di marea.'},
+{id:'ngc2976',lx:0,name:'NGC 2976',cat:'NGC 2976 · M81 Group',type:'galaxy',ra:147.57,dec:67.90,months:[1,2,3,4,5,6],
+ nasaQ:'NGC 2976 M81 Group spiral galaxy',mag:10.2,size:"6×3'",diff:3,best:[750,1085],
+ notes:'Membro del Gruppo M81. Spirale con bracci non definiti, quasi irregolare.'},
+{id:'ngc3077',lx:0,name:'NGC 3077',cat:'NGC 3077 · M81 Group',type:'galaxy',ra:150.83,dec:68.74,months:[1,2,3,4,5,6],
+ nasaQ:'NGC 3077 M81 Group elliptical interacting',mag:9.9,size:"5×4'",diff:3,best:[750,1085],
+ notes:'Terzo membro principale del Gruppo M81. Ellittica perturbata con code di marea.'},
 {id:'ngc4725',lx:0,name:'NGC 4725',cat:'NGC 4725 · Coma',type:'galaxy',ra:192.61,dec:25.50,months:[3,4,5,6],
  nasaQ:'NGC 4725 barred ringed spiral galaxy Coma',mag:9.2,size:"11×8'",diff:3,best:[336,750],
  notes:'Spirale barrata con anello prominente e un solo braccio a spirale evidente.'},
@@ -1739,6 +1396,9 @@ const OBJ=[
 {id:'ngc4395',lx:0,name:'NGC 4395',cat:'NGC 4395 · Canes Venatici',type:'galaxy',ra:186.45,dec:33.55,months:[3,4,5,6],
  nasaQ:'NGC 4395 dwarf galaxy low surface brightness',mag:10.0,size:"13×11'",diff:4,best:[135,336],
  notes:'Galassia nana di bassa luminosità superficiale. Sfida difficile, ricompensa visiva alta.'},
+{id:'ngc5866b',lx:0,name:'NGC 5907',cat:'NGC 5907 · Draco',type:'galaxy',ra:228.97,dec:56.33,months:[4,5,6,7],
+ nasaQ:'NGC 5907 Splinter Galaxy tidal stellar streams',mag:10.4,size:"12×1.4'",diff:3,best:[750,1085],
+ notes:'Edge-on con correnti stellari tenue attorno. In profondità rivelano il passato merger.'},
 {id:'ngc4216',lx:0,name:'NGC 4216',cat:'NGC 4216 · Virgo Cluster',type:'galaxy',ra:183.98,dec:13.15,months:[3,4,5,6],
  nasaQ:'NGC 4216 edge-on spiral Virgo cluster',mag:9.9,size:"8×2'",diff:3,best:[750,1085],
  notes:'Edge-on nel cuore del Virgo Cluster. NGC 4206 e NGC 4222 nelle immediate vicinanze.'},
@@ -1778,11 +1438,13 @@ const OBJ=[
 {id:'m26',lx:0,name:'M26',cat:'M26 · NGC 6694',type:'cluster',ra:281.22,dec:-9.40,months:[6,7,8,9],
  nasaQ:'M26 NGC 6694 Scutum open cluster',mag:8.0,size:"15'",diff:1,best:[336,750],
  notes:'Ammasso in Scudo. Buca di polvere attorno riduce la stella di sfondo. Vicino a M11.'},
-{id:'ngc2362',lx:0,name:'τ Canis Majoris Cluster',cat:'NGC 2362 · Tau Canis Majoris',type:'cluster',ra:109.66999999999999,dec:-24.95,months:[12,1,2,3],mag:4.1,size:"8'",diff:1,best:[336,750],notes:'Compatto e molto giovane (~5 Ma). Stelle blu brillanti attorno a τ CMa. Basso dal Nord.'},
+{id:'ngc2362',lx:0,name:'τ Canis Majoris Cluster',cat:'NGC 2362 · Tau Canis Majoris',type:'cluster',ra:109.67,dec:-24.95,months:[12,1,2,3],
+ nasaQ:'NGC 2362 open cluster Canis Major young blue stars',mag:4.1,size:"8'",diff:1,best:[336,750],
+ notes:'Compatto e molto giovane (~5 Ma). Stelle blu brillanti attorno a τ CMa. Basso dal Nord.'},
 {id:'ngc5139',lx:0,name:'Omega Centauri',cat:'NGC 5139 · ω Centauri',type:'cluster',ra:201.70,dec:-47.48,months:[4,5,6],
  nasaQ:'Omega Centauri NGC 5139 largest globular Hubble',mag:3.9,size:"36'",diff:1,best:[135,336],
  notes:'Il più grande globulare della Via Lattea (~10 milioni di stelle). Solo da Sud Europa.'},
-/* __OBJ_END__ */];
+];
 
 
 // ═══════════════════════════════════════════════════════
@@ -1790,8 +1452,6 @@ const OBJ=[
 // Falls back to canvas if image not found
 // ═══════════════════════════════════════════════════════
 const LOCAL_IMGS = {
-  'ngc2362':'img/ngc2362.jpg',
-  'ngc2976':'img/ngc2976.jpg','ngc3077':'img/ngc3077.jpg',
   'm42':'img/m42.jpg','ic434':'img/ic434.jpg','ngc1977':'img/ngc1977.jpg',
   'm78':'img/m78.jpg','m1':'img/m1.jpg','ngc2174':'img/ngc2174.jpg',
   'ngc2244':'img/ngc2244.jpg','ngc1499':'img/ngc1499.jpg','ic1805':'img/ic1805.jpg',
@@ -1819,7 +1479,7 @@ const LOCAL_IMGS = {
   'ngc6946':'img/ngc6946.jpg','ngc7331':'img/ngc7331.jpg','ic342':'img/ic342.jpg',
   'ngc2903':'img/ngc2903.jpg','ngc772':'img/ngc772.jpg','ngc4594':'img/ngc4594.jpg',
   'ngc253':'img/ngc253.jpg','ngc1316':'img/ngc1316.jpg','ngc2403':'img/ngc2403.jpg',
-  'ngc247':'img/ngc247.jpg','ngc4395':'img/ngc4395.jpg','ngc4725':'img/ngc4725.jpg','ngc2683':'img/ngc2683.jpg','ngc2841':'img/ngc2841.jpg',
+  'ngc247':'img/ngc247.jpg','ngc4725':'img/ngc4725.jpg','ngc2841':'img/ngc2841.jpg',
   'ngc7479':'img/ngc7479.jpg','ngc7814':'img/ngc7814.jpg','ngc3521':'img/ngc3521.jpg',
   'ngc5055':'img/ngc5055.jpg','ngc4490':'img/ngc4490.jpg','ngc5139':'img/ngc5139.jpg',
   'ngc1232':'img/ngc1232.jpg','ngc300':'img/ngc300.jpg','ngc55':'img/ngc55.jpg',
@@ -1830,7 +1490,7 @@ const LOCAL_IMGS = {
   'ngc6397':'img/ngc6397.jpg','m56':'img/m56.jpg','m107':'img/m107.jpg',
   'm62':'img/m62.jpg','m79':'img/m79.jpg','ngc5024':'img/ngc5024.jpg',
   'ngc6752':'img/ngc6752.jpg',
-  'm45':'img/m45.jpg','ngc1502':'img/ngc1502.jpg','ngc869':'img/ngc869.jpg','ngc884b':'img/ngc884b.jpg',
+  'm45':'img/m45.jpg','ngc869':'img/ngc869.jpg','ngc884b':'img/ngc884b.jpg',
   'ngc7789':'img/ngc7789.jpg','ngc457':'img/ngc457.jpg','m35':'img/m35.jpg',
   'm36':'img/m36.jpg','m37':'img/m37.jpg','m38':'img/m38.jpg','m34':'img/m34.jpg',
   'm11':'img/m11.jpg','m41':'img/m41.jpg','m50':'img/m50.jpg','m52':'img/m52.jpg',
@@ -1862,81 +1522,33 @@ const MONTHS=[
 // ═══════════════════════════════════════════════════════
 // INIT UI
 // ═══════════════════════════════════════════════════════
-function initLocationSearch(){
-  // Restore saved location
-  try {
-    const saved = JSON.parse(localStorage.getItem('astrofoto_obs_loc') || 'null');
-    if(saved){
-      activeLat = saved.lat; activeLon = saved.lon;
-      document.getElementById('locationLabel').textContent = '📍 ' + saved.name;
-      document.getElementById('locationSearch').placeholder = saved.name;
-    }
-  } catch(e){}
-
-  let searchTimeout = null;
-
-  window.onLocationInput = function(val){
-    clearTimeout(searchTimeout);
-    if(!val.trim()){ document.getElementById('locationResults').style.display='none'; return; }
-    searchTimeout = setTimeout(() => searchLocation(val), 500);
-  };
-
-  window.searchLocation = async function(q){
-    const input = document.getElementById('locationSearch');
-    q = q || input.value.trim();
-    if(!q) return;
-    const res = document.getElementById('locationResults');
-    res.innerHTML = '<div style="padding:8px 10px;font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">Ricerca...</div>';
-    res.style.display = 'block';
-    try {
-      const r = await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&limit=5&accept-language=it');
-      const data = await r.json();
-      res.innerHTML = '';
-      if(!data.length){
-        res.innerHTML = '<div style="padding:8px 10px;font-family:DM Mono,monospace;font-size:9px;color:var(--ink4)">Nessun risultato</div>';
-        return;
-      }
-      data.forEach(place => {
-        const row = document.createElement('div');
-        row.style.cssText = 'padding:8px 10px;cursor:pointer;font-family:Jost,sans-serif;font-size:11px;color:var(--ink);border-bottom:1px solid var(--border)';
-        const name = place.display_name.split(',').slice(0,3).join(', ');
-        row.textContent = name;
-        row.onmouseover = () => row.style.background = 'var(--bg2)';
-        row.onmouseout  = () => row.style.background = '';
-        row.onclick = () => {
-          activeLat = parseFloat(place.lat);
-          activeLon = parseFloat(place.lon);
-          const shortName = place.display_name.split(',').slice(0,2).join(', ');
-          localStorage.setItem('astrofoto_obs_loc', JSON.stringify({lat:activeLat, lon:activeLon, name:shortName}));
-          document.getElementById('locationLabel').textContent = '📍 ' + shortName;
-          document.getElementById('locationSearch').value = '';
-          document.getElementById('locationSearch').placeholder = shortName;
-          res.style.display = 'none';
-          checkHemisphere();
-          refreshAll();
-        };
-        res.appendChild(row);
-      });
-    } catch(e){
-      res.innerHTML = '<div style="padding:8px 10px;font-family:DM Mono,monospace;font-size:9px;color:#c0392b">Errore nella ricerca</div>';
-    }
-  };
-
-  // Close results on outside click
-  document.addEventListener('click', e => {
-    if(!e.target.closest('#locationResults') && e.target.id !== 'locationSearch'){
-      document.getElementById('locationResults').style.display = 'none';
-    }
+function initCountrySelect(){
+  const sel=document.getElementById('countrySelect');
+  COUNTRIES.forEach(c=>{
+    const o=document.createElement('option');
+    o.value=c.id; o.textContent=c.label;
+    sel.appendChild(o);
   });
-
-  checkHemisphere();
+  sel.addEventListener('change',()=>{
+    const c=COUNTRIES.find(x=>x.id===sel.value);
+    if(c&&c.id!=='custom'){
+      activeLat=c.lat; activeLon=c.lon;
+      document.getElementById('inpLat').value=activeLat;
+      document.getElementById('inpLon').value=activeLon;
+    }
+    refreshAll();
+  });
+  document.getElementById('inpLat').addEventListener('change',e=>{
+    activeLat=parseFloat(e.target.value)||45.5;
+    document.getElementById('countrySelect').value='custom';
+    refreshAll();
+  });
+  document.getElementById('inpLon').addEventListener('change',e=>{
+    activeLon=parseFloat(e.target.value)||10.0;
+    document.getElementById('countrySelect').value='custom';
+    refreshAll();
+  });
 }
-
-function checkHemisphere(){
-  const w = document.getElementById('southernHemisphereWarning');
-  if(w) w.style.display = activeLat < 0 ? 'block' : 'none';
-}
-
 
 function initGlobalFilters(){
   document.getElementById('filterType').addEventListener('change',e=>{
@@ -2062,21 +1674,19 @@ function buildCard(obj,month){
       <div style="display:flex;gap:4px;flex-wrap:wrap">
         <span class="type-badge">${TYPE_N[obj.type]||obj.type}</span>
         ${lxBadge}
-        ${obj._custom?'<span style="font-family:DM Mono,monospace;font-size:7px;padding:2px 6px;border-radius:2px;background:rgba(45,91,227,.15);border:1px solid rgba(45,91,227,.3);color:var(--blue)">&#9670; custom</span>':''}
       </div>
       <div class="alt-badge" style="color:${ac.c};background:rgba(250,249,246,.92);border-color:${ac.c}22">
         <span class="alt-dot" style="background:${ac.c}"></span>
-        ${info.alt}° · ${fmtH(info.hour)}
+        ${info.alt}°
       </div>
     </div>
     <div class="alt-meter"><div class="alt-meter-fill" style="width:${Math.min(100,Math.max(0,info.alt))}%;background:${ac.c}44"></div></div>
-
   </div>
   <div class="card-body">
     <div class="card-name">${obj.name}</div>
     <div class="card-cat">${obj.cat||''} · ${TYPE_N[obj.type]}</div>
     <div class="card-row2">
-      <div class="cstat"><span class="cs-lbl">Magnitudine</span><span class="cs-val">${obj.mag===99?'—':obj.mag}</span></div>
+      <div class="cstat"><span class="cs-lbl">Magnitudine</span><span class="cs-val">${obj.mag}</span></div>
       <div class="cstat"><span class="cs-lbl">Dimensione</span><span class="cs-val">${obj.size||'—'}</span></div>
     </div>
     <div class="diff-row">
@@ -2090,21 +1700,16 @@ function buildCard(obj,month){
 
   // Load real image or canvas fallback
   const canvas=d.querySelector('canvas');
-  const localSrc=obj._photo||LOCAL_IMGS[obj.id];
+  const localSrc=LOCAL_IMGS[obj.id];
   if(localSrc){
     const imgEl=document.createElement('img');
     imgEl.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s;z-index:1';
     imgEl.onload=()=>{imgEl.style.opacity='1';canvas.style.opacity='0';};
     imgEl.onerror=()=>{imgEl.remove();renderCanvas(canvas,obj,false);};
-    imgEl.src=obj._photo?obj._photo:localSrc+'?v=2';
-    const wrap=d.querySelector('.card-canvas-wrap');
-    const footer=wrap.querySelector('.card-img-footer');
-    if(footer) wrap.insertBefore(imgEl,footer);
-    else wrap.appendChild(imgEl);
+    imgEl.src=localSrc+'?v=2';
+    d.querySelector('.card-canvas-wrap').appendChild(imgEl);
   }
   renderCanvas(canvas,obj,false);
-
-
 
   // Click → modal
   d.addEventListener('click',()=>openModal(obj,month));
@@ -2123,7 +1728,7 @@ function openModal(obj,month,origin){
   // Canvas + real image overlay for modal
   const mc=document.getElementById('modalCanvas');
   renderCanvas(mc,obj,true);
-  const mSrc=obj._photo||LOCAL_IMGS[obj.id];
+  const mSrc=LOCAL_IMGS[obj.id];
   const mWrap=document.querySelector('.modal-canvas-wrap');
   let mImg=mWrap.querySelector('.modal-real-img');
   if(!mImg){
@@ -2136,7 +1741,7 @@ function openModal(obj,month,origin){
   if(mSrc){
     mImg.onload=()=>{mImg.style.opacity='1';mc.style.opacity='0';};
     mImg.onerror=()=>{mImg.style.opacity='0';mc.style.opacity='1';};
-    mImg.src=obj._photo?obj._photo:mSrc+'?v=2';
+    mImg.src=mSrc+'?v=2';
     mc.style.opacity='1';
   }
 
@@ -2151,18 +1756,18 @@ function openModal(obj,month,origin){
   document.getElementById('modalCat').textContent=(obj.cat||'')+(extra.const?` · Costellazione: ${extra.const}`:'');
 
   // Coords
-  const raH=obj.ra!=null?Math.floor(obj.ra/15):0,raM=obj.ra!=null?Math.round((obj.ra/15-raH)*60):0;
-  const decSign=(obj.dec||0)>=0?'+':'';
+  const raH=Math.floor(obj.ra/15),raM=Math.round((obj.ra/15-raH)*60);
+  const decSign=obj.dec>=0?'+':'';
   document.getElementById('modalCoords').innerHTML=`
     <span><span>AR</span>${String(raH).padStart(2,'0')}h ${String(raM).padStart(2,'0')}m</span>
-    <span><span>Dec</span>${decSign}${obj.dec!=null?obj.dec.toFixed(1):'—'}°</span>
+    <span><span>Dec</span>${decSign}${obj.dec.toFixed(1)}°</span>
     ${extra.dist?`<span><span>Distanza</span>${extra.dist}</span>`:''}
     ${extra.type_detail?`<span><span>Tipo</span>${extra.type_detail}</span>`:''}
   `;
 
   // Stats grid
   document.getElementById('modalStats').innerHTML=`
-    <div class="modal-stat"><span class="modal-stat-lbl">Magnitudine</span><span class="modal-stat-val big">${obj.mag===99?'—':obj.mag}</span></div>
+    <div class="modal-stat"><span class="modal-stat-lbl">Magnitudine</span><span class="modal-stat-val big">${obj.mag}</span></div>
     <div class="modal-stat"><span class="modal-stat-lbl">Dimensione</span><span class="modal-stat-val big">${obj.size||'—'}</span></div>
     <div class="modal-stat"><span class="modal-stat-lbl">Altitudine max</span><span class="modal-stat-val big" style="color:${ac.c}">${info.alt}°</span></div>
     <div class="modal-stat"><span class="modal-stat-lbl">Culmina alle</span><span class="modal-stat-val big">${fmtH(info.hour%24)}</span></div>
@@ -2214,7 +1819,6 @@ function renderGrid(n){
               .map(o=>({...o,_alt:getAlt(o,n).alt}));
 
   if(srtMode==='alt') list.sort((a,b)=>b._alt-a._alt);
-  else if(srtMode==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
   else list.sort((a,b)=>a.mag-b.mag);
 
   const vis=list.filter(o=>o._alt>=MIN_ALT).length;
@@ -2315,38 +1919,6 @@ function switchMonth(n){
   renderGrid(n);
 }
 
-function hmsToRaDeg(h, m, s){
-  return ((+h||0) + (+m||0)/60 + (+s||0)/3600) * 15;
-}
-function dmsToDecDeg(d, m, s){
-  const sign = (+d < 0) ? -1 : 1;
-  return sign * (Math.abs(+d||0) + (+m||0)/60 + (+s||0)/3600);
-}
-function getRaDec(){
-  return {
-    ra: hmsToRaDeg(
-      document.getElementById('atRAh').value,
-      document.getElementById('atRAm').value,
-      document.getElementById('atRAs').value
-    ),
-    dec: dmsToDecDeg(
-      document.getElementById('atDecd').value,
-      document.getElementById('atDecm').value,
-      document.getElementById('atDecs').value
-    )
-  };
-}
-
-// Global: calculate visible months using full night window
-function calcVisibleMonths(ra, dec){
-  const months = [];
-  for(let m = 1; m <= 12; m++){
-    const alt = maxAlt(ra, dec, m, activeLat, activeLon, 17, 30).alt;
-    if(alt >= MIN_ALT) months.push(m);
-  }
-  return months;
-}
-
 function initLanding(){
   // Star field
   const sc = document.getElementById('starField');
@@ -2383,7 +1955,7 @@ function initLanding(){
     showLanding();
     // reset search
     document.getElementById('landingSearch').value = '';
-    document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
+    document.getElementById('searchResults').classList.remove('show');
   });
 
   // Search logic
@@ -2415,8 +1987,6 @@ function initLanding(){
   function renderSearchResults(results){
     const el = document.getElementById('searchResults');
     el.classList.add('show');
-    // Prevent background scroll on mobile
-    if(window.innerWidth <= 768) document.body.style.overflow = 'hidden';
     if(!results.length){
       el.innerHTML='<div class="sr-empty">NESSUN RISULTATO</div>';
       return;
@@ -2452,1329 +2022,34 @@ function initLanding(){
   inp.addEventListener('input', ()=>{
     const q = inp.value.trim();
     if(q) renderSearchResults(searchObjects(q));
-    else document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
+    else document.getElementById('searchResults').classList.remove('show');
   });
   inp.addEventListener('keydown', e=>{
     if(e.key==='Enter'){
       const results = searchObjects(inp.value.trim());
       if(results.length) openFromSearch(results[0]);
     }
-    if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show'); document.body.style.overflow = '';
+    if(e.key==='Escape') document.getElementById('searchResults').classList.remove('show');
   });
 }
-// ═══════════════════════════════════════════════════════
-// CUSTOM TARGETS
-// ═══════════════════════════════════════════════════════
-const CUSTOM_KEY = 'astrofoto_custom_targets';
-
-function loadCustomTargets(){
-  try {
-    const raw = localStorage.getItem(CUSTOM_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch(e){ return []; }
-}
-
-function saveCustomTargets(targets){
-  try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(targets)); } catch(e){}
-}
-
-function addCustomTarget(obj){
-  const targets = loadCustomTargets();
-  // Avoid duplicates by id
-  if(!targets.find(t=>t.id===obj.id)){
-    targets.push(obj);
-    saveCustomTargets(targets);
-  }
-  // Add to live OBJ array if not already there
-  if(!OBJ.find(o=>o.id===obj.id)){
-    OBJ.push(obj);
-  }
-}
-
-function injectCustomTargets(){
-  const targets = loadCustomTargets();
-  if(!Array.isArray(targets)) return;
-  targets.forEach(t=>{
-    // Skip corrupted entries missing required fields
-    if(!t || !t.id || !t.name) return;
-    if(!OBJ.find(o=>o.id===t.id)) OBJ.push(t);
-  });
-}
-
-function initAddTarget(){
-  let selectedType = 'nebula';
-  let selectedMonths = [];
-  let selectedFocals = [];
-  let photoDataUrl = null;
-
-  const overlay = document.getElementById('addTargetOverlay');
-
-  function openAddTarget(){
-    // reset form
-    document.getElementById('atName').value = '';
-    selectedType = 'nebula';
-    selectedMonths = [];
-    photoDataUrl = null;
-    selectedFocals = [];
-    selectedMonths = [];
-    document.getElementById('atCat').value = '';
-    document.getElementById('atMag').value = '';
-    document.getElementById('atSizeVal').value = '';
-    document.getElementById('atNotes').value = '';
-    ['atRAh','atRAm','atRAs','atDecd','atDecm','atDecs'].forEach(id=>{ document.getElementById(id).value=''; });
-    document.getElementById('atMonthsPreview').textContent = '';
-    document.querySelectorAll('#atFocals .at-focal-btn').forEach(b=>b.classList.remove('on'));
-    document.querySelectorAll('.at-type-btn').forEach(b=>b.classList.toggle('on', b.dataset.type==='nebula'));
-    document.querySelectorAll('.at-month-btn').forEach(b=>b.classList.remove('on'));
-    document.getElementById('atPhotoPreview').style.display = 'none';
-    document.getElementById('atPhotoPlaceholder').style.display = 'flex';
-    document.getElementById('atError').style.display = 'none';
-    overlay.style.zIndex = '1100';
-    overlay.classList.add('open');
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    document.getElementById('atName').focus();
-  }
-
-  function closeAddTarget(){
-    overlay.classList.remove('open');
-    overlay.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-
-  // Open from landing button
-  document.getElementById('btnAddTarget').addEventListener('click', openAddTarget);
-  document.getElementById('addTargetClose').addEventListener('click', closeAddTarget);
-  document.getElementById('atCancel').addEventListener('click', closeAddTarget);
-  overlay.addEventListener('click', e=>{ if(e.target===overlay) closeAddTarget(); });
-
-  // Type selector
-  document.querySelectorAll('.at-type-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      selectedType = btn.dataset.type;
-      document.querySelectorAll('.at-type-btn').forEach(b=>b.classList.toggle('on', b===btn));
-    });
-  });
-
-  // Convert h/m/s → decimal degrees
-
-
-  function updateMonthPreview(){
-    const RAh = document.getElementById('atRAh').value;
-    const Decd = document.getElementById('atDecd').value;
-    const preview = document.getElementById('atMonthsPreview');
-    // Need at least RA hours and Dec degrees to compute
-    if(RAh === '' || Decd === ''){
-      preview.textContent = '';
-      selectedMonths = [];
-      return;
-    }
-    const {ra, dec} = getRaDec();
-    selectedMonths = calcVisibleMonths(ra, dec);
-    const MNAMES = ['','Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
-    if(selectedMonths.length === 0){
-      preview.innerHTML = '<span style="color:var(--red)">⚠ Oggetto non visibile dalla posizione attuale</span>';
-    } else {
-      preview.innerHTML = '◉ Visibile in: <strong style="color:var(--ink)">' +
-        selectedMonths.map(m=>MNAMES[m]).join(' · ') + '</strong>';
-    }
-  }
-
-  ['atRAh','atRAm','atRAs','atDecd','atDecm','atDecs'].forEach(id=>{
-    document.getElementById(id).addEventListener('input', updateMonthPreview);
-  });
-
-  // Focal selector
-  document.querySelectorAll('#atFocals .at-focal-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const f = +btn.dataset.focal;
-      if(selectedFocals.includes(f)){
-        selectedFocals = selectedFocals.filter(x=>x!==f);
-        btn.classList.remove('on');
-      } else {
-        selectedFocals.push(f);
-        btn.classList.add('on');
-      }
-    });
-  });
-
-  // Photo upload
-  const photoArea = document.getElementById('atPhotoArea');
-  const photoFile = document.getElementById('atPhotoFile');
-  const photoPreview = document.getElementById('atPhotoPreview');
-  const photoPlaceholder = document.getElementById('atPhotoPlaceholder');
-
-  photoArea.addEventListener('click', ()=> photoFile.click());
-  photoFile.addEventListener('change', ()=>{
-    const file = photoFile.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = e=>{
-      photoDataUrl = e.target.result;
-      // Show preview in canvas
-      const img = new Image();
-      img.onload = ()=>{
-        photoPreview.style.display = 'block';
-        photoPlaceholder.style.display = 'none';
-        const ctx = photoPreview.getContext('2d');
-        photoPreview.width = 200; photoPreview.height = 120;
-        // cover crop
-        const scale = Math.max(200/img.width, 120/img.height);
-        const w = img.width*scale, h = img.height*scale;
-        ctx.drawImage(img, (200-w)/2, (120-h)/2, w, h);
-      };
-      img.src = photoDataUrl;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // Save
-  document.getElementById('atSave').addEventListener('click', ()=>{
-    const name = document.getElementById('atName').value.trim();
-    const errEl = document.getElementById('atError');
-
-    if(!name){ errEl.textContent="Inserisci il nome dell'oggetto"; errEl.style.display='block'; return; }
-    if(!selectedMonths.length){ errEl.textContent='Inserisci coordinate RA/Dec valide — oggetto non visibile dalla posizione attuale'; errEl.style.display='block'; return; }
-    errEl.style.display = 'none';
-
-    const id = 'custom_' + name.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'') + '_' + Date.now();
-
-    // Auto-calculate best focals from size if user didn't pick manually
-    let bestFocals = selectedFocals;
-    if(!bestFocals.length){
-      const sizeRaw = document.getElementById('atSizeVal').value;
-      const sizeStr = sizeRaw ? sizeRaw + "'" : "5'";
-      const tempObj = {type: selectedType, size: sizeStr, best: []};
-      // Calculate for each camera and union the results
-      const allFocals = new Set();
-      for(const cam of [CAMERAS[0], CAMERAS[1]]){
-        const m = sizeStr.match(/([\d.]+)/);
-        if(m){
-          let sz = parseFloat(m[1]);
-          if(sizeStr.includes('°')) sz *= 60;
-          for(const [fl,fw,fh] of cam.fovs){
-            const ratio = sz / fw;
-            if(ratio > 0.15 && ratio < 0.9) allFocals.add(fl);
-          }
-        }
-      }
-      bestFocals = allFocals.size > 0 ? [...allFocals].sort((a,b)=>a-b) : [336, 750];
-    }
-    const {ra: raVal, dec: decVal} = getRaDec();
-    // Recalculate months at save time (in case location changed)
-    if(raVal || decVal) selectedMonths = calcVisibleMonths(raVal, decVal);
-
-    const newObj = {
-      id, name,
-      cat: document.getElementById('atCat').value.trim() || name,
-      type: selectedType,
-      months: selectedMonths.sort((a,b)=>a-b),
-      ra: raVal, dec: decVal,
-      mag: parseFloat(document.getElementById('atMag').value)||99,
-      size: document.getElementById('atSizeVal').value ? document.getElementById('atSizeVal').value+"'" : '—',
-      diff: 1, lx: 0, best: bestFocals,
-      notes: document.getElementById('atNotes').value.trim() || "Oggetto personalizzato.",
-      _custom: true,
-      _photo: photoDataUrl || null,
-    };
-
-    addCustomTarget(newObj);
-    closeAddTarget();
-    // Go to catalog at first visible month
-    const targetMonth = newObj.months[0];
-    enterCatalog();
-    setTimeout(()=>switchMonth(targetMonth), 520);
-  });
-}
-
-// ═══════════════════════════════════════════════════════
-// CONFIRM DIALOG
-// ═══════════════════════════════════════════════════════
-function showConfirm({title, msg, icon='⚠', okLabel='Conferma', okColor='#c0392b', onOk}){
-  const overlay = document.getElementById('confirmOverlay');
-  document.getElementById('confirmIcon').textContent = icon;
-  document.getElementById('confirmTitle').textContent = title;
-  document.getElementById('confirmMsg').textContent = msg;
-  document.getElementById('confirmOk').textContent = okLabel;
-  document.getElementById('confirmOk').style.background = okColor;
-
-  overlay.style.display = 'flex';
-
-  function close(){ overlay.style.display='none'; }
-
-  const okBtn = document.getElementById('confirmOk');
-  const cancelBtn = document.getElementById('confirmCancel');
-
-  const onOkClick = ()=>{ close(); onOk(); cleanup(); };
-  const onCancelClick = ()=>{ close(); cleanup(); };
-  const onOverlayClick = (e)=>{ if(e.target===overlay){ close(); cleanup(); } };
-
-  function cleanup(){
-    okBtn.removeEventListener('click', onOkClick);
-    cancelBtn.removeEventListener('click', onCancelClick);
-    overlay.removeEventListener('click', onOverlayClick);
-  }
-
-  okBtn.addEventListener('click', onOkClick);
-  cancelBtn.addEventListener('click', onCancelClick);
-  overlay.addEventListener('click', onOverlayClick);
-}
-
-// ═══════════════════════════════════════════════════════
-// EDIT OBJECT
-// ═══════════════════════════════════════════════════════
-function degToHms(deg){
-  const total = deg / 15;
-  const h = Math.floor(total);
-  const mTotal = (total - h) * 60;
-  const m = Math.floor(mTotal);
-  const s = Math.round((mTotal - m) * 60 * 10) / 10;
-  return {h, m, s};
-}
-function degToDms(deg){
-  const sign = deg < 0 ? -1 : 1;
-  const abs = Math.abs(deg);
-  const d = Math.floor(abs) * sign;
-  const mTotal = (abs - Math.floor(abs)) * 60;
-  const m = Math.floor(mTotal);
-  const s = Math.round((mTotal - m) * 60 * 10) / 10;
-  return {d, m, s};
-}
-
-let editingObj = null;
-
-function openEditModal(obj){
-  editingObj = obj;
-  document.getElementById('editTitle').textContent = obj.name;
-  document.getElementById('editName').value = obj.name;
-  document.getElementById('editCat').value = obj.cat||'';
-  document.getElementById('editMag').value = obj.mag===99 ? '' : obj.mag;
-  // Store original size for preservation if field not meaningfully changed
-  editingObj._origSize = obj.size||'';
-  const sizeNum = parseFloat((obj.size||'').replace(/[^0-9.]/g,''));
-  document.getElementById('editSizeVal').value = isNaN(sizeNum) ? '' : sizeNum;
-  document.getElementById('editNotes').value = obj.notes||'';
-
-  // Type
-  document.querySelectorAll('#editTypeRow .at-type-btn').forEach(b=>
-    b.classList.toggle('on', b.dataset.type===obj.type));
-
-  // RA/Dec → h/m/s
-  if(obj.ra){
-    const hms = degToHms(obj.ra);
-    document.getElementById('editRAh').value = hms.h;
-    document.getElementById('editRAm').value = hms.m;
-    document.getElementById('editRAs').value = hms.s;
-  } else {
-    ['editRAh','editRAm','editRAs'].forEach(id=>document.getElementById(id).value='');
-  }
-  if(obj.dec!==undefined){
-    const dms = degToDms(obj.dec);
-    document.getElementById('editDecd').value = dms.d;
-    document.getElementById('editDecm').value = dms.m;
-    document.getElementById('editDecs').value = dms.s;
-  } else {
-    ['editDecd','editDecm','editDecs'].forEach(id=>document.getElementById(id).value='');
-  }
-
-  // Focals
-  const best = obj.best||[];
-  document.querySelectorAll('#editFocals .at-focal-btn').forEach(b=>
-    b.classList.toggle('on', best.includes(+b.dataset.focal)));
-
-  // Month preview
-  updateEditMonthPreview();
-
-  document.getElementById('editError').style.display='none';
-  document.getElementById('editMonthsPreview').textContent='';
-  editPhotoDataUrl = null;
-  // Store original RA/Dec degree values to detect if user changed them
-  editingObj._origRA = obj.ra;
-  editingObj._origDec = obj.dec;
-  document.getElementById('editPhotoPreview').style.display='none';
-  document.getElementById('editPhotoPlaceholder').style.display='flex';
-  document.getElementById('editPhotoName').textContent = '';
-  document.getElementById('editPhotoFile').value = '';
-  // Show current photo if exists
-  const currentSrc = obj._photo || (typeof LOCAL_IMGS !== 'undefined' && LOCAL_IMGS[obj.id]);
-  if(currentSrc){
-    const prevImg = new Image();
-    prevImg.onload = ()=>{
-      const c = document.getElementById('editPhotoPreview');
-      c.style.display='block';
-      document.getElementById('editPhotoPlaceholder').style.display='none';
-      const ctx=c.getContext('2d'); c.width=200; c.height=120;
-      const scale=Math.max(200/prevImg.width,120/prevImg.height);
-      const w=prevImg.width*scale, h=prevImg.height*scale;
-      ctx.drawImage(prevImg,(200-w)/2,(120-h)/2,w,h);
-      document.getElementById('editPhotoName').textContent='Foto attuale (carica per sostituire)';
-    };
-    prevImg.src = currentSrc;
-  }
-  const overlay = document.getElementById('editOverlay');
-  overlay.style.zIndex='1200';
-  overlay.classList.add('open');
-  document.body.style.overflow='hidden';
-}
-
-function updateEditMonthPreview(){
-  const RAh = document.getElementById('editRAh').value;
-  const Decd = document.getElementById('editDecd').value;
-  const preview = document.getElementById('editMonthsPreview');
-  if(RAh===''||Decd===''){preview.textContent=''; return;}
-  const ra = hmsToRaDeg(document.getElementById('editRAh').value, document.getElementById('editRAm').value, document.getElementById('editRAs').value);
-  const dec = dmsToDecDeg(document.getElementById('editDecd').value, document.getElementById('editDecm').value, document.getElementById('editDecs').value);
-  const months = calcVisibleMonths(ra, dec);
-  const MNAMES=['','Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
-  if(!months.length){
-    preview.innerHTML='<span style="color:var(--red)">⚠ Non visibile dalla posizione attuale</span>';
-  } else {
-    preview.innerHTML='◉ Visibile in: <strong style="color:var(--ink)">'+months.map(m=>MNAMES[m]).join(' · ')+'</strong>';
-  }
-}
-
-function initEdit(){
-  const overlay = document.getElementById('editOverlay');
-  let editPhotoDataUrl = null;
-  function closeEdit(){ overlay.classList.remove('open'); document.body.style.overflow=''; editPhotoDataUrl=null; }
-
-  // Photo upload handler
-  const editPhotoArea = document.getElementById('editPhotoArea');
-  const editPhotoFile = document.getElementById('editPhotoFile');
-  const editPhotoPreview = document.getElementById('editPhotoPreview');
-  const editPhotoPlaceholder = document.getElementById('editPhotoPlaceholder');
-  editPhotoArea.addEventListener('click', ()=>editPhotoFile.click());
-  editPhotoFile.addEventListener('change', ()=>{
-    const file = editPhotoFile.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = e=>{
-      editPhotoDataUrl = e.target.result;
-      const img = new Image();
-      img.onload = ()=>{
-        editPhotoPreview.style.display = 'block';
-        editPhotoPlaceholder.style.display = 'none';
-        const ctx = editPhotoPreview.getContext('2d');
-        editPhotoPreview.width=200; editPhotoPreview.height=120;
-        const scale=Math.max(200/img.width,120/img.height);
-        const w=img.width*scale, h=img.height*scale;
-        ctx.drawImage(img,(200-w)/2,(120-h)/2,w,h);
-        document.getElementById('editPhotoName').textContent = '✓ ' + file.name;
-      };
-      img.src = editPhotoDataUrl;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  document.getElementById('editClose').addEventListener('click', closeEdit);
-  document.getElementById('editCancel').addEventListener('click', closeEdit);
-  overlay.addEventListener('click', e=>{ if(e.target===overlay) closeEdit(); });
-
-  // Type buttons
-  document.querySelectorAll('#editTypeRow .at-type-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('#editTypeRow .at-type-btn').forEach(b=>b.classList.remove('on'));
-      btn.classList.add('on');
-    });
-  });
-
-  // Focal buttons
-  document.querySelectorAll('#editFocals .at-focal-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>btn.classList.toggle('on'));
-  });
-
-  // Live month preview
-  ['editRAh','editRAm','editRAs','editDecd','editDecm','editDecs'].forEach(id=>{
-    document.getElementById(id).addEventListener('input', updateEditMonthPreview);
-  });
-
-  // Save
-  document.getElementById('editSave').addEventListener('click', ()=>{ handleEditSave(); });
-  function handleEditSave(){
-    if(!editingObj) return;
-    const name = document.getElementById('editName').value.trim();
-    if(!name){ document.getElementById('editError').textContent='Il nome è obbligatorio'; document.getElementById('editError').style.display='block'; return; }
-
-    const RAh = document.getElementById('editRAh').value;
-    const Decd = document.getElementById('editDecd').value;
-    let newRA = editingObj.ra;
-    let newDec = editingObj.dec;
-    let newMonths = editingObj.months;
-
-    if(RAh!==''&&Decd!==''){
-      newRA = hmsToRaDeg(document.getElementById('editRAh').value, document.getElementById('editRAm').value, document.getElementById('editRAs').value);
-      newDec = dmsToDecDeg(document.getElementById('editDecd').value, document.getElementById('editDecm').value, document.getElementById('editDecs').value);
-      // Only recalculate months if coords actually changed from original
-      const coordsChanged = Math.abs(newRA - (editingObj._origRA||0)) > 0.01 ||
-                            Math.abs(newDec - (editingObj._origDec||0)) > 0.01;
-      if(coordsChanged) newMonths = calcVisibleMonths(newRA, newDec);
-    }
-
-    const selectedType = document.querySelector('#editTypeRow .at-type-btn.on')?.dataset.type || editingObj.type;
-    const selectedFocals = [...document.querySelectorAll('#editFocals .at-focal-btn.on')].map(b=>+b.dataset.focal);
-    const magVal = parseFloat(document.getElementById('editMag').value);
-    const sizeVal = parseFloat(document.getElementById('editSizeVal').value);
-
-    // Update the object in place
-    editingObj.name = name;
-    editingObj.cat = document.getElementById('editCat').value.trim() || name;
-    editingObj.type = selectedType;
-    editingObj.ra = newRA;
-    editingObj.dec = newDec;
-    editingObj.months = newMonths;
-    editingObj.best = selectedFocals.length ? selectedFocals : editingObj.best;
-    editingObj.mag = isNaN(magVal) ? 99 : magVal;
-    editingObj.size = isNaN(sizeVal) ? '—' : sizeVal+"'";
-    editingObj.notes = document.getElementById('editNotes').value.trim();
-
-    // Apply new photo if uploaded
-    if(editPhotoDataUrl){
-      editingObj._photo = editPhotoDataUrl;
-      // Auto-upload photo to GitHub immediately if token available
-      autoUploadPhoto(editingObj.id, editPhotoDataUrl);
-    }
-
-    // Persist to localStorage
-    if(editingObj._custom){
-      const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
-      saveCustomTargets(saved);
-    } else {
-      // Mark as modified so export can pick it up
-      editingObj._modified = true;
-      // Save modified standard objects to localStorage too
-      const modKey = 'astrofoto_modified_objs';
-      try {
-        const mods = JSON.parse(localStorage.getItem(modKey)||'{}');
-        mods[editingObj.id] = editingObj;
-        localStorage.setItem(modKey, JSON.stringify(mods));
-      } catch(e){}
-    }
-
-    // Ask for confirmation before applying
-    const coordChanged = (RAh!==''&&Decd!=='');
-    const monthsInfo = coordChanged ? ' I mesi di visibilità verranno ricalcolati.' : '';
-    showConfirm({
-      title: 'Salva modifiche',
-      msg: 'Applicare le modifiche a "' + name + '"?' + monthsInfo,
-      icon: '✎',
-      okLabel: 'Salva',
-      okColor: 'var(--ink)',
-      onOk: ()=>{
-        // Apply all changes
-        editingObj.name = name;
-        editingObj.cat = document.getElementById('editCat').value.trim() || name;
-        editingObj.type = selectedType;
-        editingObj.ra = newRA;
-        editingObj.dec = newDec;
-        editingObj.months = newMonths;
-        editingObj.best = selectedFocals.length ? selectedFocals : editingObj.best;
-        editingObj.mag = isNaN(magVal) ? 99 : magVal;
-        // Preserve original size string if the numeric value matches original
-        const origSizeNum = parseFloat((editingObj._origSize||'').replace(/[^0-9.]/g,''));
-        if(!isNaN(sizeVal) && Math.abs(sizeVal - origSizeNum) < 0.01 && editingObj._origSize && editingObj._origSize !== '—'){
-          editingObj.size = editingObj._origSize; // keep "13×11'" intact
-        } else {
-          editingObj.size = isNaN(sizeVal) ? '—' : sizeVal+"'";
-        }
-        editingObj.notes = document.getElementById('editNotes').value.trim();
-        if(editPhotoDataUrl){
-          editingObj._photo = editPhotoDataUrl;
-          autoUploadPhoto(editingObj.id, editPhotoDataUrl);
-        }
-        if(editingObj._custom){
-          const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
-          saveCustomTargets(saved);
-        } else {
-          editingObj._modified = true;
-          const modKey = 'astrofoto_modified_objs';
-          try {
-            const mods = JSON.parse(localStorage.getItem(modKey)||'{}');
-            mods[editingObj.id] = editingObj;
-            localStorage.setItem(modKey, JSON.stringify(mods));
-          } catch(e){}
-        }
-        renderGrid(activeMonth);
-        closeEdit();
-        if(typeof renderAdminList==='function') renderAdminList();
-      }
-    });
-  }
-}
-
-// ═══════════════════════════════════════════════════════
-// GITHUB PUBLISH
-// ═══════════════════════════════════════════════════════
-async function autoUploadPhoto(id, dataUrl){
-  const GH_USER = 'mauroforlani';
-  const GH_REPO = 'Astrofoto';
-  const GH_TOKEN = localStorage.getItem('astrofoto_gh_token')||'';
-  if(!GH_TOKEN || !dataUrl || !dataUrl.startsWith('data:')) return;
-  const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
-  try {
-    const path = 'img/' + id + '.jpg';
-    const base64 = dataUrl.split(',')[1];
-    // Get current SHA if file exists
-    let sha;
-    try {
-      const r = await fetch(API+path, {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
-      if(r.ok){ const d=await r.json(); sha=d.sha; }
-    } catch(e){}
-    const body = {message:'Astrofoto: foto '+id, content:base64};
-    if(sha) body.sha = sha;
-    await fetch(API+path, {
-      method:'PUT',
-      headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-      body: JSON.stringify(body)
-    });
-    // Also update LOCAL_IMGS so other devices can find it via data.json on next publish
-    LOCAL_IMGS[id] = 'img/' + id + '.jpg';
-  } catch(e){ console.warn('autoUploadPhoto failed:', e); }
-}
-
-async function publishToGitHub(){
-  const GH_USER = 'mauroforlani';
-  const GH_REPO = 'Astrofoto';
-  const GH_TOKEN = localStorage.getItem('astrofoto_gh_token')||'';
-  const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
-
-  const statusEl = document.getElementById('publishStatus');
-  const btn = document.getElementById('btnExportIndex');
-
-  function setStatus(msg, color){ statusEl.textContent=msg; statusEl.style.color=color||'var(--ink4)'; }
-
-  btn.disabled=true; btn.style.opacity='0.6';
-  setStatus('⏳ Preparazione...');
-
-  try {
-    async function getSHA(path){
-      try {
-        const r = await fetch(API+path,{headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
-        if(r.ok){ const d=await r.json(); return d.sha; }
-      } catch(e){}
-      return null;
-    }
-
-    async function uploadFile(path, base64content){
-      const sha = await getSHA(path);
-      const r = await fetch(API+path,{
-        method:'PUT',
-        headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-        body: JSON.stringify({message:'Astrofoto: aggiornamento '+path, content:base64content, ...(sha?{sha}:{})})
-      });
-      if(!r.ok) throw new Error((await r.json()).message||'Upload failed');
-    }
-
-    function toBase64(str){
-      return btoa(unescape(encodeURIComponent(str)));
-    }
-
-    // Build data.json
-    const customs = OBJ.filter(o=>o._custom).map(o=>{
-      const obj = {...o};
-      delete obj._photo; // photos stored separately as img/ files
-      delete obj._alt;
-      return obj;
-    });
-    const modified = OBJ.filter(o=>o._modified && !o._custom).map(o=>{
-      const obj = {...o};
-      delete obj._photo;
-      delete obj._alt;
-      return obj;
-    });
-    // Build photo map: from OBJ in memory + from localStorage (catches custom objects)
-    const photoMap = {};
-    OBJ.filter(o=>o._photo && o._photo.startsWith('data:')).forEach(o=>{ photoMap[o.id]=o._photo; });
-    try {
-      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
-      Object.values(mods).forEach(mod=>{ if(mod._photo && mod._photo.startsWith('data:')) photoMap[mod.id]=mod._photo; });
-    } catch(e){}
-
-    // Local imgs: all objects with photos
-    const newImgs = {};
-    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
-    Object.keys(photoMap).forEach(id=>{ newImgs[id]='img/'+id+'.jpg'; });
-
-    const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
-    const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
-
-    // Upload photos
-    const photoEntries = Object.entries(photoMap);
-    for(let i=0; i<photoEntries.length; i++){
-      const [id, photo] = photoEntries[i];
-      setStatus(`⏳ Foto ${i+1}/${photoEntries.length}: ${id}.jpg`);
-      await uploadFile('img/'+id+'.jpg', photo.split(',')[1]);
-    }
-
-    // Upload data.json
-    setStatus('⏳ Caricamento data.json...');
-    await uploadFile('data.json', toBase64(dataJson));
-
-    setStatus('✓ Pubblicato! Visibile dopo ~2 min', '#1a7a4a');
-
-  } catch(err){
-    setStatus('✗ Errore: '+err.message, '#c0392b');
-  }
-
-  btn.disabled=false; btn.style.opacity='1';
-}
-
-
-// ═══════════════════════════════════════════════════════
-// CAMERA MANAGEMENT
-// ═══════════════════════════════════════════════════════
-
-
-function calcFovs(w, h){
-  // sensor_dim / focal * (180/PI) * 60 = arcmin
-  return FOCALS.map(fl => [fl, Math.round(w/fl*(180/Math.PI)*60), Math.round(h/fl*(180/Math.PI)*60)]);
-}
-
-function loadCustomCameras(){
-  try { return JSON.parse(localStorage.getItem('astrofoto_cameras')||'[]'); } catch(e){ return []; }
-}
-
-function saveCustomCameras(cams){
-  localStorage.setItem('astrofoto_cameras', JSON.stringify(cams));
-}
-
-function injectCustomCameras(){
-  const cams = loadCustomCameras();
-  cams.forEach(cam => {
-    CAMERAS[cam.id] = cam;
-  });
-  // Also rebuild camera select
-  rebuildCameraSelect();
-}
-
-function rebuildCameraSelect(){
-  const sel = document.getElementById('cameraSelect');
-  if(!sel) return;
-  // Keep only built-in options, remove custom ones
-  [...sel.options].forEach(opt => {
-    if(opt.dataset.custom) opt.remove();
-  });
-  // Add custom cameras
-  loadCustomCameras().forEach(cam => {
-    const opt = document.createElement('option');
-    opt.value = cam.id;
-    opt.textContent = cam.name;
-    opt.dataset.custom = '1';
-    sel.appendChild(opt);
-  });
-}
-
-function renderAdminCameraList(){
-  const list = document.getElementById('adminCameraList');
-  if(!list) return;
-  list.innerHTML = '';
-  Object.values(CAMERAS).forEach(cam => {
-    const row = document.createElement('div');
-    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:3px;gap:8px';
-    const nameEl = document.createElement('span');
-    nameEl.style.cssText = "font-family:'Jost',sans-serif;font-size:11px;color:var(--ink)";
-    nameEl.textContent = cam.name + (cam.w ? ' — ' + cam.w + '×' + cam.h + 'mm' : '');
-    row.appendChild(nameEl);
-    const btn = document.createElement('button');
-    btn.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--ink4);font-size:16px;line-height:1;padding:0 4px;flex-shrink:0';
-    btn.textContent = '×';
-    btn.onclick = () => {
-      showConfirm({
-        title: 'Elimina camera',
-        msg: 'Vuoi eliminare ' + cam.name + '?',
-        icon: '✕',
-        okLabel: 'Elimina',
-        okColor: '#c0392b',
-        onOk: () => deleteCamera(cam.id)
-      });
-    };
-    row.appendChild(btn);
-    list.appendChild(row);
-  });
-}
-
-window.saveNewCamera = function(){
-  const name = document.getElementById('camName').value.trim();
-  const w = parseFloat(document.getElementById('camW').value);
-  const h = parseFloat(document.getElementById('camH').value);
-  if(!name || !w || !h){ alert('Compila tutti i campi'); return; }
-
-  const id = 'custom_' + name.toLowerCase().replace(/[^a-z0-9]/g,'_').slice(0,20) + '_' + Date.now();
-  const fovs = calcFovs(w, h);
-  const maxSize = Math.round(fovs[0][1] * 0.9); // 90% of widest FOV
-  const minSize = Math.round(fovs[fovs.length-1][2] * 0.15); // 15% of narrowest FOV height
-
-  const newCam = {
-    id, name,
-    type: `${w}×${h}mm`,
-    w, h,
-    fovs,
-    minSize: Math.max(0.3, minSize),
-    maxSize,
-    desc: `${w}×${h}mm`
-  };
-
-  const cams = loadCustomCameras();
-  cams.push(newCam);
-  saveCustomCameras(cams);
-  CAMERAS[id] = newCam;
-  rebuildCameraSelect();
-  renderAdminCameraList();
-  refreshAll();
-
-  // Reset form
-  document.getElementById('camName').value = '';
-  document.getElementById('camW').value = '';
-  document.getElementById('camH').value = '';
-  document.getElementById('adminCameraForm').style.display = 'none';
-};
-
-window.deleteCamera = function(id){
-  delete CAMERAS[id];
-  // Remove from custom storage too if present
-  saveCustomCameras(loadCustomCameras().filter(c => c.id !== id));
-  // If deleted camera was active, switch to first available
-  if(activeCamera && activeCamera.id === id){
-    const first = Object.values(CAMERAS)[0];
-    if(first){ activeCamera = first; updateCameraInfo(); }
-  }
-  rebuildCameraSelect();
-  renderAdminCameraList();
-  refreshAll();
-};
-
-window.recalcAllBest = function(){
-  const log = [], errors = [];
-  let updated = 0;
-  OBJ.forEach(obj => {
-    if(obj.type === 'planet' || obj.type === 'double'){
-      log.push('⊙ ' + obj.name + ': saltato (pianeta/doppia)'); return;
-    }
-    const sizeStr = obj.size || '';
-    const m = sizeStr.match(/([\d.]+)/);
-    if(!m){ errors.push('✗ ' + obj.name + ': dimensione non leggibile'); return; }
-    let sz = parseFloat(m[1]);
-    if(sizeStr.includes('°')) sz *= 60;
-    if(!sz){ errors.push('✗ ' + obj.name + ': dimensione zero'); return; }
-    const goodFocals = new Set();
-    const camDetails = [];
-    Object.values(CAMERAS).forEach(cam => {
-      const cf = [];
-      cam.fovs.forEach(([fl,fw]) => { if(sz/fw > 0.15 && sz/fw < 0.9){ goodFocals.add(fl); cf.push(fl+'mm'); } });
-      camDetails.push(cam.name + ': ' + (cf.length ? cf.join(', ') : 'nessuna'));
-    });
-    const newBest = [...goodFocals].sort((a,b)=>a-b);
-    if(!newBest.length){ errors.push('✗ ' + obj.name + ' (dim=' + sz + ' arcmin): ' + camDetails.join(' | ')); return; }
-    const oldBest = JSON.stringify(obj.best||[]);
-    obj.best = newBest;
-    if(JSON.stringify(newBest) !== oldBest){ updated++; log.push('✓ ' + obj.name + ' → ' + camDetails.join(' | ')); }
-    else { log.push('· ' + obj.name + ' → ' + camDetails.join(' | ')); }
-  });
-  const logEl = document.getElementById('recalcLog');
-  logEl.style.display = 'block';
-  const lines = ['<strong>Ricalcolo: ' + updated + ' aggiornati su ' + OBJ.length + '</strong>', '', ...errors, ...(errors.length?['']:[]), ...log];
-  logEl.innerHTML = lines.map(l =>
-    l.startsWith('✗') ? '<span style="color:#c0392b">'+l+'</span>' :
-    l.startsWith('✓') ? '<span style="color:#1a7a4a">'+l+'</span>' :
-    l.startsWith('·') ? '<span style="color:var(--ink4)">'+l+'</span>' : l
-  ).join('<br>');
-  refreshAll();
-};
-
-// ═══════════════════════════════════════════════════════
-// ADMIN
-// ═══════════════════════════════════════════════════════
-function initAdmin(){
-  const ADMIN_PWD = 'mr030317';
-  const overlay = document.getElementById('adminOverlay');
-
-  function openAdmin(){
-    document.getElementById('adminAuth').style.display = 'block';
-    document.getElementById('adminPanel').style.display = 'none';
-    document.getElementById('adminPwd').value = '';
-    document.getElementById('adminAuthErr').style.display = 'none';
-    overlay.style.zIndex = '1100';
-    overlay.classList.add('open');
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    setTimeout(()=>document.getElementById('adminPwd').focus(), 100);
-  }
-
-  function closeAdmin(){
-    overlay.classList.remove('open');
-    overlay.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-
-  window.filterAdminList = function filterAdminList(query){
-    const q = query.trim().toLowerCase();
-    document.querySelectorAll('#adminList .admin-item').forEach(item=>{
-      const name = item.querySelector('.admin-item-name').textContent.toLowerCase();
-      const cat = item.querySelector('.admin-item-cat').textContent.toLowerCase();
-      item.style.display = (!q || name.includes(q) || cat.includes(q)) ? '' : 'none';
-    });
-    // Show/hide empty state
-    const visible = [...document.querySelectorAll('#adminList .admin-item')].filter(i=>i.style.display!=='none');
-    document.getElementById('adminEmpty').style.display = visible.length ? 'none' : 'block';
-  };
-
-  window.renderAdminList = function renderAdminList(){
-    const list = document.getElementById('adminList');
-    const empty = document.getElementById('adminEmpty');
-    // Show ALL objects sorted: custom first, then standard
-    const sorted = [...OBJ].sort((a,b)=>{
-      if(a._custom && !b._custom) return -1;
-      if(!a._custom && b._custom) return 1;
-      return a.name.localeCompare(b.name);
-    });
-    if(!sorted.length){ list.innerHTML=''; empty.style.display='block'; return; }
-    empty.style.display = 'none';
-    const TYPE_IT = {nebula:'Nebulosa',galaxy:'Galassia',cluster:'Ammasso',planet:'Pianeta',double:'Doppia'};
-    list.innerHTML = sorted.map(obj=>`
-      <div class="admin-item" data-id="${obj.id}">
-        <div class="admin-item-info">
-          <div class="admin-item-name">${obj._custom?'✦ ':''}${obj.name}</div>
-          <div class="admin-item-cat">${obj.cat||''} · ${TYPE_IT[obj.type]||obj.type} · mesi: ${obj.months.join(',')}</div>
-        </div>
-        <div style="display:flex;gap:6px;flex-shrink:0">
-          <button class="admin-item-edit" data-id="${obj.id}" style="background:none;border:1px solid var(--border);border-radius:2px;color:var(--ink4);font-size:10px;padding:3px 8px;cursor:pointer;font-family:'DM Mono',monospace;transition:all .15s" onmouseover="this.style.borderColor='var(--blue2)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink4)'">✎ modifica</button>
-          <button class="admin-item-del" data-id="${obj.id}">✕ rimuovi</button>
-        </div>
-      </div>`).join('');
-
-    list.querySelectorAll('.admin-item-del').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const id = btn.dataset.id;
-        const obj = OBJ.find(o=>o.id===id);
-        if(!obj) return;
-        showConfirm({
-          title: 'Rimuovi oggetto',
-          msg: 'Rimuovere "' + obj.name + '" dal catalogo? L\'operazione non può essere annullata.',
-          icon: '✕',
-          okLabel: 'Rimuovi',
-          okColor: '#c0392b',
-          onOk: ()=>{
-            const i = OBJ.findIndex(o=>o.id===id);
-            if(i>-1) OBJ.splice(i,1);
-            if(obj._custom){
-              const saved = loadCustomTargets().filter(t=>t.id!==id);
-              saveCustomTargets(saved);
-            }
-            try {
-              const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
-              if(!deleted.includes(id)) deleted.push(id);
-              localStorage.setItem('astrofoto_deleted', JSON.stringify(deleted));
-            } catch(e){}
-            renderGrid(activeMonth);
-            renderAdminList();
-          }
-        });
-      });
-    });
-
-    list.querySelectorAll('.admin-item-edit').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const id = btn.dataset.id;
-        const obj = OBJ.find(o=>o.id===id);
-        if(obj) openEditModal(obj);
-      });
-    });
-  }
-
-  // Export function
-  function exportIndex(){
-    const customs = OBJ.filter(o=>o._custom);
-    const modified = OBJ.filter(o=>o._modified && !o._custom);
-    if(!customs.length && !modified.length){
-      alert('Nessuna modifica da esportare. Aggiungi target o modifica oggetti esistenti.');
-      return;
-    }
-    fetch(window.location.href)
-      .then(r=>r.text())
-      .then(src=>{
-        function esc(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
-        function serializeEntry(o){
-          // Never embed base64 — photo will be referenced via LOCAL_IMGS as img/{id}.jpg
-          const custom = o._custom ? ',_custom:true' : '';
-          return "{id:'" + esc(o.id) + "',lx:" + (o.lx||0) +
-            ",name:'" + esc(o.name) + "',cat:'" + esc(o.cat||o.name) +
-            "',type:'" + o.type + "',ra:" + (o.ra||0) + ",dec:" + (o.dec||0) +
-            ",months:[" + o.months.join(',') + "]" +
-            ",mag:" + (o.mag||99) + ',size:"' + (o.size||'--') + '"' +
-            ",diff:" + (o.diff||1) + ",best:[" + (o.best||[336,750]).join(',') + "]" +
-            ",notes:'" + esc(o.notes||'') + "'" + custom + "}";
-        }
-
-        // Step 1: patch modified standard objects directly in source
-        const modified = OBJ.filter(o=>o._modified && !o._custom);
-        modified.forEach(o=>{
-          // Find the object entry in source by id and replace it
-          // Find object entry by id token and replace up to matching }
-          const idToken = "{id:'" + o.id + "'";
-          const startIdx = src.indexOf(idToken);
-          if(startIdx === -1) return;
-          let dep=0, j=startIdx, entryEnd=-1;
-          while(j<src.length){
-            if(src[j]==='{') dep++;
-            else if(src[j]==='}'){ dep--; if(dep===0){entryEnd=j+1;break;} }
-            j++;
-          }
-          if(entryEnd===-1) return;
-          src = src.slice(0,startIdx) + serializeEntry(o) + src.slice(entryEnd);
-        });
-
-        // Step 2: append new custom objects before end of OBJ array
-        const newCustoms = customs;
-        if(newCustoms.length > 0){
-          const entries = newCustoms.map(o=>serializeEntry(o)).join(',\n');
-          const objEndMarker = '/* __OBJ_END__ */]';
-          const objClose = src.indexOf(objEndMarker);
-          if(objClose===-1){ alert('Errore: non trovo la fine del catalogo.'); return; }
-          src = src.slice(0, objClose) + ',\n' + entries + '\n' + src.slice(objClose);
-        }
-
-        if(modified.length===0 && newCustoms.length===0){
-          alert('Nessuna modifica da esportare.');
-          return;
-        }
-
-        // Download index.html
-        // Inject LOCAL_IMGS entries for objects with new photos -> img/{id}.jpg
-        // Include ALL objects with _photo (custom, modified, or any edited object)
-        const allWithPhotos = OBJ.filter(o=>o._photo);
-        if(allWithPhotos.length){
-          const liIdx = src.indexOf('LOCAL_IMGS = {');
-          if(liIdx !== -1){
-            const insertAfter = liIdx + 'LOCAL_IMGS = {'.length;
-            // Only add entries not already present in LOCAL_IMGS
-            const newEntries = allWithPhotos
-              .filter(o=>src.indexOf("'"+o.id+"'") === -1 || src.indexOf("'"+o.id+"':'img/") === -1)
-              .map(o=>"'"+o.id+"':'img/"+o.id+".jpg'")
-              .join(',');
-            if(newEntries) src = src.slice(0, insertAfter) + "\n  " + newEntries + ',' + src.slice(insertAfter);
-          }
-        }
-
-        const blob = new Blob([src],{type:'text/html'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'index.html';
-        setTimeout(()=>{ a.click(); URL.revokeObjectURL(a.href); }, 600);
-      })
-      .catch(err=>alert('Errore: '+err.message));
-  }
-
-  // Camera list
-  renderAdminCameraList();
-
-  // Token management
-  document.getElementById('btnSaveToken').addEventListener('click', ()=>{
-    const t = document.getElementById('ghTokenInput').value.trim();
-    if(t){ localStorage.setItem('astrofoto_gh_token', t); document.getElementById('ghTokenSection').style.display='none'; document.getElementById('publishStatus').textContent='✓ Token salvato'; document.getElementById('ghTokenInput').value=''; }
-  });
-
-  // Show token section if not configured
-  if(!localStorage.getItem('astrofoto_gh_token')){
-    document.getElementById('ghTokenSection').style.display='block';
-  }
-
-  document.getElementById('btnAdmin').addEventListener('click', openAdmin);
-  document.getElementById('adminClose').addEventListener('click', closeAdmin);
-  overlay.addEventListener('click', e=>{ if(e.target===overlay) closeAdmin(); });
-
-  // btnExportIndex now uses onclick=publishToGitHub() directly
-
-  document.getElementById('adminAuthBtn').addEventListener('click', ()=>{
-    const pwd = document.getElementById('adminPwd').value;
-    if(pwd === ADMIN_PWD){
-      document.getElementById('adminAuth').style.display = 'none';
-      document.getElementById('adminPanel').style.display = 'block';
-      document.getElementById('adminSearch').value = '';
-      renderAdminList();
-    } else {
-      document.getElementById('adminAuthErr').style.display = 'block';
-      document.getElementById('adminPwd').value = '';
-      document.getElementById('adminPwd').focus();
-    }
-  });
-}
-
-initLocationSearch();
+initCountrySelect();
 initCameraSelect();
 initGlobalFilters();
-// Inject custom cameras before boot
-injectCustomCameras();
-
-// Load remote data.json then boot
-(async function bootWithData(){
-  try {
-    const r = await fetch('data.json?v=' + Date.now());
-    if(r.ok){
-      const data = await r.json();
-      // Merge deleted from data.json and localStorage
-      const remoteDeleted = Array.isArray(data.deleted) ? data.deleted : [];
-      const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
-      const deletedIds = [...new Set([...remoteDeleted, ...localDeleted])];
-      // Apply remote custom targets (skip deleted)
-      if(Array.isArray(data.customs)){
-        data.customs.forEach(t=>{
-          if(!t||!t.id||!t.name) return;
-          if(deletedIds.includes(t.id)) return;
-          if(!OBJ.find(o=>o.id===t.id)) OBJ.push(t);
-        });
-      }
-      // Remove built-in objects in deleted list
-      deletedIds.forEach(id=>{ const i=OBJ.findIndex(o=>o.id===id); if(i>-1) OBJ.splice(i,1); });
-      // Apply remote modifications
-      if(Array.isArray(data.modified)){
-        data.modified.forEach(mod=>{
-          const obj = OBJ.find(o=>o.id===mod.id);
-          if(obj) Object.assign(obj, mod);
-        });
-      }
-      // Apply remote img paths
-      if(data.imgs){
-        Object.entries(data.imgs).forEach(([id,path])=>{ LOCAL_IMGS[id]=path; });
-      }
-    }
-  } catch(e){
-    /* no data.json yet — ok */
-    try {
-      const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
-      localDeleted.forEach(id=>{ const i=OBJ.findIndex(o=>o.id===id); if(i>-1) OBJ.splice(i,1); });
-    } catch(e2){}
-  }
-
-  initSliders();
-  initMonthNav();
-  updateTotCount();
-  injectCustomTargets();
-// Apply saved modifications to existing objects (including _photo)
-(function(){
-  try {
-    const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
-    Object.values(mods).forEach(mod=>{
-      const obj = OBJ.find(o=>o.id===mod.id);
-      if(obj){
-        Object.assign(obj, mod);
-        // Register photo in LOCAL_IMGS so buildCard/openModal can find it
-        if(mod._photo) LOCAL_IMGS[obj.id] = mod._photo;
-      }
-    });
-  } catch(e){}
-})();
+initSliders();
+initMonthNav();
+updateTotCount();
 renderGrid(activeMonth);
 initLanding();
-initAddTarget();
-initAdmin();
-initEdit();
-  // Pre-count for nav badges
-  MONTHS.forEach(m=>{
-    const vis=OBJ.filter(o=>o.months.includes(m.n)&&isCameraCompatible(o)&&getAlt(o,m.n).alt>=MIN_ALT).length;
-    const nc=document.getElementById(`nc-${m.n}`);
-    if(nc)nc.textContent=vis;
-  });
-  updateTotCount();
-})(); // end bootWithData
-// ═══════════════════════════════════════════════════════
-// METEO STRIP
-// ═══════════════════════════════════════════════════════
-(function initMeteoStrip(){
-  let meteoLat = 45.9197, meteoLon = 9.2775, meteoName = 'Colma di Sormano, CO';
 
-  try {
-    const saved = JSON.parse(localStorage.getItem('astrofoto_meteo_loc')||'null');
-    if(saved){ meteoLat=saved.lat; meteoLon=saved.lon; meteoName=saved.name; }
-  } catch(e){}
+// Lazy render other months on tab click (already handled by click listener)
+// Pre-count for nav badges
+MONTHS.forEach(m=>{
+  const vis=OBJ.filter(o=>o.months.includes(m.n)&&isCameraCompatible(o)&&getAlt(o,m.n).alt>=MIN_ALT).length;
+  const nc=document.getElementById(`nc-${m.n}`);
+  if(nc)nc.textContent=vis;
+});
+updateTotCount();
 
-  function updateLocationLabel(){
-    const el = document.getElementById('meteoStripLocation');
-    if(el) el.textContent = meteoName;
-  }
-
-  window.toggleMeteoSearch = function(){
-    const box = document.getElementById('meteoSearchBox');
-    const open = box.style.display === 'none';
-    box.style.display = open ? 'block' : 'none';
-    if(open) document.getElementById('meteoStripCity').focus();
-  };
-
-  window.searchMeteoStrip = async function(){
-    const q = document.getElementById('meteoStripCity').value.trim();
-    if(!q) return;
-    const res = document.getElementById('meteoStripResults');
-    res.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4);padding:6px 0">Ricerca...</div>';
-    try {
-      const r = await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&limit=5&accept-language=it');
-      const data = await r.json();
-      if(!data.length){ res.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4);padding:6px 0">Nessun risultato</div>'; return; }
-      res.innerHTML = '';
-      data.forEach(place => {
-        const row = document.createElement('div');
-        row.style.cssText = 'padding:7px 8px;cursor:pointer;border-radius:3px;font-family:Jost,sans-serif;font-size:11px;color:var(--ink);margin-bottom:2px;background:var(--bg)';
-        row.textContent = place.display_name.split(',').slice(0,3).join(', ');
-        row.onmouseover = () => row.style.background = 'var(--bg2)';
-        row.onmouseout  = () => row.style.background = 'var(--bg)';
-        row.onclick = () => {
-          meteoLat = parseFloat(place.lat);
-          meteoLon = parseFloat(place.lon);
-          meteoName = place.display_name.split(',').slice(0,2).join(', ');
-          localStorage.setItem('astrofoto_meteo_loc', JSON.stringify({lat:meteoLat,lon:meteoLon,name:meteoName}));
-          updateLocationLabel();
-          document.getElementById('meteoStripCity').value = '';
-          document.getElementById('meteoStripResults').innerHTML = '';
-          document.getElementById('meteoSearchBox').style.display = 'none';
-          loadMeteoStrip();
-        };
-        res.appendChild(row);
-      });
-    } catch(e){ res.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;color:#c0392b">Errore nella ricerca</div>'; }
-  };
-
-  async function loadMeteoStrip(){
-    const loading = document.getElementById('meteoStripLoading');
-    const errEl   = document.getElementById('meteoStripError');
-    const cards   = document.getElementById('meteoStripCards');
-    loading.style.display = 'block';
-    cards.style.display   = 'none';
-    errEl.style.display   = 'none';
-    try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Rome';
-      const tzEnc = encodeURIComponent(tz);
-      const url = 'https://api.open-meteo.com/v1/forecast?latitude='+meteoLat+'&longitude='+meteoLon
-        +'&hourly=temperature_2m,relativehumidity_2m,precipitation,cloudcover,windspeed_10m'
-        +'&daily=sunrise,sunset,precipitation_probability_max'
-        +'&timezone='+tzEnc+'&forecast_days=7';
-      const r = await fetch(url);
-      if(!r.ok) throw new Error('HTTP ' + r.status);
-      const data = await r.json();
-      renderMeteoStrip(data);
-      loading.style.display = 'none';
-      cards.style.display   = 'flex';
-    } catch(e){
-      loading.style.display = 'none';
-      errEl.style.display   = 'block';
-      errEl.textContent     = 'Errore: ' + e.message;
-    }
-  }
-
-  function moonIllumination(dateStr){
-    const date = new Date(dateStr + 'T12:00:00');
-    const jd = date.getTime()/86400000 + 2440587.5;
-    const phase = ((jd - 2451550.1) / 29.530588) % 1;
-    const p = phase < 0 ? phase + 1 : phase;
-    const illum = Math.round((1 - Math.cos(p * 2 * Math.PI)) / 2 * 100);
-    const icon = p < 0.03||p > 0.97 ? '🌑' : p < 0.22 ? '🌒' : p < 0.28 ? '🌓' : p < 0.47 ? '🌔' : p < 0.53 ? '🌕' : p < 0.72 ? '🌖' : p < 0.78 ? '🌗' : '🌘';
-    return {illum, icon};
-  }
-
-  function fmtTime(isoStr){
-    if(!isoStr) return '--:--';
-    const t = isoStr.includes('T') ? isoStr.split('T')[1] : isoStr.split(' ')[1];
-    return (t||'').slice(0,5);
-  }
-
-  function renderMeteoStrip(data){
-    const h = data.hourly;
-    const d = data.daily || {};
-    const times = h.time, clouds = h.cloudcover||[], temp = h.temperature_2m||[], humidity = h.relativehumidity_2m||[], wind = h.windspeed_10m||[], precip = h.precipitation||[];
-
-    const dailyMap = {};
-    (d.time||[]).forEach((dk, i) => {
-      dailyMap[dk] = {
-        sunrise:  (d.sunrise||[])[i]  || '',
-        sunset:   (d.sunset||[])[i]   || '',
-        rainProb: (d.precipitation_probability_max||[])[i] || 0
-      };
-    });
-
-    const todayStr = new Date().toISOString().slice(0,10);
-    const days = {};
-    times.forEach((t,i)=>{
-      const [date, timePart] = t.includes('T') ? t.split('T') : t.split(' ');
-      const hour = parseInt((timePart||'0').split(':')[0]);
-      const isNight = hour >= 17 || hour <= 6;
-      if(!isNight) return;
-      const key = hour >= 17 ? date : new Date(new Date(date).getTime()-86400000).toISOString().slice(0,10);
-      if(key < todayStr) return;
-      if(!days[key]) days[key]=[];
-      days[key].push({hour, cloud:clouds[i]||0, temp:temp[i]||0, hum:humidity[i]||0, wind:wind[i]||0, precip:precip[i]||0});
-    });
-
-    const cards = document.getElementById('meteoStripCards');
-    cards.innerHTML = '';
-    const dayKeys = Object.keys(days).sort().slice(0,5);
-    dayKeys.forEach(dateKey => {
-      const entries = days[dateKey];
-      if(!entries.length) return;
-      const avgCloud = Math.round(entries.reduce((s,e)=>s+e.cloud,0)/entries.length);
-      const minTemp  = Math.min(...entries.map(e=>e.temp)).toFixed(1);
-      const avgHum   = Math.round(entries.reduce((s,e)=>s+e.hum,0)/entries.length);
-      const avgWind  = (entries.reduce((s,e)=>s+e.wind,0)/entries.length).toFixed(1);
-      const hasPrecip = entries.some(e=>e.precip>0.1);
-      const skyColor = avgCloud < 20 ? '#1a7a4a' : avgCloud < 50 ? '#e67e22' : '#c0392b';
-      const skyIcon  = avgCloud < 20 ? '✦' : avgCloud < 50 ? '◑' : '●';
-      const dateObj  = new Date(dateKey + 'T12:00:00');
-      const dayLabel = dateObj.toLocaleDateString('it-IT',{weekday:'short',day:'numeric',month:'short'});
-
-      const nextDay  = new Date(new Date(dateKey+'T12:00:00').getTime()+86400000).toISOString().slice(0,10);
-      const dayInfo  = dailyMap[dateKey]  || {};
-      const nextInfo = dailyMap[nextDay]  || {};
-      const sunsetTime  = fmtTime(dayInfo.sunset);
-      const sunriseTime = fmtTime(nextInfo.sunrise);
-      const rainProb = Math.max(dayInfo.rainProb||0, nextInfo.rainProb||0);
-      const moon = moonIllumination(nextDay);
-
-      const barSegs = entries.map(e=>{
-        const c = e.cloud < 20 ? '#1a7a4a' : e.cloud < 50 ? '#e67e22' : '#c0392b';
-        const op = (0.35 + e.cloud/100*0.65).toFixed(2);
-        return '<div title="'+e.hour+':00 · copertura '+e.cloud+'%" style="flex:1;height:6px;background:'+c+';opacity:'+op+'"></div>';
-      }).join('');
-      const barLabels = entries.filter((_,i)=>i%2===0).map(e=>
-        '<div style="flex:1;text-align:center;font-size:6px;color:var(--ink4);font-family:DM Mono,monospace;line-height:1">'+e.hour+'</div>'
-      ).join('');
-
-      const card = document.createElement('div');
-      card.style.cssText = 'flex:0 0 auto;width:170px;background:var(--bg);border-radius:6px;padding:10px 10px 8px;border-top:2px solid '+skyColor+';box-sizing:border-box';
-      card.innerHTML =
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
-          '<div style="font-family:Jost,sans-serif;font-size:11px;font-weight:600;color:var(--ink);text-transform:capitalize">'+dayLabel+'</div>' +
-          '<div style="font-family:DM Mono,monospace;font-size:13px;font-weight:700;color:'+skyColor+'">'+avgCloud+'%</div>' +
-        '</div>' +
-        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">' +
-          '<span style="font-size:9px;color:'+skyColor+'">'+skyIcon+'</span>' +
-          (rainProb > 20 ? '<span style="font-family:DM Mono,monospace;font-size:7px;color:#3498db">🌧 '+rainProb+'%</span>' : '') +
-        '</div>' +
-        '<div style="display:flex;border-radius:2px;overflow:hidden;margin-bottom:2px;gap:1px;height:6px">'+barSegs+'</div>' +
-        '<div style="display:flex;margin-bottom:7px">'+barLabels+'</div>' +
-        '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);margin-bottom:6px">🌡 '+minTemp+'°  💧 '+avgHum+'%  💨 '+avgWind+'m/s</div>' +
-        '<div style="border-top:1px solid var(--border);margin-bottom:6px"></div>' +
-        '<div style="display:flex;justify-content:space-between;align-items:center">' +
-          '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);line-height:1.7">' +
-            '🌇 '+sunsetTime+'<br>🌅 '+sunriseTime +
-          '</div>' +
-          '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);text-align:right;line-height:1.7">' +
-            moon.icon+' '+moon.illum+'%<br>' +
-            '<span style="color:'+(moon.illum>50?'#c0392b':'#1a7a4a')+'">'+( moon.illum>75?'luna piena':moon.illum>50?'luna intensa':moon.illum>25?'quarto':'favorevole')+'</span>' +
-          '</div>' +
-        '</div>';
-      cards.appendChild(card);
-    });
-    if(!dayKeys.length) cards.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4);padding:8px 0">Nessun dato disponibile</div>';
-  }
-
-  updateLocationLabel();
-  loadMeteoStrip();
-})();
-
-
-</script>
-
-<script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
-  });
-}
 </script>
 </body>
 </html>
