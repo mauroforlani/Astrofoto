@@ -676,6 +676,8 @@
       "_modified": true
     }
   ],
-  "imgs": {},
+  "imgs": {
+    "ngc4631b": "img/ngc4631b.jpg"
+  },
   "deleted": []
 }
