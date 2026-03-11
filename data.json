@@ -226,6 +226,36 @@
       "_modified": true
     },
     {
+      "id": "ngc752",
+      "lx": 0,
+      "name": "NGC 752",
+      "cat": "NGC 752 · Andromeda",
+      "type": "cluster",
+      "ra": 29.200000000000003,
+      "dec": 37.78,
+      "months": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "nasaQ": "NGC 752 open cluster Andromeda stars",
+      "mag": 5.7,
+      "size": "50'",
+      "diff": 1,
+      "best": [
+        135,
+        336,
+        750,
+        1085
+      ],
+      "notes": "Grande ammasso in Andromeda. Stelle di medio-bassa massa. Campo ricco a 135mm.",
+      "_origSize": "50'",
+      "_origRA": 29.2,
+      "_origDec": 37.78,
+      "_modified": true
+    },
+    {
       "id": "ngc1502",
       "lx": 0,
       "name": "NGC 1502",
@@ -559,6 +589,7 @@
     "ngc5907": "img/ngc5907.jpg",
     "ngc4559": "img/ngc4559.jpg",
     "ngc4631b": "img/ngc4631b.jpg",
+    "ngc752": "img/ngc752.jpg",
     "ic4665": "img/ic4665.jpg",
     "ngc6633": "img/ngc6633.jpg",
     "ngc4762": "img/ngc4762.jpg",
