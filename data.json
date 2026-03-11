@@ -212,7 +212,7 @@
       ],
       "nasaQ": "NGC 5907 Splinter Galaxy edge-on tidal streams",
       "mag": 10.4,
-      "size": "12×1.4'",
+      "size": "121.4'",
       "diff": 3,
       "best": [
         336,
@@ -902,7 +902,8 @@
     "custom_hcg_44_1772914802811": "img/custom_hcg_44_1772914802811.jpg",
     "ngc4649": "img/ngc4649.jpg",
     "ngc7217": "img/ngc7217.jpg",
-    "ngc4517": "img/ngc4517.jpg"
+    "ngc4517": "img/ngc4517.jpg",
+    "ngc5907": "img/ngc5907.jpg"
   },
   "deleted": [
     "ngc5194b"
