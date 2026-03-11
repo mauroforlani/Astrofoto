@@ -3081,7 +3081,15 @@ async function publishToGitHub(){
       delete obj._alt;
       return obj;
     });
-    // Local imgs: all objects with photos (from OBJ and from localStorage)
+    // Build photo map: from OBJ in memory + from localStorage (catches custom objects)
+    const photoMap = {};
+    OBJ.filter(o=>o._photo && o._photo.startsWith('data:')).forEach(o=>{ photoMap[o.id]=o._photo; });
+    try {
+      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
+      Object.values(mods).forEach(mod=>{ if(mod._photo && mod._photo.startsWith('data:')) photoMap[mod.id]=mod._photo; });
+    } catch(e){}
+
+    // Local imgs: all objects with photos
     const newImgs = {};
     OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
     Object.keys(photoMap).forEach(id=>{ newImgs[id]='img/'+id+'.jpg'; });
@@ -3089,12 +3097,12 @@ async function publishToGitHub(){
     const deleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
 
-    // Upload photos first
-    const withPhotos = OBJ.filter(o=>o._photo && o._photo.startsWith('data:'));
-    for(let i=0; i<withPhotos.length; i++){
-      const o = withPhotos[i];
-      setStatus(`⏳ Foto ${i+1}/${withPhotos.length}: ${o.id}.jpg`);
-      await uploadFile('img/'+o.id+'.jpg', o._photo.split(',')[1]);
+    // Upload photos
+    const photoEntries = Object.entries(photoMap);
+    for(let i=0; i<photoEntries.length; i++){
+      const [id, photo] = photoEntries[i];
+      setStatus(`⏳ Foto ${i+1}/${photoEntries.length}: ${id}.jpg`);
+      await uploadFile('img/'+id+'.jpg', photo.split(',')[1]);
     }
 
     // Upload data.json
