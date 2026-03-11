@@ -257,6 +257,34 @@
       "_modified": true
     },
     {
+      "id": "ic4665",
+      "lx": 0,
+      "name": "IC 4665",
+      "cat": "IC 4665 · Summer Beehive",
+      "type": "cluster",
+      "ra": 266.55,
+      "dec": 5.7,
+      "months": [
+        6,
+        7,
+        8
+      ],
+      "nasaQ": "IC 4665 open cluster Ophiuchus summer wide",
+      "mag": 4.2,
+      "size": "70'",
+      "diff": 1,
+      "best": [
+        135,
+        336,
+        750
+      ],
+      "notes": "Grande ammasso sparso in Ofiuco. Solo a 135mm o meno. Stelle giovani (~40 Ma).",
+      "_origSize": "70'",
+      "_origRA": 266.55,
+      "_origDec": 5.7,
+      "_modified": true
+    },
+    {
       "id": "ngc6633",
       "lx": 0,
       "name": "NGC 6633",
@@ -531,6 +559,7 @@
     "ngc5907": "img/ngc5907.jpg",
     "ngc4559": "img/ngc4559.jpg",
     "ngc4631b": "img/ngc4631b.jpg",
+    "ic4665": "img/ic4665.jpg",
     "ngc6633": "img/ngc6633.jpg",
     "ngc4762": "img/ngc4762.jpg",
     "ngc5746": "img/ngc5746.jpg",
