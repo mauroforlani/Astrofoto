@@ -520,14 +520,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
         </div>
 
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
-          <div id="ghTokenSection" style="display:none">
-            <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;margin-bottom:6px">GITHUB TOKEN (salvato solo su questo device)</div>
-            <div style="display:flex;gap:8px">
-              <input type="password" id="ghTokenInput" class="at-inp" placeholder="ghp_..." style="flex:1;font-family:'DM Mono',monospace;font-size:10px">
-              <button id="btnSaveToken" style="background:var(--ink);border:none;border-radius:3px;padding:8px 14px;font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;color:#fff;white-space:nowrap">Salva</button>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
             <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--ink4);letter-spacing:1px;line-height:1.5">Pubblica su GitHub Pages<br>automaticamente</div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
               <button id="btnExportIndex" style="background:var(--ink);border:none;border-radius:3px;padding:10px 18px;font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;color:#fff;white-space:nowrap" onclick="publishToGitHub()">⬆ Pubblica su GitHub</button>
@@ -556,7 +549,7 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
             <button onclick="checkMissingPhotos()" style="background:none;border:1px solid var(--border);border-radius:2px;color:var(--ink4);font-size:9px;padding:4px 10px;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:1px">↻ Verifica</button>
           </div>
           <div id="missingPhotosList" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);line-height:2">
-            <span style="color:var(--ink4);opacity:0.5">Clicca Verifica per controllare</span>
+            <span style="opacity:0.5">Clicca Verifica per controllare</span>
           </div>
         </div>
 
@@ -3048,12 +3041,7 @@ async function autoUploadPhoto(id, dataUrl){
 }
 
 function getGHToken(){
-  let t = localStorage.getItem('astrofoto_gh_token')||'';
-  if(!t){
-    t = prompt('Inserisci il tuo GitHub Personal Access Token (scope: repo):') || '';
-    if(t) localStorage.setItem('astrofoto_gh_token', t);
-  }
-  return t;
+  return (prompt('GitHub Personal Access Token (scope: repo):') || '').trim();
 }
 
 async function syncDataJson(reason){
@@ -3352,34 +3340,16 @@ function checkMissingPhotos(){
   if(!el) return;
   el.innerHTML = '<span style="opacity:0.5">Verifica in corso...</span>';
 
-  // All objects that should have a photo (have LOCAL_IMGS entry or _photo)
-  const withPhoto = OBJ.filter(o => LOCAL_IMGS[o.id] || o._photo);
-  // All objects without any photo reference
-  const withoutPhoto = OBJ.filter(o => !LOCAL_IMGS[o.id] && !o._photo);
-
-  if(!withPhoto.length && !withoutPhoto.length){
-    el.innerHTML = '<span style="opacity:0.5">Nessun oggetto nel catalogo</span>';
-    return;
-  }
-
-  // Check which img paths actually resolve (HEAD request)
-  // We can't do HEAD on GitHub Pages with CORS, so just list objects missing from LOCAL_IMGS
-  const missing = OBJ.filter(o => !LOCAL_IMGS[o.id] && !o._photo);
-  const present = OBJ.filter(o => LOCAL_IMGS[o.id] || o._photo);
-
-  if(!missing.length){
-    el.innerHTML = '<span style="color:#1a7a4a">✓ Tutti gli oggetti con foto hanno il path registrato</span>';
-    return;
-  }
-
-  // Show objects that have _photo (base64 in memory) but no LOCAL_IMGS path yet
   const hasPhotoNoPath = OBJ.filter(o => o._photo && !LOCAL_IMGS[o.id]);
-  
+  const withPath = OBJ.filter(o => LOCAL_IMGS[o.id]);
+  const missing = OBJ.filter(o => !LOCAL_IMGS[o.id] && !o._photo);
+
   let html = '';
+
   if(hasPhotoNoPath.length){
-    html += '<div style="color:#e67e22;margin-bottom:6px">⚠ Foto in memoria ma non ancora caricate su GitHub:</div>';
+    html += '<div style="color:#e67e22;margin-bottom:4px">⚠ Foto in memoria ma non caricate su GitHub:</div>';
     hasPhotoNoPath.forEach(o => {
-      html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--border)">'
+      html += '<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--border)">'
         + '<span style="color:var(--ink)">' + o.name + '</span>'
         + '<span style="color:#e67e22">img/' + o.id + '.jpg</span>'
         + '</div>';
@@ -3387,11 +3357,18 @@ function checkMissingPhotos(){
     html += '<br>';
   }
 
-  html += '<div style="color:var(--ink4);margin-bottom:6px">' + missing.length + ' oggetti senza foto:</div>';
-  missing.forEach(o => {
-    html += '<div style="padding:2px 0;color:var(--ink4);opacity:0.6">' + o.name + '</div>';
-  });
+  if(withPath.length){
+    html += '<div style="color:#1a7a4a;margin-bottom:4px">✓ ' + withPath.length + ' oggetti con foto registrata</div>';
+  }
 
+  if(missing.length){
+    html += '<div style="color:var(--ink4);margin-bottom:4px">' + missing.length + ' oggetti senza foto:</div>';
+    missing.forEach(o => {
+      html += '<div style="padding:2px 0;color:var(--ink4);opacity:0.6">' + (o._custom ? '✦ ' : '') + o.name + '</div>';
+    });
+  }
+
+  if(!html) html = '<span style="color:#1a7a4a">✓ Tutto in ordine</span>';
   el.innerHTML = html;
 }
 
@@ -3580,22 +3557,11 @@ function initAdmin(){
   renderAdminCameraList();
 
   // Token management
-  document.getElementById('btnSaveToken').addEventListener('click', ()=>{
-    const t = document.getElementById('ghTokenInput').value.trim();
-    if(t){
-      localStorage.setItem('astrofoto_gh_token', t);
-      document.getElementById('ghTokenSection').style.display='none';
-      document.getElementById('publishStatus').textContent='✓ Token salvato';
-      document.getElementById('publishStatus').style.color='#1a7a4a';
-      document.getElementById('ghTokenInput').value='';
-    }
-  });
+
 
   // Show token section if not configured
   // Show token section so user can update token if needed
-  const savedTok = localStorage.getItem('astrofoto_gh_token')||'';
-  document.getElementById('ghTokenSection').style.display = savedTok ? 'none' : 'block';
-
+  
   document.getElementById('btnAdmin').addEventListener('click', openAdmin);
   document.getElementById('adminClose').addEventListener('click', closeAdmin);
   overlay.addEventListener('click', e=>{ if(e.target===overlay) closeAdmin(); });
