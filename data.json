@@ -125,7 +125,7 @@
       ],
       "nasaQ": "NGC 4649 M60 Virgo elliptical galaxy",
       "mag": 8.8,
-      "size": "7×6'",
+      "size": "76'",
       "diff": 3,
       "best": [
         750,
@@ -899,7 +899,8 @@
     "epsilonlyrae": "img/epsilonlyrae.jpg",
     "etacas": "img/etacas.jpg",
     "algedi": "img/algedi.jpg",
-    "custom_hcg_44_1772914802811": "img/custom_hcg_44_1772914802811.jpg"
+    "custom_hcg_44_1772914802811": "img/custom_hcg_44_1772914802811.jpg",
+    "ngc4649": "img/ngc4649.jpg"
   },
   "deleted": [
     "ngc5194b"
