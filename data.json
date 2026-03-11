@@ -397,7 +397,7 @@
       ],
       "notes": "Grande ammasso in Andromeda. Stelle di medio-bassa massa. Campo ricco a 135mm.",
       "_origSize": "50'",
-      "_origRA": 29.2,
+      "_origRA": 29.200000000000003,
       "_origDec": 37.78,
       "_modified": true
     },
@@ -905,7 +905,8 @@
     "ngc4517": "img/ngc4517.jpg",
     "ngc5907": "img/ngc5907.jpg",
     "ngc1512": "img/ngc1512.jpg",
-    "ngc3532": "img/ngc3532.jpg"
+    "ngc3532": "img/ngc3532.jpg",
+    "ngc752": "img/ngc752.jpg"
   },
   "deleted": [
     "ngc5194b"
