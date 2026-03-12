@@ -787,7 +787,7 @@
       ],
       "nasaQ": "NGC 4216 edge-on spiral Virgo cluster",
       "mag": 9.9,
-      "size": "8×2'",
+      "size": "82'",
       "diff": 3,
       "best": [
         336,
@@ -1028,7 +1028,8 @@
     "ngc6633": "img/ngc6633.jpg",
     "ic2391": "img/ic2391.jpg",
     "ngc6025": "img/ngc6025.jpg",
-    "ngc5746": "img/ngc5746.jpg"
+    "ngc5746": "img/ngc5746.jpg",
+    "ngc4216": "img/ngc4216.jpg"
   },
   "deleted": [
     "ngc5194b"
