@@ -759,7 +759,7 @@
       ],
       "nasaQ": "NGC 5746 edge-on barred spiral Virgo",
       "mag": 10.3,
-      "size": "8×2'",
+      "size": "82'",
       "diff": 3,
       "best": [
         750,
@@ -767,7 +767,7 @@
       ],
       "notes": "Edge-on con evidente rigonfiamento centrale. Vicina al confine Vergine/Bilancia.",
       "_origSize": "8×2'",
-      "_origRA": 221.23,
+      "_origRA": 221.22999999999996,
       "_origDec": 1.95,
       "_modified": true
     },
@@ -1027,7 +1027,8 @@
     "ic4665": "img/ic4665.jpg",
     "ngc6633": "img/ngc6633.jpg",
     "ic2391": "img/ic2391.jpg",
-    "ngc6025": "img/ngc6025.jpg"
+    "ngc6025": "img/ngc6025.jpg",
+    "ngc5746": "img/ngc5746.jpg"
   },
   "deleted": [
     "ngc5194b"
