@@ -488,6 +488,33 @@
       "_modified": true
     },
     {
+      "id": "ngc5617",
+      "lx": 0,
+      "name": "NGC 5617",
+      "cat": "NGC 5617 · Centaurus",
+      "type": "cluster",
+      "ra": 217.30999999999997,
+      "dec": -60.72,
+      "months": [
+        4,
+        5,
+        6
+      ],
+      "nasaQ": "NGC 5617 open cluster Centaurus southern",
+      "mag": 6.3,
+      "size": "10'",
+      "diff": 1,
+      "best": [
+        336,
+        750
+      ],
+      "notes": "Solo da latitudini meridionali. Ricco ammasso in Centauro.",
+      "_origSize": "10'",
+      "_origRA": 217.31,
+      "_origDec": -60.72,
+      "_modified": true
+    },
+    {
       "id": "ic4665",
       "lx": 0,
       "name": "IC 4665",
@@ -967,7 +994,8 @@
     "ngc3532": "img/ngc3532.jpg",
     "ngc752": "img/ngc752.jpg",
     "ngc6231": "img/ngc6231.jpg",
-    "ngc2516": "img/ngc2516.jpg"
+    "ngc2516": "img/ngc2516.jpg",
+    "ngc5617": "img/ngc5617.jpg"
   },
   "deleted": [
     "ngc5194b"
