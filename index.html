@@ -626,6 +626,16 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
       </div>
 
       <div class="at-field">
+        <label class="at-lbl">Filtro L-Extreme <span style="font-weight:300;opacity:.5">(opzionale)</span></label>
+        <div class="at-type-row" id="atLxRow">
+          <button class="at-type-btn on" data-lx="0" style="color:var(--ink3)">Non usato</button>
+          <button class="at-type-btn" data-lx="1" style="color:#7c3aed">◐ Parziale</button>
+          <button class="at-type-btn" data-lx="2" style="color:#7c3aed">◎ Buono</button>
+          <button class="at-type-btn" data-lx="3" style="color:#7c3aed">★ Ottimo</button>
+        </div>
+      </div>
+
+      <div class="at-field">
         <label class="at-lbl">Focali consigliate</label>
         <div class="at-type-row" id="editFocals">
           <button class="at-focal-btn" data-focal="135">135mm</button>
@@ -2514,6 +2524,7 @@ function initAddTarget(){
   let selectedType = 'nebula';
   let selectedMonths = [];
   let selectedFocals = [];
+  let selectedLx = 0;
   let photoDataUrl = null;
 
   const overlay = document.getElementById('addTargetOverlay');
@@ -2535,6 +2546,8 @@ function initAddTarget(){
     document.querySelectorAll('#atFocals .at-focal-btn').forEach(b=>b.classList.remove('on'));
     document.querySelectorAll('.at-type-btn').forEach(b=>b.classList.toggle('on', b.dataset.type==='nebula'));
     document.querySelectorAll('.at-month-btn').forEach(b=>b.classList.remove('on'));
+    selectedLx = 0;
+    document.querySelectorAll('#atLxRow .at-type-btn').forEach(b=>b.classList.toggle('on', b.dataset.lx==='0'));
     document.getElementById('atPhotoPreview').style.display = 'none';
     document.getElementById('atPhotoPlaceholder').style.display = 'flex';
     document.getElementById('atError').style.display = 'none';
@@ -2556,11 +2569,19 @@ function initAddTarget(){
   document.getElementById('atCancel').addEventListener('click', closeAddTarget);
   overlay.addEventListener('click', e=>{ if(e.target===overlay) closeAddTarget(); });
 
-  // Type selector
-  document.querySelectorAll('.at-type-btn').forEach(btn=>{
+  // Type selector (scoped to type buttons only, not lx buttons)
+  document.querySelectorAll('#addTargetModal .at-type-btn[data-type]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       selectedType = btn.dataset.type;
-      document.querySelectorAll('.at-type-btn').forEach(b=>b.classList.toggle('on', b===btn));
+      document.querySelectorAll('#addTargetModal .at-type-btn[data-type]').forEach(b=>b.classList.toggle('on', b===btn));
+    });
+  });
+
+  // L-Extreme selector
+  document.querySelectorAll('#atLxRow .at-type-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      selectedLx = parseInt(btn.dataset.lx)||0;
+      document.querySelectorAll('#atLxRow .at-type-btn').forEach(b=>b.classList.toggle('on', b===btn));
     });
   });
 
@@ -2680,7 +2701,7 @@ function initAddTarget(){
       ra: raVal, dec: decVal,
       mag: parseFloat(document.getElementById('atMag').value)||99,
       size: document.getElementById('atSizeVal').value ? document.getElementById('atSizeVal').value+"'" : '—',
-      diff: 1, lx: 0, best: bestFocals,
+      diff: 1, lx: selectedLx, best: bestFocals,
       notes: document.getElementById('atNotes').value.trim() || "Oggetto personalizzato.",
       _custom: true,
       _photo: photoDataUrl || null,
@@ -2699,6 +2720,9 @@ function initAddTarget(){
     enterCatalog();
     setTimeout(()=>switchMonth(targetMonth), 520);
   });
+
+  // Expose to global scope so onclick="window.openAddTarget()" works
+  window.openAddTarget = openAddTarget;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -3024,6 +3048,23 @@ function initEdit(){
 // ═══════════════════════════════════════════════════════
 // GITHUB PUBLISH
 // ═══════════════════════════════════════════════════════
+let _ghSyncInProgress = false;
+
+function _ghLockAcquire(statusEl, btnEl){
+  if(_ghSyncInProgress){
+    if(statusEl) statusEl.textContent = '⏳ Operazione già in corso, attendi...';
+    if(statusEl) statusEl.style.color = '#e67e22';
+    return false;
+  }
+  _ghSyncInProgress = true;
+  if(btnEl){ btnEl.disabled=true; btnEl.style.opacity='0.6'; }
+  return true;
+}
+
+function _ghLockRelease(btnEl){
+  _ghSyncInProgress = false;
+  if(btnEl){ btnEl.disabled=false; btnEl.style.opacity='1'; }
+}
 
 function getGHToken(){
   return (prompt('GitHub Personal Access Token (scope: repo):') || '').trim();
@@ -3040,7 +3081,7 @@ async function publishToGitHub(){
 
   function setStatus(msg, color){ statusEl.textContent=msg; statusEl.style.color=color||'var(--ink4)'; }
 
-  btn.disabled=true; btn.style.opacity='0.6';
+  if(!_ghLockAcquire(statusEl, btn)) return;
   setStatus('⏳ Preparazione...');
 
   try {
@@ -3162,7 +3203,7 @@ async function publishToGitHub(){
     setStatus('✗ Errore: '+err.message, '#c0392b');
   }
 
-  btn.disabled=false; btn.style.opacity='1';
+  _ghLockRelease(btn);
 }
 
 
@@ -3182,6 +3223,7 @@ async function syncDataJson(label){
   const statusEl = document.getElementById('publishStatus');
   function setStatus(msg, color){ if(statusEl){ statusEl.textContent=msg; statusEl.style.color=color||'var(--ink4)'; } }
 
+  if(!_ghLockAcquire(statusEl, null)) return;
   setStatus('⏳ Sincronizzazione: ' + label + '...');
 
   try {
@@ -3291,10 +3333,11 @@ async function syncDataJson(label){
     setStatus('✓ Salvato: ' + label, '#1a7a4a');
 
   } catch(err){
-    // Upload failed — local data is untouched, remote is unchanged (we never got to uploadFile for data.json)
     setStatus('✗ Sync fallita (' + label + '): ' + err.message + ' — dati locali intatti', '#c0392b');
     console.warn('syncDataJson error:', err);
   }
+
+  _ghLockRelease(null);
 }
 
 
