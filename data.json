@@ -136,7 +136,10 @@
         1625
       ],
       "notes": "NGC 6951 è una galassia a spirale barrata nella costellazione di Cefeo",
-      "_custom": true
+      "_custom": true,
+      "_origSize": "3'",
+      "_origRA": 414.375,
+      "_origDec": 66.19222222222223
     }
   ],
   "modified": [
