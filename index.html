@@ -2493,7 +2493,7 @@ function initAddTarget(){
     ['atRAh','atRAm','atRAs','atDecd','atDecm','atDecs'].forEach(id=>{ document.getElementById(id).value=''; });
     document.getElementById('atMonthsPreview').textContent = '';
     document.querySelectorAll('#atFocals .at-focal-btn').forEach(b=>b.classList.remove('on'));
-    document.querySelectorAll('.at-type-btn').forEach(b=>b.classList.toggle('on', b.dataset.type==='nebula'));
+    document.querySelectorAll('#addTargetModal .at-type-btn[data-type]').forEach(b=>b.classList.toggle('on', b.dataset.type==='nebula'));
     document.querySelectorAll('.at-month-btn').forEach(b=>b.classList.remove('on'));
     selectedLx = 0;
     document.querySelectorAll('#atLxRow .at-type-btn').forEach(b=>b.classList.toggle('on', b.dataset.lx==='0'));
