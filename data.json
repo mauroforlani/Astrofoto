@@ -188,15 +188,18 @@
       ],
       "ra": 169.0875,
       "dec": 54.87444444444444,
-      "mag": 99,
-      "size": "—",
+      "mag": 9.88,
+      "size": "3'",
       "diff": 1,
       "lx": 0,
       "best": [
         1625
       ],
       "notes": "La Nebulosa Civetta (nota anche come Nebulosa Gufo o con le sigle M 97 o NGC 3587) è una nebulosa planetaria visibile nella costellazione dell'Orsa Maggiore",
-      "_custom": true
+      "_custom": true,
+      "_origSize": "—",
+      "_origRA": 169.0875,
+      "_origDec": 54.87444444444444
     },
     {
       "id": "custom_ngc_5371_1773472644340",
