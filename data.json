@@ -264,7 +264,10 @@
         1625
       ],
       "notes": "NGC 1530 è una galassia a spirale barrata situata nella costellazione della Giraffa",
-      "_custom": true
+      "_custom": true,
+      "_origSize": "2'",
+      "_origRA": 66.7,
+      "_origDec": 75.3611111111111
     }
   ],
   "modified": [
