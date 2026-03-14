@@ -2669,7 +2669,7 @@ function initAddTarget(){
   });
 
   // Save
-  document.getElementById('atSave').addEventListener('click', ()=>{
+  document.getElementById('atSave').addEventListener('click', async ()=>{
     const name = document.getElementById('atName').value.trim();
     const errEl = document.getElementById('atError');
 
@@ -2719,17 +2719,14 @@ function initAddTarget(){
     };
 
     addCustomTarget(newObj);
-    closeAddTarget();
     if(photoDataUrl) LOCAL_IMGS[newObj.id] = 'img/'+newObj.id+'.jpg';
-    syncDataJson('Nuovo target: ' + newObj.name);
-    if(photoDataUrl){
-      const st = document.getElementById('publishStatus');
-      if(st){ st.textContent='📁 Carica su GitHub: img/'+newObj.id+'.jpg'; st.style.color='#e67e22'; }
-    }
-    // Go to catalog at first visible month
+    // Go to catalog immediately
     const targetMonth = newObj.months[0];
+    closeAddTarget();
     enterCatalog();
     setTimeout(()=>switchMonth(targetMonth), 520);
+    // Sync to GitHub after UI update (await so errors are visible)
+    await syncDataJson('Nuovo target: ' + newObj.name);
   });
 
   // Expose to global scope so onclick="window.openAddTarget()" works
@@ -2939,7 +2936,7 @@ function initEdit(){
 
   // Save
   document.getElementById('editSave').addEventListener('click', ()=>{ handleEditSave(); });
-  function handleEditSave(){
+  async function handleEditSave(){
     if(!editingObj) return;
     const name = document.getElementById('editName').value.trim();
     if(!name){ document.getElementById('editError').textContent='Il nome è obbligatorio'; document.getElementById('editError').style.display='block'; return; }
@@ -2980,9 +2977,7 @@ function initEdit(){
     if(editPhotoDataUrl){
       editingObj._photo = editPhotoDataUrl;
       LOCAL_IMGS[editingObj.id] = 'img/'+editingObj.id+'.jpg';
-      syncDataJson('Foto: ' + editingObj.name);
-      const st1 = document.getElementById('publishStatus');
-      if(st1){ st1.textContent='📁 Carica su GitHub: img/'+editingObj.id+'.jpg'; st1.style.color='#e67e22'; }
+      await syncDataJson('Foto: ' + editingObj.name);
     }
 
     // Persist to localStorage
@@ -3031,9 +3026,7 @@ function initEdit(){
         if(editPhotoDataUrl){
           editingObj._photo = editPhotoDataUrl;
           LOCAL_IMGS[editingObj.id] = 'img/'+editingObj.id+'.jpg';
-          syncDataJson('Foto: ' + editingObj.name);
-          const st2 = document.getElementById('publishStatus');
-          if(st2){ st2.textContent='📁 Carica su GitHub: img/'+editingObj.id+'.jpg'; st2.style.color='#e67e22'; }
+          await syncDataJson('Foto: ' + editingObj.name);
         }
         if(editingObj._custom){
           const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
@@ -3050,7 +3043,7 @@ function initEdit(){
         renderGrid(activeMonth);
         closeEdit();
         if(typeof renderAdminList==='function') renderAdminList();
-        syncDataJson('Modifica: ' + editingObj.name);
+        await syncDataJson('Modifica: ' + editingObj.name);
       }
     });
   }
