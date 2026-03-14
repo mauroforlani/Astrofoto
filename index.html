@@ -2687,7 +2687,7 @@ function initAddTarget(){
       const tempObj = {type: selectedType, size: sizeStr, best: []};
       // Calculate for each camera and union the results
       const allFocals = new Set();
-      for(const cam of [CAMERAS[0], CAMERAS[1]]){
+      for(const cam of Object.values(CAMERAS)){
         const m = sizeStr.match(/([\d.]+)/);
         if(m){
           let sz = parseFloat(m[1]);
@@ -2786,6 +2786,7 @@ function degToDms(deg){
 }
 
 let editingObj = null;
+let editPhotoDataUrl = null;
 
 function openEditModal(obj){
   editingObj = obj;
@@ -2879,7 +2880,6 @@ function updateEditMonthPreview(){
 
 function initEdit(){
   const overlay = document.getElementById('editOverlay');
-  let editPhotoDataUrl = null;
   function closeEdit(){ overlay.classList.remove('open'); document.body.style.overflow=''; editPhotoDataUrl=null; }
 
   // Photo upload handler
@@ -3024,7 +3024,7 @@ function initEdit(){
         if(editPhotoDataUrl){
           editingObj._photo = editPhotoDataUrl;
           LOCAL_IMGS[editingObj.id] = 'img/'+editingObj.id+'.jpg';
-          await syncDataJson('Foto: ' + editingObj.name);
+          syncDataJson('Foto: ' + editingObj.name);
         }
         if(editingObj._custom){
           const saved = loadCustomTargets().map(t=>t.id===editingObj.id ? editingObj : t);
@@ -3041,7 +3041,7 @@ function initEdit(){
         renderGrid(activeMonth);
         closeEdit();
         if(typeof renderAdminList==='function') renderAdminList();
-        await syncDataJson('Modifica: ' + editingObj.name);
+        syncDataJson('Modifica: ' + editingObj.name);
       }
     });
   }
