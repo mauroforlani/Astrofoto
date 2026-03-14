@@ -166,6 +166,37 @@
       ],
       "notes": "NGC 1365 (conosciuta anche come La Grande Galassia a spirale barrata) è una galassia a spirale barrata visibile nella costellazione della Fornace",
       "_custom": true
+    },
+    {
+      "id": "custom_ngc_3587_1773472426609",
+      "name": "NGC 3587",
+      "cat": "M97 · Owl Nebula",
+      "type": "galaxy",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "ra": 169.0875,
+      "dec": 54.87444444444444,
+      "mag": 99,
+      "size": "—",
+      "diff": 1,
+      "lx": 0,
+      "best": [
+        1625
+      ],
+      "notes": "La Nebulosa Civetta (nota anche come Nebulosa Gufo o con le sigle M 97 o NGC 3587) è una nebulosa planetaria visibile nella costellazione dell'Orsa Maggiore",
+      "_custom": true
     }
   ],
   "modified": [
@@ -1094,7 +1125,8 @@
     "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg",
     "ngc4038b": "img/ngc4038b.jpg",
     "custom_ngc_6951_1773436049617": "img/custom_ngc_6951_1773436049617.jpg",
-    "custom_ngc_1365_1773472173042": "img/custom_ngc_1365_1773472173042.jpg"
+    "custom_ngc_1365_1773472173042": "img/custom_ngc_1365_1773472173042.jpg",
+    "custom_ngc_3587_1773472426609": "img/custom_ngc_3587_1773472426609.jpg"
   },
   "deleted": [
     "ngc5194b"
