@@ -3129,21 +3129,29 @@ async function publishToGitHub(){
       ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
     ];
 
-    // Build photoMap FIRST: photos in memory not yet on GitHub
-    // Use remote.imgs as reference — if id is there, file already exists on GitHub
+    // Build photoMap FIRST: photos in memory — verify physical existence on GitHub
     const remoteImgs = remote.imgs || {};
     const photoMap = {};
-    OBJ.filter(o => o._photo && typeof o._photo === 'string' && o._photo.startsWith('data:')
-                 && !remoteImgs[o.id])
-       .forEach(o => { photoMap[o.id] = o._photo; });
+
+    // Collect all candidate photos (OBJ + localStorage mods)
+    const photoCandidates = {};
+    OBJ.filter(o => o._photo && typeof o._photo === 'string' && o._photo.startsWith('data:'))
+       .forEach(o => { photoCandidates[o.id] = o._photo; });
     try {
       const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
       Object.values(mods).forEach(mod => {
-        if(mod._photo && typeof mod._photo === 'string' && mod._photo.startsWith('data:')
-           && !remoteImgs[mod.id])
-          photoMap[mod.id] = mod._photo;
+        if(mod._photo && typeof mod._photo === 'string' && mod._photo.startsWith('data:'))
+          photoCandidates[mod.id] = mod._photo;
       });
     } catch(e){}
+
+    // For each candidate, check if file physically exists on GitHub
+    for(const [id, photo] of Object.entries(photoCandidates)){
+      try {
+        const chk = await fetch(API + 'img/' + id + '.jpg', {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
+        if(!chk.ok) photoMap[id] = photo; // file not found → needs upload
+      } catch(e){ photoMap[id] = photo; }
+    }
 
     // Imgs: NEVER store base64 in imgs — only img/xxx.jpg paths
     const newImgs = {};
@@ -3272,21 +3280,29 @@ async function syncDataJson(label){
       ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
     ];
 
-    // Build photoMap FIRST: photos in memory not yet on GitHub
-    // Use remote.imgs as reference — if id is there, file already exists on GitHub
+    // Build photoMap FIRST: photos in memory — verify physical existence on GitHub
     const remoteImgs = remote.imgs || {};
     const photoMap = {};
-    OBJ.filter(o=>o._photo && typeof o._photo==='string' && o._photo.startsWith('data:')
-              && !remoteImgs[o.id])
-       .forEach(o=>{ photoMap[o.id]=o._photo; });
+
+    // Collect all candidate photos (OBJ + localStorage mods)
+    const photoCandidates = {};
+    OBJ.filter(o=>o._photo && typeof o._photo==='string' && o._photo.startsWith('data:'))
+       .forEach(o=>{ photoCandidates[o.id]=o._photo; });
     try {
       const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
       Object.values(mods).forEach(mod=>{
-        if(mod._photo && typeof mod._photo==='string' && mod._photo.startsWith('data:')
-           && !remoteImgs[mod.id])
-          photoMap[mod.id]=mod._photo;
+        if(mod._photo && typeof mod._photo==='string' && mod._photo.startsWith('data:'))
+          photoCandidates[mod.id]=mod._photo;
       });
     } catch(e){}
+
+    // For each candidate, check if file physically exists on GitHub
+    for(const [id, photo] of Object.entries(photoCandidates)){
+      try {
+        const chk = await fetch(API + 'img/' + id + '.jpg', {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
+        if(!chk.ok) photoMap[id] = photo; // file not found → needs upload
+      } catch(e){ photoMap[id] = photo; }
+    }
 
     // Imgs: NEVER store base64 in imgs — only img/xxx.jpg paths
     const newImgs = {};
