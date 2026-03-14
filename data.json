@@ -228,6 +228,37 @@
       ],
       "notes": "NGC 5371 è una galassia a spirale barrata situata nella costellazione dei Cani da Caccia",
       "_custom": true
+    },
+    {
+      "id": "custom_ngc_1530_1773472846609",
+      "name": "NGC 1530",
+      "cat": "NGC 1530",
+      "type": "galaxy",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "ra": 66.7,
+      "dec": 75.3611111111111,
+      "mag": 13.38,
+      "size": "2'",
+      "diff": 1,
+      "lx": 0,
+      "best": [
+        1625
+      ],
+      "notes": "NGC 1530 è una galassia a spirale barrata situata nella costellazione della Giraffa",
+      "_custom": true
     }
   ],
   "modified": [
@@ -1158,7 +1189,8 @@
     "custom_ngc_6951_1773436049617": "img/custom_ngc_6951_1773436049617.jpg",
     "custom_ngc_1365_1773472173042": "img/custom_ngc_1365_1773472173042.jpg",
     "custom_ngc_3587_1773472426609": "img/custom_ngc_3587_1773472426609.jpg",
-    "custom_ngc_5371_1773472644340": "img/custom_ngc_5371_1773472644340.jpg"
+    "custom_ngc_5371_1773472644340": "img/custom_ngc_5371_1773472644340.jpg",
+    "custom_ngc_1530_1773472846609": "img/custom_ngc_1530_1773472846609.jpg"
   },
   "deleted": [
     "ngc5194b"
