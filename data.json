@@ -233,7 +233,10 @@
         1625
       ],
       "notes": "NGC 5371 è una galassia a spirale barrata situata nella costellazione dei Cani da Caccia",
-      "_custom": true
+      "_custom": true,
+      "_origSize": "4'",
+      "_origRA": 209.20000000000002,
+      "_origDec": 40.328611111111115
     },
     {
       "id": "custom_ngc_1530_1773472846609",
