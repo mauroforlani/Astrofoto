@@ -1808,7 +1808,69 @@ const OBJ=[
 // LOCAL IMAGES (img/ folder on same server)
 // Falls back to canvas if image not found
 // ═══════════════════════════════════════════════════════
-const LOCAL_IMGS = {};
+const LOCAL_IMGS = {
+  'ngc4559':'img/ngc4559.jpg',  'ngc4631b':'img/ngc4631b.jpg',  'ngc4762':'img/ngc4762.jpg',
+  'ngc2362':'img/ngc2362.jpg',  'ngc2976':'img/ngc2976.jpg',  'ngc3077':'img/ngc3077.jpg',
+  'm42':'img/m42.jpg',  'ic434':'img/ic434.jpg',  'ngc1977':'img/ngc1977.jpg',
+  'm78':'img/m78.jpg',  'm1':'img/m1.jpg',  'ngc2174':'img/ngc2174.jpg',
+  'ngc2244':'img/ngc2244.jpg',  'ngc1499':'img/ngc1499.jpg',  'ic1805':'img/ic1805.jpg',
+  'ic1848':'img/ic1848.jpg',  'ngc2261':'img/ngc2261.jpg',  'ngc2392':'img/ngc2392.jpg',
+  'ngc7000':'img/ngc7000.jpg',  'ic5070':'img/ic5070.jpg',  'ngc6992':'img/ngc6992.jpg',
+  'ngc6960':'img/ngc6960.jpg',  'ic5146':'img/ic5146.jpg',  'ngc6888':'img/ngc6888.jpg',
+  'm57':'img/m57.jpg',  'm27':'img/m27.jpg',  'ngc6543':'img/ngc6543.jpg',
+  'ngc7293':'img/ngc7293.jpg',  'ngc6302':'img/ngc6302.jpg',  'm8':'img/m8.jpg',
+  'm20':'img/m20.jpg',  'm16':'img/m16.jpg',  'm17':'img/m17.jpg',
+  'sh2101':'img/sh2101.jpg',  'ngc1333':'img/ngc1333.jpg',  'ngc2264':'img/ngc2264.jpg',
+  'ngc2359':'img/ngc2359.jpg',  'sh2240':'img/sh2240.jpg',  'ngc7635':'img/ngc7635.jpg',
+  'ngc896':'img/ngc896.jpg',  'ngc281':'img/ngc281.jpg',  'ngc6334':'img/ngc6334.jpg',
+  'ngc6357':'img/ngc6357.jpg',  'vdb1':'img/vdb1.jpg',  'ic1396':'img/ic1396.jpg',
+  'sh2157':'img/sh2157.jpg',  'ngc7822':'img/ngc7822.jpg',  'ngc2068b':'img/ngc2068b.jpg',
+  'ngc2023':'img/ngc2023.jpg',  'ngc2070':'img/ngc2070.jpg',  'ic2177':'img/ic2177.jpg',
+  'ngc1893':'img/ngc1893.jpg',  'ngc6820':'img/ngc6820.jpg',  'sh2132':'img/sh2132.jpg',
+  'sh2155':'img/sh2155.jpg',  'ngc40':'img/ngc40.jpg',  'm31':'img/m31.jpg',
+  'm33':'img/m33.jpg',  'ngc891':'img/ngc891.jpg',  'm74':'img/m74.jpg',
+  'm81':'img/m81.jpg',  'm82':'img/m82.jpg',  'm51':'img/m51.jpg',
+  'm101':'img/m101.jpg',  'm63':'img/m63.jpg',  'm64':'img/m64.jpg',
+  'ngc4565':'img/ngc4565.jpg',  'ngc4631':'img/ngc4631.jpg',  'ngc4038':'img/ngc4038.jpg',
+  'm65m66':'img/m65m66.jpg',  'ngc3628':'img/ngc3628.jpg',  'ngc4244':'img/ngc4244.jpg',
+  'm84virgo':'img/m84virgo.jpg',  'm87':'img/m87.jpg',  'm102':'img/m102.jpg',
+  'm106':'img/m106.jpg',  'ngc5128':'img/ngc5128.jpg',  'ngc6946':'img/ngc6946.jpg',
+  'ngc7331':'img/ngc7331.jpg',  'ic342':'img/ic342.jpg',  'ngc2903':'img/ngc2903.jpg',
+  'ngc772':'img/ngc772.jpg',  'ngc4594':'img/ngc4594.jpg',  'ngc253':'img/ngc253.jpg',
+  'ngc1316':'img/ngc1316.jpg',  'ngc2403':'img/ngc2403.jpg',  'ngc247':'img/ngc247.jpg',
+  'ngc4395':'img/ngc4395.jpg',  'ngc4725':'img/ngc4725.jpg',  'ngc2683':'img/ngc2683.jpg',
+  'ngc2841':'img/ngc2841.jpg',  'ngc7479':'img/ngc7479.jpg',  'ngc7814':'img/ngc7814.jpg',
+  'ngc3521':'img/ngc3521.jpg',  'ngc5055':'img/ngc5055.jpg',  'ngc4490':'img/ngc4490.jpg',
+  'ngc5139':'img/ngc5139.jpg',  'ngc1232':'img/ngc1232.jpg',  'ngc300':'img/ngc300.jpg',
+  'ngc55':'img/ngc55.jpg',  'ngc6744':'img/ngc6744.jpg',  'm13':'img/m13.jpg',
+  'm92':'img/m92.jpg',  'm3':'img/m3.jpg',  'm5':'img/m5.jpg',
+  'm15':'img/m15.jpg',  'm2':'img/m2.jpg',  'm22':'img/m22.jpg',
+  'm10':'img/m10.jpg',  'm12':'img/m12.jpg',  'm4':'img/m4.jpg',
+  'm80':'img/m80.jpg',  'ngc104':'img/ngc104.jpg',  'ngc6397':'img/ngc6397.jpg',
+  'm56':'img/m56.jpg',  'm107':'img/m107.jpg',  'm62':'img/m62.jpg',
+  'm79':'img/m79.jpg',  'ngc5024':'img/ngc5024.jpg',  'ngc6752':'img/ngc6752.jpg',
+  'm45':'img/m45.jpg',  'ngc1502':'img/ngc1502.jpg',  'ngc869':'img/ngc869.jpg',
+  'ngc884b':'img/ngc884b.jpg',  'ngc7789':'img/ngc7789.jpg',  'ngc457':'img/ngc457.jpg',
+  'm35':'img/m35.jpg',  'm36':'img/m36.jpg',  'm37':'img/m37.jpg',
+  'm38':'img/m38.jpg',  'm34':'img/m34.jpg',  'm11':'img/m11.jpg',
+  'm41':'img/m41.jpg',  'm50':'img/m50.jpg',  'm52':'img/m52.jpg',
+  'm67':'img/m67.jpg',  'm44':'img/m44.jpg',  'm47':'img/m47.jpg',
+  'm46':'img/m46.jpg',  'm48':'img/m48.jpg',  'm39':'img/m39.jpg',
+  'm29':'img/m29.jpg',  'm26':'img/m26.jpg',  'luna':'img/luna.jpg',
+  'giove':'img/giove.jpg',  'saturno':'img/saturno.jpg',  'marte':'img/marte.jpg',
+  'venere':'img/venere.jpg',  'urano':'img/urano.jpg',  'nettuno':'img/nettuno.jpg',
+  'albireo':'img/albireo.jpg',  'mizar':'img/mizar.jpg',  'epsilonlyrae':'img/epsilonlyrae.jpg',
+  'etacas':'img/etacas.jpg',  'algedi':'img/algedi.jpg',  'custom_hcg_44_1772914802811':'img/custom_hcg_44_1772914802811.jpg',
+  'ngc4649':'img/ngc4649.jpg',  'ngc7217':'img/ngc7217.jpg',  'ngc4517':'img/ngc4517.jpg',
+  'ngc5907':'img/ngc5907.jpg',  'ngc1512':'img/ngc1512.jpg',  'ngc3532':'img/ngc3532.jpg',
+  'ngc752':'img/ngc752.jpg',  'ngc6231':'img/ngc6231.jpg',  'ngc2516':'img/ngc2516.jpg',
+  'ngc5617':'img/ngc5617.jpg',  'ic4665':'img/ic4665.jpg',  'ngc6633':'img/ngc6633.jpg',
+  'ic2391':'img/ic2391.jpg',  'ngc6025':'img/ngc6025.jpg',  'ngc5746':'img/ngc5746.jpg',
+  'ngc4216':'img/ngc4216.jpg',  'custom_ic_2118_1773213201586':'img/custom_ic_2118_1773213201586.jpg',  'custom_ngc_4535_1772821562319':'img/custom_ngc_4535_1772821562319.jpg',
+  'ngc4038b':'img/ngc4038b.jpg',  'custom_ngc_6951_1773436049617':'img/custom_ngc_6951_1773436049617.jpg',  'custom_ngc_1365_1773472173042':'img/custom_ngc_1365_1773472173042.jpg',
+  'custom_ngc_3587_1773472426609':'img/custom_ngc_3587_1773472426609.jpg',  'custom_ngc_5371_1773472644340':'img/custom_ngc_5371_1773472644340.jpg',  'custom_ngc_1530_1773472846609':'img/custom_ngc_1530_1773472846609.jpg',
+};
+
 // ═══════════════════════════════════════════════════════
 // MONTHS
 // ═══════════════════════════════════════════════════════
@@ -2999,22 +3061,6 @@ function initEdit(){
 // ═══════════════════════════════════════════════════════
 let _ghSyncInProgress = false;
 
-function _ghLockAcquire(statusEl, btnEl){
-  if(_ghSyncInProgress){
-    if(statusEl) statusEl.textContent = '⏳ Operazione già in corso, attendi...';
-    if(statusEl) statusEl.style.color = '#e67e22';
-    return false;
-  }
-  _ghSyncInProgress = true;
-  if(btnEl){ btnEl.disabled=true; btnEl.style.opacity='0.6'; }
-  return true;
-}
-
-function _ghLockRelease(btnEl){
-  _ghSyncInProgress = false;
-  if(btnEl){ btnEl.disabled=false; btnEl.style.opacity='1'; }
-}
-
 function getGHToken(){
   return (prompt('GitHub Personal Access Token (scope: repo):') || '').trim();
 }
@@ -3027,10 +3073,11 @@ async function publishToGitHub(){
 
   const statusEl = document.getElementById('publishStatus');
   const btn = document.getElementById('btnExportIndex');
-
   function setStatus(msg, color){ statusEl.textContent=msg; statusEl.style.color=color||'var(--ink4)'; }
 
-  if(!_ghLockAcquire(statusEl, btn)) return;
+  if(_ghSyncInProgress){ setStatus('⏳ Operazione già in corso, attendi...','#e67e22'); return; }
+  _ghSyncInProgress = true;
+  btn.disabled=true; btn.style.opacity='0.6';
   setStatus('⏳ Preparazione...');
 
   try {
@@ -3041,7 +3088,6 @@ async function publishToGitHub(){
       } catch(e){}
       return null;
     }
-
     async function uploadFile(path, base64content){
       const sha = await getSHA(path);
       const r = await fetch(API+path,{
@@ -3051,65 +3097,44 @@ async function publishToGitHub(){
       });
       if(!r.ok) throw new Error((await r.json()).message||'Upload failed');
     }
+    function toBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
 
-    function toBase64(str){
-      return btoa(unescape(encodeURIComponent(str)));
-    }
-
-    // Read current remote data.json FIRST — never overwrite blindly
+    // Read remote data.json FIRST
     let remote = {customs:[], modified:[], imgs:{}, deleted:[]};
     try {
       const rr = await fetch('https://raw.githubusercontent.com/mauroforlani/Astrofoto/main/data.json?t='+Date.now(), {cache:'no-store'});
       if(rr.ok) remote = await rr.json();
     } catch(e){}
 
-    // Build data.json — local wins for same id, remote fills the rest
     const localCustomIds = new Set(OBJ.filter(o=>o._custom).map(o=>o.id));
     const localModIds = new Set(OBJ.filter(o=>o._modified&&!o._custom).map(o=>o.id));
-
     const customs = [
-      ...OBJ.filter(o=>o._custom).map(o=>{ const obj={...o}; delete obj._photo; delete obj._alt; return obj; }),
+      ...OBJ.filter(o=>o._custom).map(o=>{ const c={...o}; delete c._photo; delete c._alt; return c; }),
       ...(remote.customs||[]).filter(o=>!localCustomIds.has(o.id))
     ];
     const modified = [
-      ...OBJ.filter(o=>o._modified&&!o._custom).map(o=>{ const obj={...o}; delete obj._photo; delete obj._alt; return obj; }),
+      ...OBJ.filter(o=>o._modified&&!o._custom).map(o=>{ const c={...o}; delete c._photo; delete c._alt; return c; }),
       ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
     ];
 
-    // Build photoMap FIRST: photos in memory not yet on GitHub
-    // Use remote.imgs as reference — if id is there, file already exists on GitHub
+    // photoMap: only base64 photos not yet on GitHub (check remote.imgs)
     const remoteImgs = remote.imgs || {};
     const photoMap = {};
-    OBJ.filter(o => o._photo && typeof o._photo === 'string' && o._photo.startsWith('data:')
-                 && !remoteImgs[o.id])
-       .forEach(o => { photoMap[o.id] = o._photo; });
+    OBJ.filter(o=>o._photo && typeof o._photo==='string' && o._photo.startsWith('data:') && !remoteImgs[o.id])
+       .forEach(o=>{ photoMap[o.id]=o._photo; });
     try {
       const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
-      Object.values(mods).forEach(mod => {
-        if(mod._photo && typeof mod._photo === 'string' && mod._photo.startsWith('data:')
-           && !remoteImgs[mod.id])
-          photoMap[mod.id] = mod._photo;
+      Object.values(mods).forEach(mod=>{
+        if(mod._photo && typeof mod._photo==='string' && mod._photo.startsWith('data:') && !remoteImgs[mod.id])
+          photoMap[mod.id]=mod._photo;
       });
     } catch(e){}
 
-    // Imgs: NEVER store base64 in imgs — only img/xxx.jpg paths
-    const newImgs = {};
-    // Start from remote, skip legacy base64 values
-    Object.entries(remoteImgs).forEach(([id,p])=>{
-      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
-    });
-    // Apply LOCAL_IMGS, skip base64 values
-    Object.entries(LOCAL_IMGS).forEach(([id,p])=>{
-      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
-    });
-    // Register path for objects with _photo (being uploaded now)
-    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
-    // Custom targets whose _photo was already cleaned but path never registered
-    JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]')
-      .filter(t=>!t._photo && !newImgs[t.id] && remoteImgs[t.id])
-      .forEach(t=>{ newImgs[t.id]=remoteImgs[t.id]; });
+    // newImgs: remote paths + LOCAL_IMGS paths + new uploads (no base64 ever)
+    const newImgs = {...LOCAL_IMGS};
+    Object.entries(remoteImgs).forEach(([id,p])=>{ if(p && p.startsWith('img/')) newImgs[id]=p; });
+    Object.keys(photoMap).forEach(id=>{ newImgs[id]='img/'+id+'.jpg'; });
 
-    // Deleted: union of remote + local
     const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
     const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
@@ -3126,33 +3151,31 @@ async function publishToGitHub(){
     setStatus('⏳ Caricamento data.json...');
     await uploadFile('data.json', toBase64(dataJson));
 
-    // Cleanup: remove base64 _photo from localStorage now that files are on GitHub
-    // Also update LOCAL_IMGS so current session shows photos immediately
+    // Cleanup base64 from memory and localStorage
     try {
       const modKey = 'astrofoto_modified_objs';
       const mods = JSON.parse(localStorage.getItem(modKey)||'{}');
       let changed = false;
-      Object.keys(photoMap).forEach(id => {
-        if(mods[id] && mods[id]._photo) { delete mods[id]._photo; changed = true; }
-        const obj = OBJ.find(o=>o.id===id);
-        if(obj) delete obj._photo;
-        // Register path in LOCAL_IMGS so render finds it immediately
-        LOCAL_IMGS[id] = 'img/' + id + '.jpg';
+      Object.keys(photoMap).forEach(id=>{
+        if(mods[id]&&mods[id]._photo){ delete mods[id]._photo; changed=true; }
+        const obj=OBJ.find(o=>o.id===id); if(obj) delete obj._photo;
+        LOCAL_IMGS[id]='img/'+id+'.jpg';
       });
       if(changed) localStorage.setItem(modKey, JSON.stringify(mods));
-      const customs = JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]');
-      let cChanged = false;
-      customs.forEach(t => { if(photoMap[t.id] && t._photo) { delete t._photo; cChanged = true; } });
-      if(cChanged) localStorage.setItem('astrofoto_custom_targets', JSON.stringify(customs));
+      const ct = JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]');
+      let cc=false;
+      ct.forEach(t=>{ if(photoMap[t.id]&&t._photo){ delete t._photo; cc=true; } });
+      if(cc) localStorage.setItem('astrofoto_custom_targets', JSON.stringify(ct));
     } catch(e){}
 
     setStatus('✓ Pubblicato! Visibile dopo ~2 min', '#1a7a4a');
 
   } catch(err){
     setStatus('✗ Errore: '+err.message, '#c0392b');
+  } finally {
+    _ghSyncInProgress = false;
+    btn.disabled=false; btn.style.opacity='1';
   }
-
-  _ghLockRelease(btn);
 }
 
 
@@ -3165,51 +3188,44 @@ async function syncDataJson(label){
   const GH_REPO = 'Astrofoto';
   const API = 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/contents/';
 
-  // Ask for token — if user cancels or leaves empty, abort without touching anything
   const GH_TOKEN = (prompt('GitHub Personal Access Token (scope: repo) per salvare "' + label + '":') || '').trim();
   if(!GH_TOKEN) return;
 
   const statusEl = document.getElementById('publishStatus');
   function setStatus(msg, color){ if(statusEl){ statusEl.textContent=msg; statusEl.style.color=color||'var(--ink4)'; } }
 
-  if(!_ghLockAcquire(statusEl, null)) return;
+  if(_ghSyncInProgress){ setStatus('⏳ Operazione già in corso, attendi...','#e67e22'); return; }
+  _ghSyncInProgress = true;
   setStatus('⏳ Sincronizzazione: ' + label + '...');
 
   try {
     function toBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
-
     async function getSHA(path){
       try {
-        const r = await fetch(API+path, {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
+        const r = await fetch(API+path,{headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
         if(r.ok){ const d=await r.json(); return d.sha; }
       } catch(e){}
       return null;
     }
-
     async function uploadFile(path, base64content){
       const sha = await getSHA(path);
-      const r = await fetch(API+path, {
-        method: 'PUT',
-        headers: {'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      const r = await fetch(API+path,{
+        method:'PUT',
+        headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
         body: JSON.stringify({message:'Astrofoto: '+label, content:base64content, ...(sha?{sha}:{})})
       });
-      if(!r.ok){
-        const msg = (await r.json()).message || 'Upload failed';
-        throw new Error(msg);
-      }
+      if(!r.ok){ const msg=(await r.json()).message||'Upload failed'; throw new Error(msg); }
     }
 
-    // Read current remote data.json FIRST — never overwrite blindly
+    // Read remote data.json FIRST
     let remote = {customs:[], modified:[], imgs:{}, deleted:[]};
     try {
       const rr = await fetch('https://raw.githubusercontent.com/'+GH_USER+'/'+GH_REPO+'/main/data.json?t='+Date.now(), {cache:'no-store'});
       if(rr.ok) remote = await rr.json();
     } catch(e){}
 
-    // Build merged data.json — local wins for same id, remote fills the rest
     const localCustomIds = new Set(OBJ.filter(o=>o._custom).map(o=>o.id));
     const localModIds    = new Set(OBJ.filter(o=>o._modified&&!o._custom).map(o=>o.id));
-
     const customs = [
       ...OBJ.filter(o=>o._custom).map(o=>{ const c={...o}; delete c._photo; delete c._alt; return c; }),
       ...(remote.customs||[]).filter(o=>!localCustomIds.has(o.id))
@@ -3219,42 +3235,29 @@ async function syncDataJson(label){
       ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
     ];
 
-    // Build photoMap FIRST: photos in memory not yet on GitHub
-    // Use remote.imgs as reference — if id is there, file already exists on GitHub
+    // photoMap: only base64 photos not yet on GitHub
     const remoteImgs = remote.imgs || {};
     const photoMap = {};
-    OBJ.filter(o=>o._photo && typeof o._photo==='string' && o._photo.startsWith('data:')
-              && !remoteImgs[o.id])
+    OBJ.filter(o=>o._photo && typeof o._photo==='string' && o._photo.startsWith('data:') && !remoteImgs[o.id])
        .forEach(o=>{ photoMap[o.id]=o._photo; });
     try {
       const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
       Object.values(mods).forEach(mod=>{
-        if(mod._photo && typeof mod._photo==='string' && mod._photo.startsWith('data:')
-           && !remoteImgs[mod.id])
+        if(mod._photo && typeof mod._photo==='string' && mod._photo.startsWith('data:') && !remoteImgs[mod.id])
           photoMap[mod.id]=mod._photo;
       });
     } catch(e){}
 
-    // Imgs: NEVER store base64 in imgs — only img/xxx.jpg paths
-    const newImgs = {};
-    Object.entries(remoteImgs).forEach(([id,p])=>{
-      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
-    });
-    Object.entries(LOCAL_IMGS).forEach(([id,p])=>{
-      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
-    });
-    // Register path for objects with _photo (being uploaded now)
-    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
-    // Custom targets whose _photo was already cleaned but path never registered
-    JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]')
-      .filter(t=>!t._photo && !newImgs[t.id] && remoteImgs[t.id])
-      .forEach(t=>{ newImgs[t.id]=remoteImgs[t.id]; });
+    // newImgs: remote paths + LOCAL_IMGS + new uploads (no base64)
+    const newImgs = {...LOCAL_IMGS};
+    Object.entries(remoteImgs).forEach(([id,p])=>{ if(p && p.startsWith('img/')) newImgs[id]=p; });
+    Object.keys(photoMap).forEach(id=>{ newImgs[id]='img/'+id+'.jpg'; });
 
     const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
     const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
-
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
 
+    // Upload photos
     const photoEntries = Object.entries(photoMap);
     for(let i=0; i<photoEntries.length; i++){
       const [id, photo] = photoEntries[i];
@@ -3262,28 +3265,25 @@ async function syncDataJson(label){
       await uploadFile('img/'+id+'.jpg', photo.split(',')[1]);
     }
 
-    // Upload data.json last — only if everything above succeeded
+    // Upload data.json
     setStatus('⏳ Aggiornamento data.json...');
     await uploadFile('data.json', toBase64(dataJson));
 
-    // Cleanup: remove base64 _photo from localStorage now that files are on GitHub
-    // Also update LOCAL_IMGS so current session shows the photo immediately
+    // Cleanup base64 from memory and localStorage
     try {
       const modKey = 'astrofoto_modified_objs';
       const mods = JSON.parse(localStorage.getItem(modKey)||'{}');
       let changed = false;
-      Object.keys(photoMap).forEach(id => {
-        if(mods[id] && mods[id]._photo) { delete mods[id]._photo; changed = true; }
-        const obj = OBJ.find(o=>o.id===id);
-        if(obj) delete obj._photo;
-        // Register path in LOCAL_IMGS so render finds it immediately
-        LOCAL_IMGS[id] = 'img/' + id + '.jpg';
+      Object.keys(photoMap).forEach(id=>{
+        if(mods[id]&&mods[id]._photo){ delete mods[id]._photo; changed=true; }
+        const obj=OBJ.find(o=>o.id===id); if(obj) delete obj._photo;
+        LOCAL_IMGS[id]='img/'+id+'.jpg';
       });
       if(changed) localStorage.setItem(modKey, JSON.stringify(mods));
-      const customs = JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]');
-      let cChanged = false;
-      customs.forEach(t => { if(photoMap[t.id] && t._photo) { delete t._photo; cChanged = true; } });
-      if(cChanged) localStorage.setItem('astrofoto_custom_targets', JSON.stringify(customs));
+      const ct = JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]');
+      let cc=false;
+      ct.forEach(t=>{ if(photoMap[t.id]&&t._photo){ delete t._photo; cc=true; } });
+      if(cc) localStorage.setItem('astrofoto_custom_targets', JSON.stringify(ct));
     } catch(e){}
 
     setStatus('✓ Salvato: ' + label, '#1a7a4a');
@@ -3291,9 +3291,9 @@ async function syncDataJson(label){
   } catch(err){
     setStatus('✗ Sync fallita (' + label + '): ' + err.message + ' — dati locali intatti', '#c0392b');
     console.warn('syncDataJson error:', err);
+  } finally {
+    _ghSyncInProgress = false;
   }
-
-  _ghLockRelease(null);
 }
 
 
