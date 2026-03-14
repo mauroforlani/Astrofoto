@@ -140,6 +140,32 @@
       "_origSize": "3'",
       "_origRA": 414.375,
       "_origDec": 66.19222222222223
+    },
+    {
+      "id": "custom_ngc_1365_1773472173042",
+      "name": "NGC 1365",
+      "cat": "NGC 1365",
+      "type": "galaxy",
+      "months": [
+        1,
+        2,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "ra": 53.64999999999999,
+      "dec": -36.05583333333333,
+      "mag": 9.63,
+      "size": "7'",
+      "diff": 1,
+      "lx": 0,
+      "best": [
+        1625
+      ],
+      "notes": "NGC 1365 (conosciuta anche come La Grande Galassia a spirale barrata) è una galassia a spirale barrata visibile nella costellazione della Fornace",
+      "_custom": true
     }
   ],
   "modified": [
@@ -1067,7 +1093,8 @@
     "custom_ic_2118_1773213201586": "img/custom_ic_2118_1773213201586.jpg",
     "custom_ngc_4535_1772821562319": "img/custom_ngc_4535_1772821562319.jpg",
     "ngc4038b": "img/ngc4038b.jpg",
-    "custom_ngc_6951_1773436049617": "img/custom_ngc_6951_1773436049617.jpg"
+    "custom_ngc_6951_1773436049617": "img/custom_ngc_6951_1773436049617.jpg",
+    "custom_ngc_1365_1773472173042": "img/custom_ngc_1365_1773472173042.jpg"
   },
   "deleted": [
     "ngc5194b"
