@@ -3076,43 +3076,43 @@ async function publishToGitHub(){
       ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
     ];
 
+    // Build photoMap FIRST: photos in memory not yet on GitHub
+    // Use remote.imgs as reference — if id is there, file already exists on GitHub
+    const remoteImgs = remote.imgs || {};
+    const photoMap = {};
+    OBJ.filter(o => o._photo && typeof o._photo === 'string' && o._photo.startsWith('data:')
+                 && !remoteImgs[o.id])
+       .forEach(o => { photoMap[o.id] = o._photo; });
+    try {
+      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
+      Object.values(mods).forEach(mod => {
+        if(mod._photo && typeof mod._photo === 'string' && mod._photo.startsWith('data:')
+           && !remoteImgs[mod.id])
+          photoMap[mod.id] = mod._photo;
+      });
+    } catch(e){}
+
     // Imgs: NEVER store base64 in imgs — only img/xxx.jpg paths
     const newImgs = {};
     // Start from remote, skip legacy base64 values
-    Object.entries(remote.imgs||{}).forEach(([id,p])=>{
+    Object.entries(remoteImgs).forEach(([id,p])=>{
       if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
     });
     // Apply LOCAL_IMGS, skip base64 values
     Object.entries(LOCAL_IMGS).forEach(([id,p])=>{
       if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
     });
-    // Objects with _photo in memory: register their path
+    // Register path for objects with _photo (being uploaded now)
     OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
     // Custom targets whose _photo was already cleaned but path never registered
     JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]')
-      .filter(t=>!t._photo && !newImgs[t.id] && (remote.imgs||{})[t.id])
-      .forEach(t=>{ newImgs[t.id]=(remote.imgs||{})[t.id]; });
+      .filter(t=>!t._photo && !newImgs[t.id] && remoteImgs[t.id])
+      .forEach(t=>{ newImgs[t.id]=remoteImgs[t.id]; });
 
     // Deleted: union of remote + local
     const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
     const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
     const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
-
-    // Build photoMap: only photos that are base64 in memory AND not yet on GitHub
-    // Use newImgs as reference (already built from remote.imgs + local) — if id is there, file exists on GitHub
-    const photoMap = {};
-    OBJ.filter(o => o._photo && typeof o._photo === 'string' && o._photo.startsWith('data:')
-                 && !newImgs[o.id])
-       .forEach(o => { photoMap[o.id] = o._photo; });
-    // Also check localStorage for modified objects with pending base64 photos
-    try {
-      const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
-      Object.values(mods).forEach(mod => {
-        if(mod._photo && typeof mod._photo === 'string' && mod._photo.startsWith('data:')
-           && !newImgs[mod.id])
-          photoMap[mod.id] = mod._photo;
-      });
-    } catch(e){}
 
     // Upload photos
     const photoEntries = Object.entries(photoMap);
@@ -3219,38 +3219,41 @@ async function syncDataJson(label){
       ...(remote.modified||[]).filter(o=>!localModIds.has(o.id))
     ];
 
-    // Imgs: NEVER store base64 in imgs — only img/xxx.jpg paths
-    const newImgs = {};
-    Object.entries(remote.imgs||{}).forEach(([id,p])=>{
-      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
-    });
-    Object.entries(LOCAL_IMGS).forEach(([id,p])=>{
-      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
-    });
-    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
-    JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]')
-      .filter(t=>!t._photo && !newImgs[t.id] && (remote.imgs||{})[t.id])
-      .forEach(t=>{ newImgs[t.id]=(remote.imgs||{})[t.id]; });
-
-    const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
-    const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
-
-    const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
-
-    // Build photoMap: only photos that are base64 in memory AND not yet on GitHub
-    // Use newImgs as reference — if id is already there, file exists on GitHub
+    // Build photoMap FIRST: photos in memory not yet on GitHub
+    // Use remote.imgs as reference — if id is there, file already exists on GitHub
+    const remoteImgs = remote.imgs || {};
     const photoMap = {};
     OBJ.filter(o=>o._photo && typeof o._photo==='string' && o._photo.startsWith('data:')
-              && !newImgs[o.id])
+              && !remoteImgs[o.id])
        .forEach(o=>{ photoMap[o.id]=o._photo; });
     try {
       const mods = JSON.parse(localStorage.getItem('astrofoto_modified_objs')||'{}');
       Object.values(mods).forEach(mod=>{
         if(mod._photo && typeof mod._photo==='string' && mod._photo.startsWith('data:')
-           && !newImgs[mod.id])
+           && !remoteImgs[mod.id])
           photoMap[mod.id]=mod._photo;
       });
     } catch(e){}
+
+    // Imgs: NEVER store base64 in imgs — only img/xxx.jpg paths
+    const newImgs = {};
+    Object.entries(remoteImgs).forEach(([id,p])=>{
+      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
+    });
+    Object.entries(LOCAL_IMGS).forEach(([id,p])=>{
+      if(typeof p==='string' && p.startsWith('img/')) newImgs[id]=p;
+    });
+    // Register path for objects with _photo (being uploaded now)
+    OBJ.filter(o=>o._photo).forEach(o=>{ newImgs[o.id]='img/'+o.id+'.jpg'; });
+    // Custom targets whose _photo was already cleaned but path never registered
+    JSON.parse(localStorage.getItem('astrofoto_custom_targets')||'[]')
+      .filter(t=>!t._photo && !newImgs[t.id] && remoteImgs[t.id])
+      .forEach(t=>{ newImgs[t.id]=remoteImgs[t.id]; });
+
+    const localDeleted = JSON.parse(localStorage.getItem('astrofoto_deleted')||'[]');
+    const deleted = [...new Set([...(remote.deleted||[]), ...localDeleted])];
+
+    const dataJson = JSON.stringify({customs, modified, imgs:newImgs, deleted}, null, 2);
 
     const photoEntries = Object.entries(photoMap);
     for(let i=0; i<photoEntries.length; i++){
