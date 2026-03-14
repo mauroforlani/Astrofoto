@@ -3510,8 +3510,11 @@ function checkMissingPhotos(){
   if(!el) return;
   el.innerHTML = '<span style="opacity:0.5">Verifica in corso...</span>';
 
+  // Foto base64 in memoria ma non ancora caricate su GitHub
   const hasPhotoNoPath = OBJ.filter(o => o._photo && !LOCAL_IMGS[o.id]);
+  // Tutti gli oggetti con foto registrata su GitHub
   const withPath = OBJ.filter(o => LOCAL_IMGS[o.id]);
+  // Tutti gli oggetti senza foto (né in memoria né su GitHub) — custom e standard
   const missing = OBJ.filter(o => !LOCAL_IMGS[o.id] && !o._photo);
 
   let html = '';
@@ -3527,18 +3530,22 @@ function checkMissingPhotos(){
     html += '<br>';
   }
 
-  if(withPath.length){
-    html += '<div style="color:#1a7a4a;margin-bottom:4px">✓ ' + withPath.length + ' oggetti con foto registrata</div>';
-  }
+  html += '<div style="color:#1a7a4a;margin-bottom:4px">✓ ' + withPath.length + ' oggetti con foto registrata</div>';
 
   if(missing.length){
-    html += '<div style="color:var(--ink4);margin-bottom:4px">' + missing.length + ' oggetti senza foto:</div>';
+    html += '<div style="color:var(--ink4);margin-bottom:8px;margin-top:4px">'
+      + missing.length + ' oggetti senza foto (canvas generativo):</div>';
     missing.forEach(o => {
-      html += '<div style="padding:2px 0;color:var(--ink4);opacity:0.6">' + (o._custom ? '✦ ' : '') + o.name + '</div>';
+      html += '<div style="padding:2px 0;color:var(--ink4);opacity:0.6">'
+        + (o._custom ? '✦ ' : '') + o.name
+        + ' <span style="font-family:DM Mono,monospace;font-size:8px;opacity:0.5">' + o.id + '</span>'
+        + '</div>';
     });
+  } else {
+    html += '<div style="color:#1a7a4a">✓ Tutti gli oggetti hanno una foto</div>';
   }
 
-  if(!html) html = '<span style="color:#1a7a4a">✓ Tutto in ordine</span>';
+  if(!hasPhotoNoPath.length && !missing.length) html = '<span style="color:#1a7a4a">✓ Tutto in ordine</span>';
   el.innerHTML = html;
 }
 
