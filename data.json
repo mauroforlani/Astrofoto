@@ -343,6 +343,37 @@
       "_origSize": "—",
       "_origRA": 149.42083333333332,
       "_origDec": 68.94250000000001
+    },
+    {
+      "id": "custom_rho_ophiuchi_1783611698943",
+      "name": "Rho Ophiuchi",
+      "cat": "Rho Ophiuchi",
+      "type": "nebula",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "ra": 246.8,
+      "dec": 23.50888888888889,
+      "mag": 4.59,
+      "size": "—",
+      "diff": 1,
+      "lx": 0,
+      "best": [
+        135
+      ],
+      "notes": "La Nube di Rho Ophiuchi è una nube molecolare gigante composta in parte da idrogeno ionizzato luminoso e in gran parte da polveri oscure; deve il suo nome alla stella che domina la regione in cui si trova, ρ Ophiuchi, situata tre gradi a nord di Antares, nella costellazione dell'Ofiuco.",
+      "_custom": true
     }
   ],
   "modified": [
@@ -1276,7 +1307,8 @@
     "custom_ngc_5371_1773472644340": "img/custom_ngc_5371_1773472644340.jpg",
     "custom_ngc_1530_1773472846609": "img/custom_ngc_1530_1773472846609.jpg",
     "custom_ngc_7023_1783609105428": "img/custom_ngc_7023_1783609105428.jpg",
-    "custom_m81__m82_1783609505333": "img/custom_m81__m82_1783609505333.jpg"
+    "custom_m81__m82_1783609505333": "img/custom_m81__m82_1783609505333.jpg",
+    "custom_rho_ophiuchi_1783611698943": "img/custom_rho_ophiuchi_1783611698943.jpg"
   },
   "deleted": [
     "ngc5194b"
