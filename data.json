@@ -271,6 +271,43 @@
       "_origSize": "2'",
       "_origRA": 66.7,
       "_origDec": 75.3611111111111
+    },
+    {
+      "id": "custom_ngc_7023_1783609105428",
+      "name": "NGC 7023",
+      "cat": "Nebulosa Iris",
+      "type": "nebula",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "ra": 315.4916666666667,
+      "dec": 68.26527777777778,
+      "mag": 7.19,
+      "size": "8'",
+      "diff": 1,
+      "lx": 0,
+      "best": [
+        336,
+        750,
+        1085,
+        1625
+      ],
+      "notes": "La Nebulosa Iris (nota anche come NGC 7023 o Caldwell 4) è una luminosa nebulosa a riflessione situata a circa 1.300 anni luce dalla Terra, nella costellazione di Cefeo",
+      "_custom": true,
+      "_origSize": "8'",
+      "_origRA": 315.4916666666667,
+      "_origDec": 68.26527777777778
     }
   ],
   "modified": [
@@ -1202,7 +1239,8 @@
     "custom_ngc_1365_1773472173042": "img/custom_ngc_1365_1773472173042.jpg",
     "custom_ngc_3587_1773472426609": "img/custom_ngc_3587_1773472426609.jpg",
     "custom_ngc_5371_1773472644340": "img/custom_ngc_5371_1773472644340.jpg",
-    "custom_ngc_1530_1773472846609": "img/custom_ngc_1530_1773472846609.jpg"
+    "custom_ngc_1530_1773472846609": "img/custom_ngc_1530_1773472846609.jpg",
+    "custom_ngc_7023_1783609105428": "img/custom_ngc_7023_1783609105428.jpg"
   },
   "deleted": [
     "ngc5194b"
