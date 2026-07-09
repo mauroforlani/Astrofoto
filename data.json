@@ -308,6 +308,38 @@
       "_origSize": "8'",
       "_origRA": 315.4916666666667,
       "_origDec": 68.26527777777778
+    },
+    {
+      "id": "custom_m81__m82_1783609505333",
+      "name": "M81 & M82",
+      "cat": "M81 & M82",
+      "type": "galaxy",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "ra": 149.42083333333332,
+      "dec": 68.94250000000001,
+      "mag": 7,
+      "size": "—",
+      "diff": 1,
+      "lx": 0,
+      "best": [
+        1085,
+        750
+      ],
+      "notes": "Soggetto doppio",
+      "_custom": true
     }
   ],
   "modified": [
@@ -1240,7 +1272,8 @@
     "custom_ngc_3587_1773472426609": "img/custom_ngc_3587_1773472426609.jpg",
     "custom_ngc_5371_1773472644340": "img/custom_ngc_5371_1773472644340.jpg",
     "custom_ngc_1530_1773472846609": "img/custom_ngc_1530_1773472846609.jpg",
-    "custom_ngc_7023_1783609105428": "img/custom_ngc_7023_1783609105428.jpg"
+    "custom_ngc_7023_1783609105428": "img/custom_ngc_7023_1783609105428.jpg",
+    "custom_m81__m82_1783609505333": "img/custom_m81__m82_1783609505333.jpg"
   },
   "deleted": [
     "ngc5194b"
