@@ -335,11 +335,14 @@
       "diff": 1,
       "lx": 0,
       "best": [
-        1085,
-        750
+        750,
+        1085
       ],
       "notes": "Soggetto doppio",
-      "_custom": true
+      "_custom": true,
+      "_origSize": "—",
+      "_origRA": 149.42083333333332,
+      "_origDec": 68.94250000000001
     }
   ],
   "modified": [
