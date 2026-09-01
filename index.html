@@ -441,8 +441,8 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
   </div>
   <!-- Forecast cards row -->
   <div id="meteoStripCards" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;scrollbar-width:thin;-webkit-overflow-scrolling:touch"></div>
-  <div id="meteoStripLoading" style="padding:12px 0;font-family:'DM Mono',monospace;font-size:9px;color:var(--ink4);text-align:center">Caricamento previsioni...</div>
-  <div id="meteoStripError" style="display:none;padding:10px 0;font-family:'DM Mono',monospace;font-size:9px;color:#c0392b"></div>
+  <div id="meteoStripLoading" style="padding:12px 0;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink4);text-align:center">Caricamento previsioni...</div>
+  <div id="meteoStripError" style="display:none;padding:10px 0;font-family:'DM Mono',monospace;font-size:12px;color:#c0392b"></div>
 </div></div>
 
 <!-- ══ MONTH NAV ═══════════════════════════════════════════════════ -->
@@ -4078,6 +4078,38 @@ initEdit();
     return {rise, set};
   }
 
+  // Altitude apparente del Sole (in gradi), stessa logica della funzione lunare,
+  // con le formule di posizione solare a bassa precisione.
+  function sunAltitudeDeg(date, lat, lon){
+    const rad = Math.PI/180;
+    const d = date.getTime()/86400000 - 10957.5; // giorni da J2000.0
+    const g = rad*(357.529 + 0.98560028*d);       // anomalia media
+    const q = 280.459 + 0.98564736*d;             // longitudine media
+    const L = rad*(q + 1.915*Math.sin(g) + 0.020*Math.sin(2*g)); // longitudine eclittica
+    const e = rad*(23.439 - 0.00000036*d);        // obliquità
+    const ra  = Math.atan2(Math.cos(e)*Math.sin(L), Math.cos(L));
+    const dec = Math.asin(Math.sin(e)*Math.sin(L));
+    const gst = rad*(280.16 + 360.9856235*d);
+    const hourAngle = gst + rad*lon - ra;
+    const phi = rad*lat;
+    return Math.asin(Math.sin(phi)*Math.sin(dec) + Math.cos(phi)*Math.cos(dec)*Math.cos(hourAngle)) / rad;
+  }
+
+  // Individua inizio/fine del crepuscolo astronomico (Sole sotto -18°): la finestra
+  // di cielo completamente buio, la più utile per l'astrofotografia.
+  function findAstroTwilight(fromDate, toDate, lat, lon){
+    const horizon = -18;
+    let dusk = null, dawn = null;
+    let prevAlt = sunAltitudeDeg(fromDate, lat, lon) - horizon;
+    for(let t = new Date(fromDate.getTime()+300000); t <= toDate; t = new Date(t.getTime()+300000)){
+      const alt = sunAltitudeDeg(t, lat, lon) - horizon;
+      if(prevAlt >= 0 && alt < 0 && !dusk) dusk = new Date(t.getTime()-150000);
+      if(prevAlt < 0 && alt >= 0 && !dawn) dawn = new Date(t.getTime()-150000);
+      prevAlt = alt;
+    }
+    return {dusk, dawn};
+  }
+
   function fmtHM(date){
     if(!date) return '--:--';
     return date.getHours().toString().padStart(2,'0')+':'+date.getMinutes().toString().padStart(2,'0');
@@ -4133,6 +4165,13 @@ initEdit();
       const rainProb = Math.round(Math.max(...entries.map(e=>e.precipProb), 0));
       const moon = moonIllumination(nextDay);
 
+      // Finestra di buio astronomico (Sole sotto -18°): il momento migliore per l'astrofotografia.
+      const nightStart = new Date(dateKey + 'T12:00:00');
+      const nightEnd   = new Date(nextDay + 'T12:00:00');
+      const astro = findAstroTwilight(nightStart, nightEnd, meteoLat, meteoLon);
+      const astroDuskStr = astro.dusk ? fmtHM(astro.dusk) : null;
+      const astroDawnStr = astro.dawn ? fmtHM(astro.dawn) : null;
+
       // Alba/tramonto lunari: se la sorgente dati li fornisce direttamente (meteoblue)
       // li uso da lì; altrimenti calcolo con l'algoritmo astronomico di riserva.
       const moonInfo = dailyMoon[dateKey] || {};
@@ -4141,8 +4180,6 @@ initEdit();
         moonRiseStr = moonInfo.moonrise ? fmtTime(moonInfo.moonrise) : null;
         moonSetStr  = moonInfo.moonset  ? fmtTime(moonInfo.moonset)  : null;
       } else {
-        const nightStart = new Date(dateKey + 'T12:00:00');
-        const nightEnd   = new Date(nextDay + 'T12:00:00');
         const computed = findMoonRiseSet(nightStart, nightEnd, meteoLat, meteoLon);
         moonRiseStr = computed.rise ? fmtHM(computed.rise) : null;
         moonSetStr  = computed.set  ? fmtHM(computed.set)  : null;
@@ -4151,32 +4188,35 @@ initEdit();
       const barSegs = entries.map(e=>{
         const c = e.cloud < 20 ? '#1a7a4a' : e.cloud < 50 ? '#e67e22' : '#c0392b';
         const op = (0.35 + e.cloud/100*0.65).toFixed(2);
-        return '<div title="'+e.hour+':00 · copertura '+e.cloud+'%" style="flex:1;height:6px;background:'+c+';opacity:'+op+'"></div>';
+        return '<div title="'+e.hour+':00 · copertura '+e.cloud+'%" style="flex:1;height:9px;background:'+c+';opacity:'+op+'"></div>';
       }).join('');
       const barLabels = entries.filter((_,i)=>i%2===0).map(e=>
-        '<div style="flex:1;text-align:center;font-size:6px;color:var(--ink4);font-family:DM Mono,monospace;line-height:1">'+e.hour+'</div>'
+        '<div style="flex:1;text-align:center;font-size:9px;color:var(--ink4);font-family:DM Mono,monospace;line-height:1">'+e.hour+'</div>'
       ).join('');
 
       const card = document.createElement('div');
-      card.style.cssText = 'flex:0 0 auto;width:170px;background:var(--bg);border-radius:6px;padding:10px 10px 8px;border-top:2px solid '+skyColor+';box-sizing:border-box';
+      card.style.cssText = 'flex:0 0 auto;width:230px;background:var(--bg);border-radius:8px;padding:14px 14px 12px;border-top:3px solid '+skyColor+';box-sizing:border-box';
       card.innerHTML =
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
-          '<div style="font-family:Jost,sans-serif;font-size:11px;font-weight:600;color:var(--ink);text-transform:capitalize">'+dayLabel+'</div>' +
-          '<div style="font-family:DM Mono,monospace;font-size:13px;font-weight:700;color:'+skyColor+'">'+avgCloud+'%</div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">' +
+          '<div style="font-family:Jost,sans-serif;font-size:15px;font-weight:600;color:var(--ink);text-transform:capitalize">'+dayLabel+'</div>' +
+          '<div style="font-family:DM Mono,monospace;font-size:18px;font-weight:700;color:'+skyColor+'">'+avgCloud+'%</div>' +
         '</div>' +
-        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">' +
-          '<span style="font-size:9px;color:'+skyColor+'">'+skyIcon+'</span>' +
-          (rainProb > 20 ? '<span style="font-family:DM Mono,monospace;font-size:7px;color:#3498db">🌧 '+rainProb+'%</span>' : '') +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">' +
+          '<span style="font-size:12px;color:'+skyColor+'">'+skyIcon+'</span>' +
+          (rainProb > 20 ? '<span style="font-family:DM Mono,monospace;font-size:10px;color:#3498db">🌧 '+rainProb+'%</span>' : '') +
         '</div>' +
-        '<div style="display:flex;border-radius:2px;overflow:hidden;margin-bottom:2px;gap:1px;height:6px">'+barSegs+'</div>' +
-        '<div style="display:flex;margin-bottom:7px">'+barLabels+'</div>' +
-        '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);margin-bottom:6px">🌡 '+minTemp+'°  💧 '+avgHum+'%  💨 '+avgWind+' km/h'+(maxWind>avgWind?' (max '+maxWind+')':'')+'</div>' +
-        '<div style="border-top:1px solid var(--border);margin-bottom:6px"></div>' +
+        '<div style="display:flex;border-radius:3px;overflow:hidden;margin-bottom:3px;gap:1px;height:9px">'+barSegs+'</div>' +
+        '<div style="display:flex;margin-bottom:9px">'+barLabels+'</div>' +
+        '<div style="font-family:DM Mono,monospace;font-size:10px;color:var(--ink4);margin-bottom:8px">🌡 '+minTemp+'°  💧 '+avgHum+'%  💨 '+avgWind+' km/h'+(maxWind>avgWind?' (max '+maxWind+')':'')+'</div>' +
+        (astroDuskStr && astroDawnStr ?
+          '<div style="font-family:DM Mono,monospace;font-size:11px;font-weight:700;color:#7c5cff;background:rgba(124,92,255,0.1);border-radius:4px;padding:5px 7px;margin-bottom:8px;text-align:center">🔭 '+astroDuskStr+' – '+astroDawnStr+'</div>'
+          : '') +
+        '<div style="border-top:1px solid var(--border);margin-bottom:8px"></div>' +
         '<div style="display:flex;justify-content:space-between;align-items:center">' +
-          '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);line-height:1.7">' +
+          '<div style="font-family:DM Mono,monospace;font-size:10px;color:var(--ink4);line-height:1.9">' +
             '🌇 '+sunsetTime+'<br>🌅 '+sunriseTime +
           '</div>' +
-          '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);text-align:right;line-height:1.7">' +
+          '<div style="font-family:DM Mono,monospace;font-size:10px;color:var(--ink4);text-align:right;line-height:1.9">' +
             moon.icon+' '+moon.illum+'%<br>' +
             '<span style="color:'+(moon.illum>50?'#c0392b':'#1a7a4a')+'">'+( moon.illum>75?'luna piena':moon.illum>50?'luna intensa':moon.illum>25?'quarto':'favorevole')+'</span><br>' +
             (moonRiseStr ? '↑'+moonRiseStr+' ' : '') + (moonSetStr ? '↓'+moonSetStr : '') +
@@ -4184,7 +4224,7 @@ initEdit();
         '</div>';
       cards.appendChild(card);
     });
-    if(!dayKeys.length) cards.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--ink4);padding:8px 0">Nessun dato disponibile</div>';
+    if(!dayKeys.length) cards.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:12px;color:var(--ink4);padding:8px 0">Nessun dato disponibile</div>';
   }
 
   updateLocationLabel();
