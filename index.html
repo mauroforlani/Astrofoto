@@ -3972,6 +3972,46 @@ initEdit();
     return {illum, icon};
   }
 
+  // Altitude apparente della Luna (in gradi) per una data/ora e coordinate osservatore,
+  // basata sulle formule di posizione lunare a bassa precisione (Meeus).
+  function moonAltitudeDeg(date, lat, lon){
+    const rad = Math.PI/180;
+    const d   = date.getTime()/86400000 - 10957.5; // giorni da J2000.0
+    const L   = rad*(218.316 + 13.176396*d);   // longitudine media
+    const M   = rad*(134.963 + 13.064993*d);   // anomalia media
+    const F   = rad*(93.272  + 13.229350*d);   // distanza media dal nodo
+    const lonEcl = L + rad*6.289*Math.sin(M);
+    const latEcl = rad*5.128*Math.sin(F);
+    const obliq  = rad*23.4397;
+    const ra  = Math.atan2(Math.sin(lonEcl)*Math.cos(obliq) - Math.tan(latEcl)*Math.sin(obliq), Math.cos(lonEcl));
+    const dec = Math.asin(Math.sin(latEcl)*Math.cos(obliq) + Math.cos(latEcl)*Math.sin(obliq)*Math.sin(lonEcl));
+    const gst = rad*(280.16 + 360.9856235*d);
+    const hourAngle = gst + rad*lon - ra;
+    const phi = rad*lat;
+    let alt = Math.asin(Math.sin(phi)*Math.sin(dec) + Math.cos(phi)*Math.cos(dec)*Math.cos(hourAngle)) / rad;
+    alt += 0.017/Math.tan(rad*(alt + 10.26/(alt+5.10))); // rifrazione atmosferica vicino all'orizzonte
+    return alt;
+  }
+
+  // Cerca sorgere/tramonto della Luna scandendo a passi di 10 minuti nella finestra [from, to).
+  function findMoonRiseSet(fromDate, toDate, lat, lon){
+    const horizon = -0.55; // ~ raggio apparente lunare + parallasse media, in gradi
+    let rise = null, set = null;
+    let prevAlt = moonAltitudeDeg(fromDate, lat, lon) - horizon;
+    for(let t = new Date(fromDate.getTime()+600000); t <= toDate; t = new Date(t.getTime()+600000)){
+      const alt = moonAltitudeDeg(t, lat, lon) - horizon;
+      if(prevAlt < 0 && alt >= 0 && !rise) rise = new Date(t.getTime()-300000);
+      if(prevAlt >= 0 && alt < 0 && !set)  set  = new Date(t.getTime()-300000);
+      prevAlt = alt;
+    }
+    return {rise, set};
+  }
+
+  function fmtHM(date){
+    if(!date) return '--:--';
+    return date.getHours().toString().padStart(2,'0')+':'+date.getMinutes().toString().padStart(2,'0');
+  }
+
   function fmtTime(isoStr){
     if(!isoStr) return '--:--';
     const t = isoStr.includes('T') ? isoStr.split('T')[1] : isoStr.split(' ')[1];
@@ -4029,6 +4069,9 @@ initEdit();
       const sunriseTime = fmtTime(nextInfo.sunrise);
       const rainProb = Math.max(dayInfo.rainProb||0, nextInfo.rainProb||0);
       const moon = moonIllumination(nextDay);
+      const nightStart = new Date(dateKey + 'T12:00:00');
+      const nightEnd   = new Date(nextDay + 'T12:00:00');
+      const moonTimes  = findMoonRiseSet(nightStart, nightEnd, meteoLat, meteoLon);
 
       const barSegs = entries.map(e=>{
         const c = e.cloud < 20 ? '#1a7a4a' : e.cloud < 50 ? '#e67e22' : '#c0392b';
@@ -4060,7 +4103,8 @@ initEdit();
           '</div>' +
           '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);text-align:right;line-height:1.7">' +
             moon.icon+' '+moon.illum+'%<br>' +
-            '<span style="color:'+(moon.illum>50?'#c0392b':'#1a7a4a')+'">'+( moon.illum>75?'luna piena':moon.illum>50?'luna intensa':moon.illum>25?'quarto':'favorevole')+'</span>' +
+            '<span style="color:'+(moon.illum>50?'#c0392b':'#1a7a4a')+'">'+( moon.illum>75?'luna piena':moon.illum>50?'luna intensa':moon.illum>25?'quarto':'favorevole')+'</span><br>' +
+            (moonTimes.rise ? '↑'+fmtHM(moonTimes.rise)+' ' : '') + (moonTimes.set ? '↓'+fmtHM(moonTimes.set) : '') +
           '</div>' +
         '</div>';
       cards.appendChild(card);
