@@ -3945,7 +3945,7 @@ initEdit();
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Rome';
       const tzEnc = encodeURIComponent(tz);
-      const url = 'https://api.open-meteo.com/v1/forecast?latitude='+meteoLat+'&longitude='+meteoLon
+      const url = 'https://api.open-meteo.com/v1/dwd-icon?latitude='+meteoLat+'&longitude='+meteoLon
         +'&hourly=temperature_2m,relativehumidity_2m,precipitation,cloudcover,windspeed_10m'
         +'&daily=sunrise,sunset,precipitation_probability_max'
         +'&timezone='+tzEnc+'&forecast_days=7';
@@ -4007,7 +4007,7 @@ initEdit();
 
     const cards = document.getElementById('meteoStripCards');
     cards.innerHTML = '';
-    const dayKeys = Object.keys(days).sort().slice(0,5);
+    const dayKeys = Object.keys(days).sort().slice(0,7);
     dayKeys.forEach(dateKey => {
       const entries = days[dateKey];
       if(!entries.length) return;
@@ -4015,6 +4015,7 @@ initEdit();
       const minTemp  = Math.min(...entries.map(e=>e.temp)).toFixed(1);
       const avgHum   = Math.round(entries.reduce((s,e)=>s+e.hum,0)/entries.length);
       const avgWind  = (entries.reduce((s,e)=>s+e.wind,0)/entries.length).toFixed(1);
+      const maxWind  = Math.max(...entries.map(e=>e.wind)).toFixed(1);
       const hasPrecip = entries.some(e=>e.precip>0.1);
       const skyColor = avgCloud < 20 ? '#1a7a4a' : avgCloud < 50 ? '#e67e22' : '#c0392b';
       const skyIcon  = avgCloud < 20 ? '✦' : avgCloud < 50 ? '◑' : '●';
@@ -4051,7 +4052,7 @@ initEdit();
         '</div>' +
         '<div style="display:flex;border-radius:2px;overflow:hidden;margin-bottom:2px;gap:1px;height:6px">'+barSegs+'</div>' +
         '<div style="display:flex;margin-bottom:7px">'+barLabels+'</div>' +
-        '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);margin-bottom:6px">🌡 '+minTemp+'°  💧 '+avgHum+'%  💨 '+avgWind+'m/s</div>' +
+        '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);margin-bottom:6px">🌡 '+minTemp+'°  💧 '+avgHum+'%  💨 '+avgWind+' km/h'+(maxWind>avgWind?' (max '+maxWind+')':'')+'</div>' +
         '<div style="border-top:1px solid var(--border);margin-bottom:6px"></div>' +
         '<div style="display:flex;justify-content:space-between;align-items:center">' +
           '<div style="font-family:DM Mono,monospace;font-size:7px;color:var(--ink4);line-height:1.7">' +
