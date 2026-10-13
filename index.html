@@ -261,13 +261,13 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 #skCv{position:absolute;inset:0;width:100%;height:100%;display:block}
 .sk-top{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 8px;background:linear-gradient(#000a,#0000);pointer-events:none}
 .sk-top>*{pointer-events:auto}
-.sk-btn{width:40px;height:40px;border-radius:50%;border:1px solid #ffffff30;background:#0b1020cc;color:#fff;font-size:16px;cursor:pointer;backdrop-filter:blur(8px)}
+.sk-btn{width:38px;height:38px;flex:none;border-radius:50%;border:1px solid #ffffff30;background:#0b1020cc;color:#fff;font-size:16px;cursor:pointer;backdrop-filter:blur(8px)}
 .sk-title{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15}
 .sk-title b{font-family:'Cormorant Garamond',serif;font-size:20px}
 .sk-title span{font:9px 'DM Mono',monospace;letter-spacing:1px;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sk-status{position:absolute;top:calc(env(safe-area-inset-top,0px) + 58px);left:14px;display:flex;flex-direction:column;gap:2px;font:10px 'DM Mono',monospace;color:#ffffffa8;pointer-events:none;text-shadow:0 1px 3px #000}
+.sk-status{position:absolute;top:calc(env(safe-area-inset-top,0px) + 92px);left:14px;display:flex;flex-direction:column;gap:2px;font:10px 'DM Mono',monospace;color:#ffffffa8;pointer-events:none;text-shadow:0 1px 3px #000}
 .sk-status b{color:#fff;font-weight:500;font-size:11px}
-.sk-view{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 58px);font:10px 'DM Mono',monospace;color:#ffffff90;text-shadow:0 1px 3px #000;pointer-events:none}
+.sk-view{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 92px);font:10px 'DM Mono',monospace;color:#ffffff90;text-shadow:0 1px 3px #000;pointer-events:none}
 .sk-zoom{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px}
 .sk-zoom .sk-btn{width:38px;height:38px}
 .sk-search,.sk-layers{position:absolute;top:calc(env(safe-area-inset-top,0px) + 58px);left:12px;right:12px;max-width:420px;margin:0 auto;background:#0b1020ee;border:1px solid #ffffff25;border-radius:12px;padding:10px;backdrop-filter:blur(12px);z-index:5}
@@ -305,6 +305,21 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 #skSlider{width:100%}
 .sk-modal-btn{margin-top:16px;width:100%;padding:12px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:#fff;font:500 13px 'Jost',sans-serif;cursor:pointer}
 @media(min-width:700px){.sk-card{left:auto;right:70px;margin:0;bottom:130px}}
+
+.sk-framesz{font:11px 'DM Mono',monospace;color:#4cc9f0;width:100%}.sk-hint{font:10px 'DM Mono',monospace;opacity:.55;align-self:center}
+.sk-vis{position:absolute;left:8px;right:8px;top:calc(env(safe-area-inset-top,0px) + 58px);bottom:calc(env(safe-area-inset-bottom,0px) + 150px);max-width:560px;margin:0 auto;background:#0b1020f2;border:1px solid #ffffff25;border-radius:14px;backdrop-filter:blur(14px);display:flex;flex-direction:column;z-index:6;overflow:hidden}
+.sk-vis[hidden]{display:none}
+.sk-vis-h{display:flex;align-items:center;gap:6px;padding:10px 10px 4px}.sk-vis-h #skVisH{flex:1;display:flex;flex-direction:column}.sk-vis-h b{font:700 18px 'Cormorant Garamond',serif}.sk-vis-h span{font:9px 'DM Mono',monospace;opacity:.6}
+.sk-vis-leg{font:9px 'DM Mono',monospace;opacity:.6;padding:0 12px 6px}.sk-vis-leg s,.sk-vis-leg u{display:inline-block;width:8px;height:8px;vertical-align:middle;text-decoration:none}.sk-vis-leg s{background:#fff}.sk-vis-leg u{background:#7c5cff88}
+#skVisList{overflow:auto;flex:1;padding:0 8px 8px}
+.sk-vrow{display:grid;grid-template-columns:40px 1fr auto;grid-template-areas:'i n a' 'i s t';gap:2px 10px;width:100%;background:none;border:0;border-top:1px solid #ffffff14;color:#fff;padding:8px 2px;text-align:left;cursor:pointer;font-family:inherit;align-items:center}
+.sk-vrow img,.sk-vph{grid-area:i;width:40px;height:40px;border-radius:8px;object-fit:cover;box-sizing:border-box}.sk-vph{border:2px dashed;background:#ffffff08}
+.sk-vn{grid-area:n;display:flex;flex-direction:column;min-width:0}.sk-vn b{font:600 14px 'Jost',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sk-vn em{font:9px 'DM Mono',monospace;opacity:.55;font-style:normal}
+.sk-va{grid-area:a;font:600 13px 'DM Mono',monospace}
+.sk-strip{grid-area:s;position:relative;height:10px;border-radius:5px;overflow:hidden;display:block}
+.sk-strip u{position:absolute;top:0;bottom:0;background:#7c5cff55;border-left:1px solid #7c5cffaa;border-right:1px solid #7c5cffaa;mix-blend-mode:screen}
+.sk-strip s{position:absolute;top:-1px;bottom:-1px;width:2px;background:#fff;transform:translateX(-1px)}
+.sk-vt{grid-area:t;font:9px 'DM Mono',monospace;color:#ffd37a;text-align:right}
 </style>
   <!-- PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -829,9 +844,11 @@ main{max-width:1440px;margin:0 auto;padding:40px 64px 100px}
 
 <div id="skyOv" hidden>
 <canvas id="skCv"></canvas>
-<div class="sk-top"><button class="sk-btn" id="skClose">✕</button><div class="sk-title"><b>Planetario</b><span id="skLoc"></span></div><button class="sk-btn" id="skSearchBtn">⌕</button><button class="sk-btn" id="skLayersBtn">☰</button></div>
+<div class="sk-top" id="skTopbar"><button class="sk-btn" id="skClose">✕</button><div class="sk-title"><b>Planetario</b><span id="skLoc"></span></div><button class="sk-btn" id="skSearchBtn" title="Cerca">⌕</button><button class="sk-btn" id="skFrameBtn" title="Inquadratura">▭</button><button class="sk-btn" id="skVisBtn" title="Oggetti visibili">◎</button><button class="sk-btn" id="skLayersBtn">☰</button></div>
 <div class="sk-status" id="skStatus"></div><div class="sk-view" id="skView"></div>
 <div class="sk-search" id="skSearch" hidden><input id="skQ" placeholder="Cerca oggetto, es. M42, Andromeda…" autocomplete="off"><div id="skRes"></div></div>
+<div class="sk-layers" id="skFrame" hidden></div>
+<div class="sk-vis" id="skVis" hidden><div class="sk-vis-h"><div id="skVisH"></div><button class="sk-lchip" id="skVisNight">Stanotte</button><button class="sk-lchip" id="skVisNow">Ora</button><button class="sk-x" id="skVisClose">✕</button></div><div class="sk-vis-leg"><s></s> adesso · <u></u> tua finestra · barra = sopra la quota minima</div><div id="skVisList"></div></div>
 <div class="sk-layers" id="skLayers" hidden>
 <button class="sk-lchip" data-o="dso">Target</button><button class="sk-lchip" data-o="compat">Solo camera compatibile</button><button class="sk-lchip" data-o="frame">Inquadratura</button><button class="sk-lchip" data-o="bodies">Sole/Luna/Pianeti</button><button class="sk-lchip" data-o="con">Costellazioni</button><button class="sk-lchip" data-o="names">Nomi stelle</button><button class="sk-lchip" data-o="mw">Via Lattea</button><button class="sk-lchip" data-o="azg">Griglia Az/Alt</button><button class="sk-lchip" data-o="eqg">Griglia AR/Dec</button><button class="sk-lchip" data-o="ground">Terreno</button>
 <div class="sk-legend"><span><i style="background:#ff8fb1"></i>Nebulosa</span><span><i style="background:#ffb26b"></i>Galassia</span><span><i style="background:#ffe27a"></i>Ammasso</span><span><i style="background:#8fe3a3"></i>Doppia</span></div></div>
@@ -4529,9 +4546,10 @@ function render(){
   if(opts.con)drawConstNames(boxes);
   if(opts.dso)drawDSO(boxes);
   if(opts.bodies)drawBodies(B,boxes);
-  if(st.sel&&opts.frame)drawFrame(B);
+  if(opts.frame)drawFrame(B);
   if(opts.ground)drawGround(skyC);
   drawHorizonLabels();
+  drawCompass();
   drawSelection(B);
   updateHud(B);
   st.dirty=false;
@@ -4762,8 +4780,9 @@ function drawMoon(x,y,R,B,sunScr){
 }
 
 function drawFrame(B){
-  const q=selRaDec(st.sel,B);if(!q)return;
-  const cam=activeCamera;if(!cam||!cam.fovs)return;
+  let q=st.sel?selRaDec(st.sel,B):null;
+  if(!q){const e=h2e(VB.f[0],VB.f[1],VB.f[2]);q={ra:rev(Math.atan2(e[1],e[0])*DEG),dec:Math.asin(clamp(e[2],-1,1))*DEG};}
+  const cam=activeCamera;if(!cam||!cam.fovs)return;ensureFocal();
   const c=eqv(q.ra,q.dec),a=q.ra*RAD,d=q.dec*RAD;
   const E=[-Math.sin(a),Math.cos(a),0],N=[-Math.sin(d)*Math.cos(a),-Math.sin(d)*Math.sin(a),Math.cos(d)];
   const rot=st.rot*RAD,cr=Math.cos(rot),sr=Math.sin(rot);
@@ -4822,6 +4841,25 @@ function drawHorizonLabels(){
     if(pr(vv[0],vv[1],vv[2]))ctx.fillText(DIRS[i],px,py);
   }
 }
+function drawCompass(){
+  const tb=$('skTopbar'),y0=(tb?tb.offsetHeight:56)+2,h=24;
+  const dpp=view.fov/Math.min(cssW,cssH),half=cssW/2*dpp,span=half*2;
+  ctx.save();
+  ctx.fillStyle='rgba(6,10,22,.6)';ctx.fillRect(0,y0,cssW,h);
+  const step=span>90?5:span>30?2:span>12?1:0.5,lab=span>90?15:span>30?10:span>12?5:1;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  const a0=Math.floor((view.az-half)/step)*step;
+  for(let a=a0;a<=view.az+half+step;a+=step){
+    const x=cx+(a-view.az)/dpp,aa=((Math.round(a*2)/2%360)+360)%360;
+    const card=aa%45===0,major=aa%lab===0;
+    ctx.strokeStyle=card?'#ffd37a':'rgba(255,255,255,.45)';ctx.lineWidth=card?1.6:1;
+    ctx.beginPath();ctx.moveTo(x,y0+h);ctx.lineTo(x,y0+h-(card?9:major?6:3));ctx.stroke();
+    if(card){ctx.font=(aa%90===0?'700 13px':'600 10px')+' Jost,sans-serif';ctx.fillStyle=aa===0?'#ff6b6b':'#ffd37a';ctx.fillText(DIRS[aa/45],x,y0+9);}
+    else if(major&&span<=90){ctx.font='9px "DM Mono",monospace';ctx.fillStyle='rgba(255,255,255,.6)';ctx.fillText(aa+'°',x,y0+9);}
+  }
+  ctx.fillStyle='#4cc9f0';ctx.beginPath();ctx.moveTo(cx-5,y0+h+5);ctx.lineTo(cx+5,y0+h+5);ctx.lineTo(cx,y0+h-1);ctx.closePath();ctx.fill();
+  ctx.restore();
+}
 function drawSelection(B){
   if(!st.sel)return;
   const q=selRaDec(st.sel,B);if(!q)return;
@@ -4851,16 +4889,19 @@ function selName(s){return s.kind==='obj'?s.obj.name:s.kind==='body'?BODY_META[s
 function select(sel,goto){
   st.sel=sel;evCache=null;
   if(sel){
-    if(sel.kind==='obj'||(sel.kind==='body'&&sel.obj)){
-      const o=sel.obj;let best=null;
-      try{best=bestFocalsForCamera(o);}catch(e){}
+    if(!st.focalUser&&(sel.kind==='obj'||(sel.kind==='body'&&sel.obj))){
+      let best=null;try{best=bestFocalsForCamera(sel.obj);}catch(e){}
       const fs=activeCamera.fovs.map(f=>f[0]);
-      st.focal=(best&&best.find(f=>fs.includes(f)))||fs[Math.min(1,fs.length-1)];
-    }else st.focal=null;
-    st.rot=0;
+      if(best&&best.find(f=>fs.includes(f)))st.focal=best.find(f=>fs.includes(f));
+    }
+    ensureFocal();
     if(goto)goTo(sel);
   }
   renderCard();st.dirty=true;
+}
+function ensureFocal(){
+  const fv=activeCamera&&activeCamera.fovs;if(!fv||!fv.length)return;
+  if(!fv.some(f=>f[0]===st.focal))st.focal=fv[Math.min(1,fv.length-1)][0];
 }
 function goTo(sel){
   const B=frameBodies||bodiesAt(st.t,lat,lon),q=selRaDec(sel,B);if(!q)return;
@@ -4914,12 +4955,14 @@ function updateHud(B){
   const mAlt=altOfRaDec(B.moon.ra,B.moon.dec,B._th,lat);
   $('skStatus').innerHTML=`<b>${ds} · ${pad(d.getHours())}:${pad(d.getMinutes())}</b><span>${twilightLabel(sunAlt)} · Sole ${sunAlt.toFixed(0)}°</span>`+
     `<span>Luna ${mk!=null?mk+'%':''} · ${mAlt.toFixed(0)}°${mAlt<0?' (sotto)':''}</span>`;
-  $('skView').textContent=`Az ${Math.round(rev(view.az))}° · Alt ${Math.round(view.alt)}° · Campo ${view.fov<10?view.fov.toFixed(1):Math.round(view.fov)}°`;
+  const az8=DIRS[Math.round(rev(view.az)/45)%8];
+  $('skView').textContent=`${az8} · Az ${Math.round(rev(view.az))}° · Alt ${Math.round(view.alt)}° · Campo ${view.fov<10?view.fov.toFixed(1):Math.round(view.fov)}°`;
   const tl=$('skTime');if(document.activeElement!==tl)tl.value=pad(d.getHours())+':'+pad(d.getMinutes());
   const nd=new Date(noon0);const dv=nd.getFullYear()+'-'+pad(nd.getMonth()+1)+'-'+pad(nd.getDate());
   const di=$('skDate');if(document.activeElement!==di)di.value=dv;
   $('skSlider').value=clamp(Math.round((st.t-noon0)/60000),0,1440);
   if(st.sel)updateCardLive(B);
+  visTick();
 }
 function renderCard(){
   const c=$('skCard');
@@ -4932,9 +4975,7 @@ function renderCard(){
   else sub='Stella';
   let img='';
   if(o){const src=o._photo||(LOCAL_IMGS[o.id]?LOCAL_IMGS[o.id]:null);if(src)img=`<img class="sk-thumb" src="${src}" alt="">`;}
-  const focalChips=(o&&s.kind==='obj'&&cam&&cam.fovs)?`<div class="sk-sec"><div class="sk-lbl">Inquadratura · ${cam.name}</div><div class="sk-chips" id="skFocals">`+
-    cam.fovs.map(f=>`<button class="sk-chip${f[0]===st.focal?' on':''}" data-f="${f[0]}">${f[0]}mm</button>`).join('')+
-    `</div><div class="sk-rot"><span>Rotazione</span><input type="range" id="skRot" min="-90" max="90" step="1" value="${st.rot}"><span id="skRotV">${st.rot}°</span></div></div>`:'';
+  const focalChips='';
   c.innerHTML=`<div class="sk-card-top">${img}<div class="sk-card-head"><div class="sk-name">${title}</div><div class="sk-sub">${sub}</div><div class="sk-live" id="skLive"></div></div><button class="sk-x" id="skCardX">✕</button></div>`+
     `<div class="sk-ev" id="skEv"></div><canvas id="skChart" height="70"></canvas>${focalChips}`+
     `<div class="sk-actions"><button class="sk-act" id="skCenter">⌖ Centra</button><button class="sk-act${st.follow?' on':''}" id="skFollow">⟳ Segui</button>${o?'<button class="sk-act pri" id="skSheet">Scheda</button>':''}</div>`;
@@ -4942,8 +4983,6 @@ function renderCard(){
   $('skCenter').onclick=()=>goTo(st.sel);
   $('skFollow').onclick=()=>{st.follow=!st.follow;$('skFollow').classList.toggle('on',st.follow);};
   if(o)$('skSheet').onclick=()=>{try{openModal(o,activeMonth,'sky');$('modalOverlay').style.zIndex='1200';}catch(e){}};
-  const fc=$('skFocals');if(fc)fc.onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;st.focal=+b.dataset.f;[...fc.children].forEach(x=>x.classList.toggle('on',x===b));st.dirty=true;};
-  const rt=$('skRot');if(rt)rt.oninput=()=>{st.rot=+rt.value;$('skRotV').textContent=st.rot+'°';st.dirty=true;};
   evCache=null;cardChartKey='';updateCardLive(frameBodies||bodiesAt(st.t,lat,lon));
 }
 let cardChartKey='';
@@ -5101,7 +5140,7 @@ function openSky(target){
   resize();
   let t=Date.now();const d=nextDark(t);st.tourist=d!==t;
   setTime(d);
-  syncOptsUI();
+  syncOptsUI();ensureFocal();closePanels();
   if(target){
     const sel=target.id?selFromObj(target):target;
     try{const ev=computeEvents(sel);const p0=posAt(sel,st.t);
@@ -5119,9 +5158,16 @@ function closeSky(){
 }
 function buildUI(){
   $('skClose').onclick=closeSky;
-  $('skSearchBtn').onclick=()=>{const s=$('skSearch');s.hidden=!s.hidden;$('skLayers').hidden=true;if(!s.hidden){$('skQ').value='';$('skRes').innerHTML='';setTimeout(()=>$('skQ').focus(),50);}};
+  $('skFrameBtn').onclick=()=>{const p=$('skFrame'),h=!p.hidden;closePanels();if(!h){buildFramePanel();p.hidden=false;}};
+  $('skVisBtn').onclick=()=>{const p=$('skVis'),h=!p.hidden;closePanels();if(!h){visKey='';p.hidden=false;visTick();}};
+  $('skVisClose').onclick=()=>{$('skVis').hidden=true;};
+  $('skVisNow').onclick=()=>{visMode='now';visKey='';visTick();};
+  $('skVisNight').onclick=()=>{visMode='night';visKey='';visTick();};
+  $('skVisList').onclick=e=>{const b=e.target.closest('.sk-vrow');if(!b)return;const x=visRows[+b.dataset.i];if(!x)return;
+    $('skVis').hidden=true;select(x.r.sel,true);};
+  $('skSearchBtn').onclick=()=>{const s=$('skSearch');const h=!s.hidden;closePanels();s.hidden=h;if(!s.hidden){$('skQ').value='';$('skRes').innerHTML='';setTimeout(()=>$('skQ').focus(),50);}};
   $('skQ').oninput=e=>doSearch(e.target.value);
-  $('skLayersBtn').onclick=()=>{const l=$('skLayers');l.hidden=!l.hidden;$('skSearch').hidden=true;};
+  $('skLayersBtn').onclick=()=>{const l=$('skLayers'),h=!l.hidden;closePanels();l.hidden=h;};
   $('skLayers').onclick=e=>{const b=e.target.closest('[data-o]');if(!b)return;const k=b.dataset.o;opts[k]=!opts[k];
     try{localStorage.setItem(OPT_KEY,JSON.stringify(opts));}catch(_){}
     syncOptsUI();st.dirty=true;};
@@ -5143,6 +5189,86 @@ function buildUI(){
   $('skSpeed').onclick=()=>{const sp=[1,60,600,3600];st.speed=sp[(sp.indexOf(st.speed)+1)%sp.length];$('skSpeed').textContent=st.speed===1?'1×':st.speed===60?'1m/s':st.speed===600?'10m/s':'1h/s';};
   $('skWin').onclick=()=>{const mid=noon0-12*H1;setTime(mid+timeStart*H1);};
   document.addEventListener('keydown',e=>{if(st.open&&e.key==='Escape'&&$('modalOverlay').classList.contains('open')===false)closeSky();});
+}
+function buildFramePanel(){
+  ensureFocal();const cam=activeCamera,p=$('skFrame');
+  const f=cam.fovs.find(x=>x[0]===st.focal);
+  p.innerHTML=`<div class="sk-lbl" style="width:100%">Inquadratura · ${cam.name}</div><div class="sk-chips" id="skFocals" style="width:100%">`+
+    cam.fovs.map(x=>`<button class="sk-chip${x[0]===st.focal?' on':''}" data-f="${x[0]}">${x[0]}mm</button>`).join('')+
+    `</div><div class="sk-framesz" id="skFrameSz">${f?fmtArc(f[1])+' × '+fmtArc(f[2]):''}</div>`+
+    `<div class="sk-rot" style="width:100%"><span>Rotazione</span><input type="range" id="skRot" min="-90" max="90" step="1" value="${st.rot}"><span id="skRotV">${st.rot}°</span></div>`+
+    `<button class="sk-lchip${opts.frame?' on':''}" id="skFrameOn">Mostra inquadratura</button><span class="sk-hint">${st.sel?'Centrata sul target selezionato':'Centrata al centro dello schermo'}</span>`;
+  $('skFocals').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;st.focal=+b.dataset.f;st.focalUser=true;opts.frame=true;buildFramePanel();syncOptsUI();st.dirty=true;};
+  $('skRot').oninput=e=>{st.rot=+e.target.value;$('skRotV').textContent=st.rot+'°';st.dirty=true;};
+  $('skFrameOn').onclick=()=>{opts.frame=!opts.frame;try{localStorage.setItem(OPT_KEY,JSON.stringify(opts));}catch(_){}buildFramePanel();syncOptsUI();st.dirty=true;};
+}
+function closePanels(except){for(const id of ['skSearch','skLayers','skFrame','skVis'])if(id!==except)$(id).hidden=true;}
+
+/* ───────────── elenco visibili ───────────── */
+let visMode='night',visCache=null,visRows=[];
+function visData(){
+  const key=noon0+'|'+opts.compat+'|'+OBJ.length+'|'+activeCamera.name+'|'+lat+lon;
+  if(visCache&&visCache.key===key)return visCache;
+  const n=48,step=DAY/n,suns=[];
+  for(let i=0;i<=n;i++)suns.push(sunAltAt(noon0+i*step,lat,lon));
+  const rows=[];
+  for(const o of OBJ){
+    const sel=selFromObj(o);
+    if(sel.kind==='obj'){if(o.ra==null)continue;try{if(opts.compat&&!isCameraCompatible(o))continue;}catch(e){}}
+    const alts=[];let max=-90,mi=0,upDark=0,dm=-90,di=0;
+    for(let i=0;i<=n;i++){
+      const t=noon0+i*step,p=posAt(sel,t),a=altOfRaDec(p.ra,p.dec,p.th,lat);
+      alts.push(a);if(suns[i]<-12&&a>=MIN_ALT){upDark++;if(a>dm){dm=a;di=i;}}if(a>max){max=a;mi=i;}
+    }
+    rows.push({o,sel,alts,max:upDark?dm:max,maxT:noon0+(upDark?di:mi)*step,upDark});
+  }
+  return visCache={key,suns,rows,n};
+}
+function visNowAlt(r,t){const p=posAt(r.sel,t);return altOfRaDec(p.ra,p.dec,p.th,lat);}
+function stripBg(r,D){
+  const n=D.n,alt=[],night=[];
+  for(let i=0;i<n;i++){
+    const a=(r.alts[i]+r.alts[i+1])/2,s=(D.suns[i]+D.suns[i+1])/2;
+    const c=a<MIN_ALT?'rgba(0,0,0,0)':`rgba(255,211,122,${(0.4+0.6*Math.min(1,(a-MIN_ALT)/45)).toFixed(2)})`;
+    alt.push(`${c} ${(i/n*100).toFixed(2)}%`,`${c} ${((i+1)/n*100).toFixed(2)}%`);
+    const sc=s>0?'#2c4a78':s>-6?'#1f3560':s>-12?'#16264a':s>-18?'#0e1a36':'#070d1f';
+    night.push(`${sc} ${(i/n*100).toFixed(2)}%`,`${sc} ${((i+1)/n*100).toFixed(2)}%`);
+  }
+  return `linear-gradient(90deg,${alt.join(',')}),linear-gradient(90deg,${night.join(',')})`;
+}
+function renderVis(){
+  const D=visData(),t=st.t;
+  const mid=noon0-12*H1,ws=clamp((mid+timeStart*H1-noon0)/DAY,0,1)*100,we=clamp((mid+timeEnd*H1-noon0)/DAY,0,1)*100;
+  let rows=D.rows.map(r=>({r,now:visNowAlt(r,t)}));
+  if(visMode==='now'){rows=rows.filter(x=>x.now>=MIN_ALT).sort((a,b)=>b.now-a.now);}
+  else{rows=rows.filter(x=>x.r.upDark>0).sort((a,b)=>a.r.maxT-b.r.maxT);}
+  visRows=rows;
+  const nd=new Date(noon0).toLocaleDateString('it-IT',{day:'numeric',month:'short'});
+  $('skVisH').innerHTML=`<b>Visibili</b><span>${rows.length} · notte del ${nd} · sopra ${MIN_ALT}°</span>`;
+  $('skVisNow').classList.toggle('on',visMode==='now');$('skVisNight').classList.toggle('on',visMode==='night');
+  const mk=((t-noon0)/DAY*100).toFixed(2);
+  $('skVisList').innerHTML=rows.map((x,i)=>{
+    const o=x.r.o,img=LOCAL_IMGS[o.id]||o._photo;
+    const col=x.now<0?'#ff8a8a':x.now<MIN_ALT?'#ffcf7a':'#7ee8a8';
+    return `<button class="sk-vrow" data-i="${i}">${img?`<img src="${img}" alt="">`:`<i class="sk-vph" style="border-color:${TYPE_COL[o.type]||'#fff'}"></i>`}`+
+      `<span class="sk-vn"><b>${o.name}</b><em>${shortName(o)}${o.mag!=null&&o.mag!==99?' · mag '+o.mag:''}</em></span>`+
+      `<span class="sk-va" style="color:${col}">${Math.round(x.now)}°</span>`+
+      `<span class="sk-strip" style="background:${stripBg(x.r,D)}"><u style="left:${ws}%;width:${we-ws}%"></u><s style="left:${mk}%"></s></span>`+
+      `<span class="sk-vt">${x.r.upDark?'meglio':'▲'} ${fmtT(x.r.maxT)} · ${Math.round(x.r.max)}°</span></button>`;
+  }).join('')||'<div class="sk-none" style="padding:14px">Nessun oggetto visibile con questi filtri.</div>';
+  visStamp=performance.now();
+}
+let visStamp=0,visKey='';
+function visTick(){
+  if($('skVis').hidden)return;
+  if(visKey!==noon0+'|'+visMode+'|'+opts.compat){visKey=noon0+'|'+visMode+'|'+opts.compat;renderVis();return;}
+  if(performance.now()-visStamp<700)return;visStamp=performance.now();
+  const mk=((st.t-noon0)/DAY*100).toFixed(2);
+  document.querySelectorAll('#skVisList .sk-vrow').forEach((el,i)=>{
+    const x=visRows[i];if(!x)return;const a=visNowAlt(x.r,st.t);
+    const va=el.querySelector('.sk-va');va.textContent=Math.round(a)+'°';va.style.color=a<0?'#ff8a8a':a<MIN_ALT?'#ffcf7a':'#7ee8a8';
+    el.querySelector('.sk-strip s').style.left=mk+'%';
+  });
 }
 function syncOptsUI(){
   document.querySelectorAll('#skLayers [data-o]').forEach(b=>b.classList.toggle('on',!!opts[b.dataset.o]));
