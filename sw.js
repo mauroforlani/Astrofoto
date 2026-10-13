@@ -1,4 +1,4 @@
-const CACHE = 'astrofoto-v4';
+const CACHE = 'astrofoto-v5';
 
 self.addEventListener('install', e => {
   e.waitUntil(self.skipWaiting());
